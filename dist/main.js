@@ -7,18 +7,19 @@ const MyLogger_1 = require("./logger/MyLogger");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
 const express = require("express");
+console.log("https://nb-nb.onrender.com");
 async function bootstrap() {
     (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger: new MyLogger_1.MyLogger() });
     app.enableCors({
-        origin: ['http://localhost:5000', 'http://localhost:3000'],
+        origin: ['http://localhost:5000', 'http://localhost:3000', "https://nb-nb.onrender.com"],
         credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.setGlobalPrefix("api");
     app.use(cookieParser());
     app.use(express.static('build'));
-    await app.listen(process.env.APP_PORT, () => console.log('Server started on port ' + process.env.APP_PORT));
+    await app.listen(process.env.APP_PORT || 5000, () => console.log('Server started on port ' + process.env.APP_PORT || 5000));
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

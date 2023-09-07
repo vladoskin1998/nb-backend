@@ -16,13 +16,21 @@ const passport_facebook_1 = require("passport-facebook");
 const enum_1 = require("../enum/enum");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-console.log(process.env);
+console.log(process.env.APP_PORT);
+console.log(process.env.MONGO_LINK);
+console.log(process.env.JWT_SECRET);
+console.log(process.env.MAIL_TRANSPORT);
+console.log(process.env.MAIL_FROM);
+console.log(process.env.GOOGLE_CLIENT_ID);
+console.log(process.env.GOOGLE_CLIENT_SECRET);
+console.log(process.env.FB_ID);
+console.log(process.env.FB_SECRET);
 let FacebookStrategy = class FacebookStrategy extends (0, passport_1.PassportStrategy)(passport_facebook_1.Strategy, 'facebook') {
     constructor() {
         super({
             clientID: process.env.FB_ID,
             clientSecret: process.env.FB_SECRET,
-            callbackURL: 'http://localhost:5000/api/auth/facebook-redirect',
+            callbackURL: 'https://nb-nb.onrender.com/api/auth/facebook-redirect',
             scope: ['email', 'public_profile'],
             profileFields: ['id', 'emails', 'name'],
         });

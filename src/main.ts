@@ -6,12 +6,15 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express'; 
 
+console.log("https://nb-nb.onrender.com");
+
+
 async function bootstrap() {
   config();
   const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
   app.enableCors(
     {
-      origin: ['http://localhost:5000','http://localhost:3000'], // Укажите домен вашего клиента
+      origin: ['http://localhost:5000','http://localhost:3000', "https://nb-nb.onrender.com"], // Укажите домен вашего клиента
       credentials: true, 
     }
   );

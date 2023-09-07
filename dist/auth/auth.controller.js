@@ -25,22 +25,22 @@ let AuthController = class AuthController {
     async googleAuth() { }
     async googleAuthRedirect(req, res) {
         const payload = await this.authService.messengerLogin(req.user);
-        console.log("refreshToken", payload.refreshToken);
+        console.log('refreshToken', payload.refreshToken);
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        return res.redirect('http://localhost:3000');
+        return res.redirect('https://nb-nb.onrender.com');
     }
     async facebookLogin() { }
     async facebookLoginRedirect(req, res) {
         const payload = await this.authService.messengerLogin(req.user);
-        console.log("refreshToken", payload.refreshToken);
+        console.log('refreshToken', payload.refreshToken);
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        return res.redirect('http://localhost:3000');
+        return res.redirect('https://nb-nb.onrender.com');
     }
     async registration(authDto, res) {
         const result = await this.authService.registration(authDto);
