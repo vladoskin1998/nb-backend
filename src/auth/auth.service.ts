@@ -17,12 +17,12 @@ export class AuthService {
     private mailService: MailService,
   ) {}
 
-  async messengerLogin(req) {
-    const { email, methodRegistration } = req?.user;
+  async messengerLogin(user: {email:string, methodRegistration:METHOD_REGISTRATION }) {
+    const { email, methodRegistration } = user;
 
     console.log(email, methodRegistration );
     
-    if (!req.user) {
+    if (!user) {
       throw new HttpException(`No user from ${methodRegistration}`, HttpStatus.BAD_REQUEST);
     }
 
@@ -38,12 +38,12 @@ export class AuthService {
       });
     }
 
-    if (candidate.methodRegistration !== methodRegistration) {
-      throw new HttpException(
-        `Bad method auth, your method ${candidate.methodRegistration}`,
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    // if (candidate.methodRegistration !== methodRegistration) {
+    //   throw new HttpException(
+    //     `Bad method auth, your method ${candidate.methodRegistration}`,
+    //     HttpStatus.FORBIDDEN,
+    //   );
+    // }
     return await this.login({ email, password: candidate?.password, methodRegistration });
   }
 

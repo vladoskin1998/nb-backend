@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Redirect,
   Req,
   Res,
   UseGuards,
@@ -23,8 +24,17 @@ export class AuthController {
 
   @Get('google-redirect')
   @UseGuards(GoogleOAuthGuard)
-  async googleAuthRedirect(@Req() req: Request) {
-    return await this.authService.messengerLogin(req);
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const payload = await this.authService.messengerLogin(req.user as any);
+    console.log("refreshToken", payload.refreshToken);
+    
+    res.cookie('refreshToken', payload.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+  
+    return res.redirect('http://localhost:3000')
+
   }
 
   @Get('facebook')
@@ -33,8 +43,15 @@ export class AuthController {
 
   @Get('facebook-redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req: Request): Promise<any> {
-    return await this.authService.messengerLogin(req);
+  async facebookLoginRedirect(@Req() req: Request, @Res() res: Response): Promise<any> {
+    const payload = await this.authService.messengerLogin(req.user as any);
+    console.log("refreshToken", payload.refreshToken);
+    
+    res.cookie('refreshToken', payload.refreshToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    return res.redirect('http://localhost:3000')
   }
 
   @Post('registration')
