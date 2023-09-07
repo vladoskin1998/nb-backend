@@ -26,15 +26,14 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const payload = await this.authService.messengerLogin(req.user as any);
-    console.log("refreshToken", payload.refreshToken);
-    
+    console.log('refreshToken', payload.refreshToken);
+
     res.cookie('refreshToken', payload.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-  
-    return res.redirect('http://localhost:3000')
-
+    return res.redirect('https://nb-nb.onrender.com');
+   // return res.redirect('http://localhost:3000');
   }
 
   @Get('facebook')
@@ -43,15 +42,20 @@ export class AuthController {
 
   @Get('facebook-redirect')
   @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req: Request, @Res() res: Response): Promise<any> {
+  async facebookLoginRedirect(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
     const payload = await this.authService.messengerLogin(req.user as any);
-    console.log("refreshToken", payload.refreshToken);
-    
+    console.log('refreshToken', payload.refreshToken);
+
     res.cookie('refreshToken', payload.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
     });
-    return res.redirect('http://localhost:3000')
+ //   return res.redirect('http://localhost:3000');
+ 
+ return res.redirect('https://nb-nb.onrender.com');
   }
 
   @Post('registration')
