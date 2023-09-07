@@ -19,8 +19,8 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.use(cookieParser());
   app.use(express.static('build'));
-  await app.listen(process.env.APP_PORT, () =>
-    console.log('Server started on port ' + process.env.APP_PORT),
+  await app.listen(process.env.APP_PORT || 5000, () =>
+    console.log('Server started on port ' + process.env.APP_PORT || 5000),
   );
 }
 bootstrap();

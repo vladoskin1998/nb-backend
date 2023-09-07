@@ -6,7 +6,18 @@ import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { config } from 'dotenv';
 config();
 
-console.log(process.env);
+console.log(process.env.APP_PORT)
+console.log(process.env.MONGO_LINK)
+
+  console.log(process.env.JWT_SECRET)
+  console.log(process.env.MAIL_TRANSPORT)
+  console.log(process.env.MAIL_FROM)
+
+  console.log(process.env.GOOGLE_CLIENT_ID)
+  console.log(process.env.GOOGLE_CLIENT_SECRET)
+  console.log(process.env.FB_ID)
+  console.log(process.env.FB_SECRET)
+
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
