@@ -5,22 +5,41 @@ import { v4 } from 'uuid';
 
 @Injectable()
 export class FilesService {
+  async uploadSingleFile(file: Express.Multer.File, dirName?: string): Promise<string> {
+    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+
+    await this.accessDir(dirPath);
+
+    try {
+      const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
+      await writeFile(`${dirPath}/${fileName}`, file.buffer);
+      return fileName;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteFile(fileName: string, dirName: string) {
+    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+    
+    try {
+      await unlink(`${dirPath}/${fileName}`);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async uploadFiles(
     files: Array<Express.Multer.File>,
     dirName?: string,
   ): Promise<Array<string>> {
-    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
     const nameFiles: string[] = [];
-
-    await this.accessDir(dirPath);
 
     await Promise.all(
       files.map(async (file: Express.Multer.File) => {
         try {
-          const fileName = `${v4()}.${file.mimetype.split('/')[1]}`;
+          const fileName = await this.uploadSingleFile(file, dirName);
           nameFiles.push(fileName);
-          await writeFile(`${dirPath}/${fileName}`, file.buffer);
-          return true;
         } catch (error) {
           throw error;
         }
@@ -30,20 +49,6 @@ export class FilesService {
     return nameFiles;
   }
 
-  async deleteFiles(files: string[], dirName: string) {
-    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-    await Promise.all(
-      files.map(async (fileName: string) => {
-        try {
-          await unlink(`${dirPath}/${fileName}`);
-          return true;
-        } catch (error) {
-          throw error;
-        }
-      }),
-    );
-  }
-  
   async accessDir(dirPath: string): Promise<void> {
     try {
       await access(dirPath, constants.R_OK | constants.W_OK);

@@ -17,11 +17,11 @@ export class JwtTokenService {
   generateTokens(payload: { email: string; role: roleType; id: string }) {
     const accessToken = this.jwtService.sign(
       payload,
-      { expiresIn: '150s' },
+      { expiresIn: '1500s' },
     );
     const refreshToken = this.jwtService.sign(
       payload,
-      { expiresIn: '300s' },
+      { expiresIn: '300000s' },
     );
     return {
       accessToken,

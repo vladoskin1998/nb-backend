@@ -18,13 +18,15 @@ const enum_1 = require("../enum/enum");
 const auth_service_1 = require("./auth.service");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-console.log(process.env);
+console.log(process.env.GOOGLE_CLIENT_ID);
+console.log(process.env.GOOGLE_CLIENT_SECRET);
+console.log(process.env.CALL_BACK_URL_GOOGLE);
 let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrategy)(passport_google_oauth20_1.Strategy, 'google') {
     constructor(configService, authService) {
         super({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: 'https://nb-nb.onrender.com/api/auth/google-redirect/',
+            callbackURL: process.env.CALL_BACK_URL_GOOGLE,
             scope: ['email', 'profile'],
         });
         this.configService = configService;

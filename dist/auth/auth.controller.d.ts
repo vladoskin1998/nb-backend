@@ -1,9 +1,11 @@
 import { AuthService } from './auth.service';
 import { AuthDto } from './auth.dto';
 import { Response, Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 export declare class AuthController {
     private readonly authService;
-    constructor(authService: AuthService);
+    private configService;
+    constructor(authService: AuthService, configService: ConfigService);
     googleAuth(): Promise<any>;
     googleAuthRedirect(req: Request, res: Response): Promise<void>;
     facebookLogin(): Promise<any>;

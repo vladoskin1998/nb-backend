@@ -7,12 +7,11 @@ import { FilesModule } from './files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ERROR_MESSAGE } from './enum/enum';
 import { UserModule } from './user/user.module';
-
-const envPath = path.resolve(__dirname, '..', '.env');
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: envPath, isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -27,20 +26,21 @@ const envPath = path.resolve(__dirname, '..', '.env');
       },
     }),
  
-    MulterModule.register({
-      limits: {
-        fileSize: 1000000000,
-      },
-      fileFilter: (req, file, cb) => {
-        if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|mp4)$/)) {
-          return cb(new Error(ERROR_MESSAGE.ERROR_FILE_EXTENSION), false);
-        }
-        cb(null, true);
-      },
-    }),
+    // MulterModule.register({
+    //   limits: {
+    //     fileSize: 100000000000,
+    //   },
+    //   // fileFilter: (req, file, cb) => {
+    //   //   if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|mp4)$/)) {
+    //   //     return cb(new Error(ERROR_MESSAGE.ERROR_FILE_EXTENSION), false);
+    //   //   }
+    //   //   cb(null, true);
+    //   // },
+    // }),
     AuthModule,
     FilesModule,
     UserModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

@@ -18,29 +18,29 @@ const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("./auth.service");
 const google_auth_guard_1 = require("./google-auth.guard");
 const auth_dto_1 = require("./auth.dto");
+const config_1 = require("@nestjs/config");
 let AuthController = class AuthController {
-    constructor(authService) {
+    constructor(authService, configService) {
         this.authService = authService;
+        this.configService = configService;
     }
     async googleAuth() { }
     async googleAuthRedirect(req, res) {
         const payload = await this.authService.messengerLogin(req.user);
-        console.log('refreshToken', payload.refreshToken);
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        return res.redirect('https://nb-nb.onrender.com');
+        return res.redirect(this.configService.get('CALL_BACK_URL_WEB_APP'));
     }
     async facebookLogin() { }
     async facebookLoginRedirect(req, res) {
         const payload = await this.authService.messengerLogin(req.user);
-        console.log('refreshToken', payload.refreshToken);
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-        return res.redirect('https://nb-nb.onrender.com');
+        return res.redirect(this.configService.get('CALL_BACK_URL_WEB_APP'));
     }
     async registration(authDto, res) {
         const result = await this.authService.registration(authDto);
@@ -140,7 +140,8 @@ __decorate([
 ], AuthController.prototype, "logout", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        config_1.ConfigService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

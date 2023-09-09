@@ -10,36 +10,40 @@ exports.FilesService = void 0;
 const common_1 = require("@nestjs/common");
 const promises_1 = require("fs/promises");
 const path = require("path");
-const uuid_1 = require("uuid");
 let FilesService = class FilesService {
-    async uploadFiles(files, dirName) {
+    async uploadSingleFile(file, dirName) {
         const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-        const nameFiles = [];
         await this.accessDir(dirPath);
+        try {
+            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
+            await (0, promises_1.writeFile)(`${dirPath}/${fileName}`, file.buffer);
+            return fileName;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async deleteFile(fileName, dirName) {
+        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+        try {
+            await (0, promises_1.unlink)(`${dirPath}/${fileName}`);
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async uploadFiles(files, dirName) {
+        const nameFiles = [];
         await Promise.all(files.map(async (file) => {
             try {
-                const fileName = `${(0, uuid_1.v4)()}.${file.mimetype.split('/')[1]}`;
+                const fileName = await this.uploadSingleFile(file, dirName);
                 nameFiles.push(fileName);
-                await (0, promises_1.writeFile)(`${dirPath}/${fileName}`, file.buffer);
-                return true;
             }
             catch (error) {
                 throw error;
             }
         }));
         return nameFiles;
-    }
-    async deleteFiles(files, dirName) {
-        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-        await Promise.all(files.map(async (fileName) => {
-            try {
-                await (0, promises_1.unlink)(`${dirPath}/${fileName}`);
-                return true;
-            }
-            catch (error) {
-                throw error;
-            }
-        }));
     }
     async accessDir(dirPath) {
         try {

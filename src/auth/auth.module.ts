@@ -31,6 +31,9 @@ import { User, UserSchema } from '../user/user.schema';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, FacebookStrategy, JwtTokenService],
+  providers: [AuthService, 
+    GoogleStrategy, 
+    FacebookStrategy, 
+    JwtTokenService],
 })
 export class AuthModule {}

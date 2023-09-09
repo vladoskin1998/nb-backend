@@ -9,20 +9,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const path = require("path");
 const mongoose_1 = require("@nestjs/mongoose");
 const auth_module_1 = require("./auth/auth.module");
 const files_module_1 = require("./files/files.module");
-const platform_express_1 = require("@nestjs/platform-express");
-const enum_1 = require("./enum/enum");
 const user_module_1 = require("./user/user.module");
-const envPath = path.resolve(__dirname, '..', '.env');
+const category_module_1 = require("./category/category.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule.forRoot({ envFilePath: envPath, isGlobal: true }),
+            config_1.ConfigModule.forRoot({ isGlobal: true }),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
@@ -35,20 +32,10 @@ AppModule = __decorate([
                     };
                 },
             }),
-            platform_express_1.MulterModule.register({
-                limits: {
-                    fileSize: 1000000000,
-                },
-                fileFilter: (req, file, cb) => {
-                    if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|mp4)$/)) {
-                        return cb(new Error(enum_1.ERROR_MESSAGE.ERROR_FILE_EXTENSION), false);
-                    }
-                    cb(null, true);
-                },
-            }),
             auth_module_1.AuthModule,
             files_module_1.FilesModule,
             user_module_1.UserModule,
+            category_module_1.CategoryModule,
         ],
     })
 ], AppModule);

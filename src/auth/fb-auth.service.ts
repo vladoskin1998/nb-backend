@@ -6,17 +6,10 @@ import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { config } from 'dotenv';
 config();
 
-console.log(process.env.APP_PORT);
-console.log(process.env.MONGO_LINK);
 
-console.log(process.env.JWT_SECRET);
-console.log(process.env.MAIL_TRANSPORT);
-console.log(process.env.MAIL_FROM);
-
-console.log(process.env.GOOGLE_CLIENT_ID);
-console.log(process.env.GOOGLE_CLIENT_SECRET);
 console.log(process.env.FB_ID);
 console.log(process.env.FB_SECRET);
+console.log(process.env.CALL_BACK_URL_FB);
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
@@ -24,8 +17,9 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
     super({
       clientID: process.env.FB_ID,
       clientSecret: process.env.FB_SECRET,
-      // callbackURL: 'http://localhost:5000/api/auth/facebook-redirect',
-      callbackURL: 'https://nb-nb.onrender.com/api/auth/facebook-redirect',
+      //callbackURL: 'http://localhost:5000/api/auth/facebook-redirect',
+      // callbackURL: 'https://nb-nb.onrender.com/api/auth/facebook-redirect',
+      callbackURL: process.env.CALL_BACK_URL_FB,
       scope: ['email', 'public_profile'],
       profileFields: ['id', 'emails', 'name'],
     });

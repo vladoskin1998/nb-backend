@@ -9,17 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FilesController = void 0;
-const common_1 = require("@nestjs/common");
-const files_service_1 = require("./files.service");
-let FilesController = class FilesController {
-    constructor(filesService) {
-        this.filesService = filesService;
-    }
-};
-FilesController = __decorate([
-    (0, common_1.Controller)('files'),
-    __metadata("design:paramtypes", [files_service_1.FilesService])
-], FilesController);
-exports.FilesController = FilesController;
-//# sourceMappingURL=files.controller.js.map
+exports.SubCategoryListDto = exports.CategoryDto = void 0;
+const class_validator_1 = require("class-validator");
+class CategoryDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "id", void 0);
+exports.CategoryDto = CategoryDto;
+class SubCategoryListDto {
+}
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], SubCategoryListDto.prototype, "listSubCategory", void 0);
+exports.SubCategoryListDto = SubCategoryListDto;
+//# sourceMappingURL=category.dto.js.map

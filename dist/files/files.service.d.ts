@@ -1,6 +1,7 @@
 /// <reference types="multer" />
 export declare class FilesService {
+    uploadSingleFile(file: Express.Multer.File, dirName?: string): Promise<string>;
+    deleteFile(fileName: string, dirName: string): Promise<void>;
     uploadFiles(files: Array<Express.Multer.File>, dirName?: string): Promise<Array<string>>;
-    deleteFiles(files: string[], dirName: string): Promise<void>;
     accessDir(dirPath: string): Promise<void>;
 }
