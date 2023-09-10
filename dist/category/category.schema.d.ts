@@ -22,24 +22,28 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { HydratedDocument, Types } from 'mongoose';
-export type CategoryDocument = HydratedDocument<Category>;
-export type SubCategoryDocument = HydratedDocument<SubCategory>;
+import { Model, Types } from 'mongoose';
+export type CategoryDocument = Model<Category>;
+export type SubCategoryDocument = Model<SubCategory>;
 export declare class SubCategory {
     name: string;
     fileName: string;
+    isVisiable: boolean;
+    numberView: number;
     category: Types.ObjectId;
 }
 export declare class Category {
     name: string;
+    numberView: number;
+    isVisiable: boolean;
     fileName: string;
 }
-export declare const SubCategorySchema: import("mongoose").Schema<SubCategory, import("mongoose").Model<SubCategory, any, any, any, import("mongoose").Document<unknown, any, SubCategory> & SubCategory & {
+export declare const SubCategorySchema: import("mongoose").Schema<SubCategory, Model<SubCategory, any, any, any, import("mongoose").Document<unknown, any, SubCategory> & SubCategory & {
     _id: Types.ObjectId;
 }, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, SubCategory, import("mongoose").Document<unknown, {}, SubCategory> & SubCategory & {
     _id: Types.ObjectId;
 }>;
-export declare const CategorySchema: import("mongoose").Schema<Category, import("mongoose").Model<Category, any, any, any, import("mongoose").Document<unknown, any, Category> & Category & {
+export declare const CategorySchema: import("mongoose").Schema<Category, Model<Category, any, any, any, import("mongoose").Document<unknown, any, Category> & Category & {
     _id: Types.ObjectId;
 }, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Category, import("mongoose").Document<unknown, {}, Category> & Category & {
     _id: Types.ObjectId;

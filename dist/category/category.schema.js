@@ -23,11 +23,19 @@ __decorate([
     __metadata("design:type", String)
 ], SubCategory.prototype, "fileName", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: true }),
+    __metadata("design:type", Boolean)
+], SubCategory.prototype, "isVisiable", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], SubCategory.prototype, "numberView", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'Category' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], SubCategory.prototype, "category", void 0);
 SubCategory = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ versionKey: false })
 ], SubCategory);
 exports.SubCategory = SubCategory;
 let Category = class Category {
@@ -37,11 +45,19 @@ __decorate([
     __metadata("design:type", String)
 ], Category.prototype, "name", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], Category.prototype, "numberView", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: true }),
+    __metadata("design:type", Boolean)
+], Category.prototype, "isVisiable", void 0);
+__decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], Category.prototype, "fileName", void 0);
 Category = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ versionKey: false })
 ], Category);
 exports.Category = Category;
 exports.SubCategorySchema = mongoose_1.SchemaFactory.createForClass(SubCategory);

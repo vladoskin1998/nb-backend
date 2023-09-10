@@ -1,25 +1,55 @@
-import { Controller, Post, Body, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UploadedFiles,
+  UseInterceptors,
+  Get,
+  Query,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CategoryDto, SubCategoryListDto } from './category.dto'; // Создайте DTO по вашим требованиям
-import { FileFieldsInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { MulterModule } from '@nestjs/platform-express';
+import { CategoryDto, IDDto, SubCategoryListDto } from './category.dto'; // Создайте DTO по вашим требованиям
+import { FilesInterceptor } from '@nestjs/platform-express';
+
 @Controller('categories')
 export class CategoryController {
-    constructor(private readonly categoryService: CategoryService) { }
+  constructor(private readonly categoryService: CategoryService) {}
 
-    @Post('add-categories')
-    @UseInterceptors(FilesInterceptor('files'))
-    async uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Body() body) {
+  @Post('add-categories')
+  @UseInterceptors(FilesInterceptor('files'))
+  async uploadFile(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body,
+  ) {
+    const {
+      category,
+      subCategory,
+    }: {
+      category: CategoryDto;
+      subCategory: SubCategoryListDto;
+    } = JSON.parse(body.payload);
 
-        console.log(files);
+    await this.categoryService.createCategory({ category, subCategory, files });
+  }
 
-        const { category, subCategory }: {
-            category: {id:string, name:string},
-            subCategory:  {id:string, name:string}[]
-        } = JSON.parse(body.payload)
+  @Get('all-categories')
+  async allCategories() {
+    return await this.categoryService.getAllCategories();
+  }
 
-        await this.categoryService.createCategory(
-            { category, subCategory, files }
-        );
-    }
+  @Get('sub-categories')
+  async allSubCategorie(@Query() { id }: IDDto) {
+    console.log(id);
+    return await this.categoryService.getSubCategories(id);
+  }
+
+  @Post('delete-category')
+  async deleteCategory(@Body() {id}: IDDto) {
+    return await this.categoryService.deleteCategory(id)
+  }
+
+  @Post('delete-subcategory')
+  async deleteSubCategory(@Body() {id}: IDDto) {
+    return await this.categoryService.deleteSubCategory(id)
+  }
 }

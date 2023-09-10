@@ -31,9 +31,8 @@ let CategoryService = class CategoryService {
                 name: category.name,
                 fileName: category.id,
             });
-            if (subCategory &&
-                subCategory.length > 0) {
-                const subCategoriesArr = subCategory.map(it => ({
+            if (subCategory && subCategory.listSubCategory.length > 0) {
+                const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
                     name: it.name,
                     fileName: it.id,
                 }));
@@ -47,9 +46,37 @@ let CategoryService = class CategoryService {
             return newCategory;
         }
         catch (error) {
-            throw new Error("CategoryService createCategory" + error.message);
+            throw new Error('CategoryService createCategory' + error.message);
         }
     }
+    async getAllCategories() {
+        try {
+            return await this.categoryModel.find().select('-fileName');
+        }
+        catch (error) {
+            throw new Error('CategoryService getAllCategories' + error.message);
+        }
+    }
+    async getSubCategories(categoryId) {
+        try {
+            await this.categoryModel.findOneAndUpdate({ _id: categoryId }, { $inc: { numberView: 1 } });
+            return await this.subCategoryModel.find({
+                category: new mongoose_1.Types.ObjectId(categoryId),
+            });
+        }
+        catch (error) {
+            throw new Error('CategoryService getSubCategories' + error.message);
+        }
+    }
+    async deleteCategory(categoryId) {
+        try {
+            await this.subCategoryModel.deleteMany({ category: categoryId });
+            await this.categoryModel.findByIdAndDelete({ _id: categoryId });
+            return categoryId;
+        }
+        catch (error) { }
+    }
+    async deleteSubCategory(id) { }
 };
 CategoryService = __decorate([
     (0, common_1.Injectable)(),

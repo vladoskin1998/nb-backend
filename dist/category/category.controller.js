@@ -15,15 +15,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryController = void 0;
 const common_1 = require("@nestjs/common");
 const category_service_1 = require("./category.service");
+const category_dto_1 = require("./category.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 let CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
     async uploadFile(files, body) {
-        console.log(files);
-        const { category, subCategory } = JSON.parse(body.payload);
+        const { category, subCategory, } = JSON.parse(body.payload);
         await this.categoryService.createCategory({ category, subCategory, files });
+    }
+    async allCategories() {
+        return await this.categoryService.getAllCategories();
+    }
+    async allSubCategorie({ id }) {
+        console.log(id);
+        return await this.categoryService.getSubCategories(id);
+    }
+    async deleteCategory({ id }) {
+        return await this.categoryService.deleteCategory(id);
+    }
+    async deleteSubCategory({ id }) {
+        return await this.categoryService.deleteSubCategory(id);
     }
 };
 __decorate([
@@ -35,6 +48,33 @@ __decorate([
     __metadata("design:paramtypes", [Array, Object]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "uploadFile", null);
+__decorate([
+    (0, common_1.Get)('all-categories'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "allCategories", null);
+__decorate([
+    (0, common_1.Get)('sub-categories'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "allSubCategorie", null);
+__decorate([
+    (0, common_1.Post)('delete-category'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "deleteCategory", null);
+__decorate([
+    (0, common_1.Post)('delete-subcategory'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "deleteSubCategory", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
