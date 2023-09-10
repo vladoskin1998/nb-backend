@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkfrontend_jfit=self.webpackChunkfrontend_jfit||[]).push([[625],{2625:function(e,n,t){t.r(n);var a=t(9439),f=t(2791),s=t(184);n.default=function(){var e=(0,f.useState)(!1),n=(0,a.Z)(e,2);n[0],n[1];return(0,s.jsx)("div",{className:"admin"})}}}]);
+//# sourceMappingURL=625.ce7168cd.chunk.js.map
