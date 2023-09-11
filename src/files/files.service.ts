@@ -5,69 +5,72 @@ import { v4 } from 'uuid';
 
 @Injectable()
 export class FilesService {
-    async uploadSingleFile(file: Express.Multer.File, dirName?: string): Promise<string> {
-        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-        await this.accessDir(dirPath);
+  async uploadSingleFile(file: Express.Multer.File, dirName?: string): Promise<string> {
+    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+
+    await this.accessDir(dirPath);
+
+    try {
+      const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
+      await writeFile(`${dirPath}/${fileName}`, file.buffer);
+      return fileName;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteFile(fileName: string, dirName: string) {
+    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+    
+    try {
+      await unlink(`${dirPath}/${fileName}.jpeg`);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteFiles(fileNames: string[], dirName: string) {
+
+  
+    try {
+      for (const fileName of fileNames) {
+        await this.deleteFile(fileName, dirName);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+
+  async uploadFiles(
+    files: Array<Express.Multer.File>,
+    dirName?: string,
+  ): Promise<Array<string>> {
+    const nameFiles: string[] = [];
+
+    await Promise.all(
+      files.map(async (file: Express.Multer.File) => {
         try {
-            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
-            await writeFile(`${dirPath}/${fileName}`, file.buffer);
-            return fileName;
+          const fileName = await this.uploadSingleFile(file, dirName);
+          nameFiles.push(fileName);
         } catch (error) {
-            throw error;
+          throw error;
         }
+      }),
+    );
+
+    return nameFiles;
+  }
+
+  async accessDir(dirPath: string): Promise<void> {
+    try {
+      await access(dirPath, constants.R_OK | constants.W_OK);
+    } catch (error) {
+      try {
+        await mkdir(dirPath);
+      } catch (error) {
+        throw error;
+      }
     }
-
-    async deleteFile(fileName: string, dirName: string) {
-        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-
-        try {
-            await unlink(`${dirPath}/${fileName}.jpeg`);
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async deleteFiles(fileNames: string[], dirName: string) {
-
-        try {
-            for (const fileName of fileNames) {
-                await this.deleteFile(fileName, dirName);
-            }
-        } catch (error) {
-            throw error;
-        }
-    }
-
-
-    async uploadFiles(
-        files: Array<Express.Multer.File>,
-        dirName?: string,
-    ): Promise<Array<string>> {
-        const nameFiles: string[] = [];
-
-        await Promise.all(
-            files.map(async (file: Express.Multer.File) => {
-                try {
-                    const fileName = await this.uploadSingleFile(file, dirName);
-                    nameFiles.push(fileName);
-                } catch (error) {
-                    throw error;
-                }
-            }),
-        );
-
-        return nameFiles;
-    }
-
-    async accessDir(dirPath: string): Promise<void> {
-        try {
-            await access(dirPath, constants.R_OK | constants.W_OK);
-        } catch (error) {
-            try {
-                await mkdir(dirPath);
-            } catch (error) {
-                throw error;
-            }
-        }
-    }
+  }
 }
