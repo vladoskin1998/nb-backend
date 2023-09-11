@@ -60,15 +60,15 @@ let FilesService = class FilesService {
         const uploadsDir = path.join(__dirname, '../../', 'uploads');
         try {
             (0, fs_1.accessSync)(uploadsDir, promises_1.constants.R_OK | promises_1.constants.W_OK);
+            try {
+                (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
+            }
+            catch (error) {
+                (0, fs_1.mkdirSync)(dirPath);
+            }
         }
         catch (error) {
             (0, fs_1.mkdirSync)(uploadsDir);
-            (0, fs_1.mkdirSync)(dirPath);
-        }
-        try {
-            (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
-        }
-        catch (error) {
             (0, fs_1.mkdirSync)(dirPath);
         }
     }
