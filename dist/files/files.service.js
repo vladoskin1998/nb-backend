@@ -8,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilesService = void 0;
 const common_1 = require("@nestjs/common");
+const fs_1 = require("fs");
 const promises_1 = require("fs/promises");
 const path = require("path");
 let FilesService = class FilesService {
     async uploadSingleFile(file, dirName) {
-        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-        await this.accessDir(dirPath);
+        const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
+        this.accessDir(dirPath);
         try {
             const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
             await (0, promises_1.writeFile)(`${dirPath}/${fileName}`, file.buffer);
@@ -24,7 +25,7 @@ let FilesService = class FilesService {
         }
     }
     async deleteFile(fileName, dirName) {
-        const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+        const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
         try {
             await (0, promises_1.unlink)(`${dirPath}/${fileName}.jpeg`);
         }
@@ -55,16 +56,18 @@ let FilesService = class FilesService {
         }));
         return nameFiles;
     }
-    async accessDir(dirPath) {
+    accessDir(dirPath) {
+        const uploadsDir = path.join(__dirname, '../../', 'uploads');
         try {
-            await (0, promises_1.access)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
+            (0, fs_1.accessSync)(uploadsDir, promises_1.constants.R_OK | promises_1.constants.W_OK);
         }
         catch (error) {
+            (0, fs_1.mkdirSync)(uploadsDir);
             try {
-                await (0, promises_1.mkdir)(dirPath);
+                (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
             }
             catch (error) {
-                throw error;
+                (0, fs_1.mkdirSync)(dirPath);
             }
         }
     }

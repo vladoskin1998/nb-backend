@@ -4,5 +4,5 @@ export declare class FilesService {
     deleteFile(fileName: string, dirName: string): Promise<void>;
     deleteFiles(fileNames: string[], dirName: string): Promise<void>;
     uploadFiles(files: Array<Express.Multer.File>, dirName?: string): Promise<Array<string>>;
-    accessDir(dirPath: string): Promise<void>;
+    accessDir(dirPath: string): void;
 }

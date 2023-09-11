@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { accessSync, mkdirSync } from 'fs';
 import { access, constants, mkdir, unlink, writeFile } from 'fs/promises';
 import * as path from 'path';
 import { v4 } from 'uuid';
 
 @Injectable()
 export class FilesService {
-  async uploadSingleFile(file: Express.Multer.File, dirName?: string): Promise<string> {
-    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
+  async uploadSingleFile(
+    file: Express.Multer.File,
+    dirName?: string,
+  ): Promise<string> {
+    const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
 
-    await this.accessDir(dirPath);
+    this.accessDir(dirPath);
 
     try {
       const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
@@ -20,8 +24,7 @@ export class FilesService {
   }
 
   async deleteFile(fileName: string, dirName: string) {
-    const dirPath = path.join(__dirname, '../../', dirName || 'upload');
-    
+    const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
     try {
       await unlink(`${dirPath}/${fileName}.jpeg`);
     } catch (error) {
@@ -30,8 +33,6 @@ export class FilesService {
   }
 
   async deleteFiles(fileNames: string[], dirName: string) {
-
-  
     try {
       for (const fileName of fileNames) {
         await this.deleteFile(fileName, dirName);
@@ -40,7 +41,6 @@ export class FilesService {
       throw error;
     }
   }
-  
 
   async uploadFiles(
     files: Array<Express.Multer.File>,
@@ -62,14 +62,20 @@ export class FilesService {
     return nameFiles;
   }
 
-  async accessDir(dirPath: string): Promise<void> {
+  accessDir(dirPath: string): void {
+    //uploads/categories
+    const uploadsDir = path.join(__dirname, '../../', 'uploads')
     try {
-      await access(dirPath, constants.R_OK | constants.W_OK);
+      accessSync(
+        uploadsDir,
+        constants.R_OK | constants.W_OK,
+      );
     } catch (error) {
+      mkdirSync(uploadsDir);
       try {
-        await mkdir(dirPath);
+        accessSync(dirPath, constants.R_OK | constants.W_OK);
       } catch (error) {
-        throw error;
+        mkdirSync(dirPath);
       }
     }
   }
