@@ -25,7 +25,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Model, Types } from 'mongoose';
 import { Category, SubCategory } from './category.schema';
-import { CategoryDto, SubCategoryListDto } from './category.dto';
+import { CategoryDto, SubCategoryListDto, VisiableDto } from './category.dto';
 import { FilesService } from 'src/files/files.service';
 export declare class CategoryService {
     private readonly categoryModel;
@@ -37,12 +37,25 @@ export declare class CategoryService {
         subCategory: SubCategoryListDto;
         files: Array<Express.Multer.File>;
     }): Promise<Category>;
+    addSubCategoriesToCategories({ idCategory, subCategory, files }: {
+        idCategory: string;
+        subCategory: SubCategoryListDto;
+        files: Array<Express.Multer.File>;
+    }): Promise<void>;
+    createSubCategory({ idCategory, subCategory, }: {
+        idCategory: Types.ObjectId;
+        subCategory: SubCategoryListDto;
+    }): Promise<void>;
     getAllCategories(): Promise<(import("mongoose").Document<unknown, {}, Category> & Category & {
         _id: Types.ObjectId;
     })[]>;
     getSubCategories(categoryId: string): Promise<(import("mongoose").Document<unknown, {}, SubCategory> & SubCategory & {
         _id: Types.ObjectId;
     })[]>;
-    deleteCategory(categoryId: any): Promise<any>;
-    deleteSubCategory(id: any): Promise<void>;
+    deleteCategory(catId: string): Promise<string>;
+    deleteSubCategory(subCatId: string): Promise<Types.ObjectId>;
+    visiableCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
+    visiableSubCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
+    editCategory({ id, name }: CategoryDto): Promise<CategoryDto>;
+    editSubCategory({ id, name }: CategoryDto): Promise<CategoryDto>;
 }

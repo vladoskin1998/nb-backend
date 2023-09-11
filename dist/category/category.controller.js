@@ -21,9 +21,15 @@ let CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
-    async uploadFile(files, body) {
+    async addCategories(files, body) {
         const { category, subCategory, } = JSON.parse(body.payload);
         await this.categoryService.createCategory({ category, subCategory, files });
+        return;
+    }
+    async addSubCategoriesToCategories(files, body) {
+        const { category, subCategory, } = JSON.parse(body.payload);
+        await this.categoryService.addSubCategoriesToCategories({ idCategory: category.id, subCategory, files });
+        return;
     }
     async allCategories() {
         return await this.categoryService.getAllCategories();
@@ -38,6 +44,18 @@ let CategoryController = class CategoryController {
     async deleteSubCategory({ id }) {
         return await this.categoryService.deleteSubCategory(id);
     }
+    async visiableCategory(dto) {
+        return await this.categoryService.visiableCategory(dto);
+    }
+    async visiableSubCategory(dto) {
+        return await this.categoryService.visiableSubCategory(dto);
+    }
+    async editCategory(dto) {
+        return await this.categoryService.editCategory(dto);
+    }
+    async editSubCategory(dto) {
+        return await this.categoryService.editSubCategory(dto);
+    }
 };
 __decorate([
     (0, common_1.Post)('add-categories'),
@@ -47,7 +65,16 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array, Object]),
     __metadata("design:returntype", Promise)
-], CategoryController.prototype, "uploadFile", null);
+], CategoryController.prototype, "addCategories", null);
+__decorate([
+    (0, common_1.Post)('add-sub-categories'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
+    __param(0, (0, common_1.UploadedFiles)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Object]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "addSubCategoriesToCategories", null);
 __decorate([
     (0, common_1.Get)('all-categories'),
     __metadata("design:type", Function),
@@ -75,6 +102,34 @@ __decorate([
     __metadata("design:paramtypes", [category_dto_1.IDDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "deleteSubCategory", null);
+__decorate([
+    (0, common_1.Post)('visiable-category'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.VisiableDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "visiableCategory", null);
+__decorate([
+    (0, common_1.Post)('visiable-subcategory'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.VisiableDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "visiableSubCategory", null);
+__decorate([
+    (0, common_1.Post)('edit-category'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.CategoryDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "editCategory", null);
+__decorate([
+    (0, common_1.Post)('edit-subcategory'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.CategoryDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "editSubCategory", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])

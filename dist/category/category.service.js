@@ -32,22 +32,34 @@ let CategoryService = class CategoryService {
                 fileName: category.id,
             });
             if (subCategory && subCategory.listSubCategory.length > 0) {
-                const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
-                    name: it.name,
-                    fileName: it.id,
-                }));
-                const newSubCategory = new this.subCategoryModel(subCategoriesArr);
-                newSubCategory.category = newCategory._id;
-                await Promise.all([newCategory.save(), newSubCategory.save()]);
+                this.createSubCategory({
+                    idCategory: newCategory._id,
+                    subCategory,
+                });
             }
-            else {
-                await newCategory.save();
-            }
+            await newCategory.save();
             return newCategory;
         }
         catch (error) {
             throw new Error('CategoryService createCategory' + error.message);
         }
+    }
+    async addSubCategoriesToCategories({ idCategory, subCategory, files }) {
+        await this.filesService.uploadFiles(files, 'uploads/categories');
+        const idCatRef = new mongoose_1.Types.ObjectId(idCategory);
+        await this.createSubCategory({
+            idCategory: idCatRef,
+            subCategory,
+        });
+        return;
+    }
+    async createSubCategory({ idCategory, subCategory, }) {
+        const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
+            name: it.name,
+            fileName: it.id,
+            category: idCategory
+        }));
+        await this.subCategoryModel.create(subCategoriesArr);
     }
     async getAllCategories() {
         try {
@@ -68,15 +80,72 @@ let CategoryService = class CategoryService {
             throw new Error('CategoryService getSubCategories' + error.message);
         }
     }
-    async deleteCategory(categoryId) {
+    async deleteCategory(catId) {
+        const categoryId = new mongoose_1.Types.ObjectId(catId);
         try {
+            const subFileNames = await this.subCategoryModel.find({ category: categoryId }, "fileName");
+            const catFile = await this.categoryModel.findByIdAndDelete({ _id: catId });
+            const deletedFiles = await subFileNames.map(item => item === null || item === void 0 ? void 0 : item.fileName);
+            deletedFiles.push(catFile.fileName);
+            await this.filesService.deleteFiles(deletedFiles, 'uploads/categories');
             await this.subCategoryModel.deleteMany({ category: categoryId });
-            await this.categoryModel.findByIdAndDelete({ _id: categoryId });
-            return categoryId;
+            return catId;
         }
-        catch (error) { }
+        catch (error) {
+            throw error;
+        }
     }
-    async deleteSubCategory(id) { }
+    async deleteSubCategory(subCatId) {
+        const subCategoryId = new mongoose_1.Types.ObjectId(subCatId);
+        try {
+            const subCatFile = await this.subCategoryModel.findByIdAndDelete({ _id: subCategoryId });
+            await this.filesService.deleteFile(subCatFile.fileName, 'uploads/categories');
+            return subCategoryId;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async visiableCategory({ id, isVisiable }) {
+        const categoryId = new mongoose_1.Types.ObjectId(id);
+        try {
+            await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { isVisiable });
+            return { id, isVisiable };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async visiableSubCategory({ id, isVisiable }) {
+        const subCategoryId = new mongoose_1.Types.ObjectId(id);
+        try {
+            await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { isVisiable });
+            return { id, isVisiable };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async editCategory({ id, name }) {
+        const categoryId = new mongoose_1.Types.ObjectId(id);
+        try {
+            await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { name });
+            return { id, name };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async editSubCategory({ id, name }) {
+        const subCategoryId = new mongoose_1.Types.ObjectId(id);
+        try {
+            await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { name });
+            return { id, name };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 CategoryService = __decorate([
     (0, common_1.Injectable)(),
