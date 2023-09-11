@@ -71,12 +71,13 @@ export class FilesService {
         constants.R_OK | constants.W_OK,
       );
     } catch (error) {
-      mkdirSync(uploadsDir);
-      try {
+      mkdirSync(uploadsDir)
+      mkdirSync(dirPath);
+    }
+    try {
         accessSync(dirPath, constants.R_OK | constants.W_OK);
       } catch (error) {
         mkdirSync(dirPath);
       }
-    }
   }
 }

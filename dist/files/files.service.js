@@ -63,12 +63,13 @@ let FilesService = class FilesService {
         }
         catch (error) {
             (0, fs_1.mkdirSync)(uploadsDir);
-            try {
-                (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
-            }
-            catch (error) {
-                (0, fs_1.mkdirSync)(dirPath);
-            }
+            (0, fs_1.mkdirSync)(dirPath);
+        }
+        try {
+            (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
+        }
+        catch (error) {
+            (0, fs_1.mkdirSync)(dirPath);
         }
     }
 };
