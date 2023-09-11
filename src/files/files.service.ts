@@ -26,7 +26,7 @@ export class FilesService {
   async deleteFile(fileName: string, dirName: string) {
     const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
     try {
-      await unlink(`${dirPath}/${fileName}.jpeg`);
+      await unlink(`${dirPath}/${fileName}`);
     } catch (error) {
       throw error;
     }

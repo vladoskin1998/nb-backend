@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Authentication, AuthenticationSchema } from './auth.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MailModule } from 'src/mailer/mail.module';
+//import { MailModule } from 'src/mailer/mail.module';
 import { GoogleStrategy } from './google-auth.service';
 import { FacebookStrategy } from './fb-auth.service';
 import { JwtTokenService } from './jwt-auth.service';
@@ -14,7 +14,7 @@ import { User, UserSchema } from '../user/user.schema';
 @Module({
   imports: [
     ConfigModule,
-    MailModule,
+  
     MongooseModule.forFeature([
       { name: Authentication.name, schema: AuthenticationSchema },
       { name: User.name, schema: UserSchema },

@@ -19,14 +19,12 @@ const user_schema_1 = require("../user/user.schema");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const bcrypt = require("bcrypt");
-const mail_service_1 = require("../mailer/mail.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
 const uuid_1 = require("uuid");
 let AuthService = class AuthService {
-    constructor(userModel, jwtTokenService, mailService) {
+    constructor(userModel, jwtTokenService) {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
-        this.mailService = mailService;
     }
     async messengerLogin(user) {
         const { email, methodRegistration } = user;
@@ -109,8 +107,7 @@ AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_auth_service_1.JwtTokenService,
-        mail_service_1.MailService])
+        jwt_auth_service_1.JwtTokenService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

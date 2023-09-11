@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { AuthDto } from './auth.dto';
 import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
 import * as bcrypt from 'bcrypt';
-import { MailService } from 'src/mailer/mail.service';
+//import { MailService } from 'src/mailer/mail.service';
 import { JwtTokenService } from './jwt-auth.service';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtTokenService: JwtTokenService,
-    private mailService: MailService,
+ //   private mailService: MailService,
   ) {}
 
   async messengerLogin(user: {email:string, methodRegistration:METHOD_REGISTRATION }) {

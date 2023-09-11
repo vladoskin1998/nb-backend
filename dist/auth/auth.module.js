@@ -14,7 +14,6 @@ const mongoose_1 = require("@nestjs/mongoose");
 const auth_schema_1 = require("./auth.schema");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
-const mail_module_1 = require("../mailer/mail.module");
 const google_auth_service_1 = require("./google-auth.service");
 const fb_auth_service_1 = require("./fb-auth.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
@@ -25,7 +24,6 @@ AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule,
-            mail_module_1.MailModule,
             mongoose_1.MongooseModule.forFeature([
                 { name: auth_schema_1.Authentication.name, schema: auth_schema_1.AuthenticationSchema },
                 { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },

@@ -2,13 +2,11 @@ import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
 import { AuthDto } from './auth.dto';
 import { ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
-import { MailService } from 'src/mailer/mail.service';
 import { JwtTokenService } from './jwt-auth.service';
 export declare class AuthService {
     private userModel;
     private jwtTokenService;
-    private mailService;
-    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService, mailService: MailService);
+    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService);
     messengerLogin(user: {
         email: string;
         methodRegistration: METHOD_REGISTRATION;
