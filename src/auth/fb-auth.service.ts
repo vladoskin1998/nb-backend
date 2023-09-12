@@ -4,8 +4,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-facebook';
 import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { config } from 'dotenv';
+import path from 'path';
+
+const env =  path?.join(__dirname, "../../", '.env')
 config({
-  path: '../../.env'
+  path: env
 });
 
 

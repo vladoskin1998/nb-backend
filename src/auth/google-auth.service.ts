@@ -5,8 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { AuthService } from './auth.service';
 import { config } from 'dotenv';
+import path from 'path';
+
+const env =  path?.join(__dirname, "../../", '.env')
 config({
-  path: '../../.env'
+  path: env
 });
 
 console.log(process.env.GOOGLE_CLIENT_ID);
