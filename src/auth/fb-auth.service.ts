@@ -7,6 +7,8 @@ import { config } from 'dotenv';
 import path from 'path';
 
 const env =  path?.join(__dirname, '.env')
+console.log("FacebookStrategy-------->", env);
+
 config({
   path: env
 });
