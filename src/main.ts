@@ -10,7 +10,9 @@ console.log("https://nb-nb.onrender.com");
 
 
 async function bootstrap() {
-  config();
+  config({
+    path:'../.env'
+  });
   const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
   app.enableCors(
     {

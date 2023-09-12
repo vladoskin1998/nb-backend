@@ -15,7 +15,9 @@ const passport_1 = require("@nestjs/passport");
 const passport_facebook_1 = require("passport-facebook");
 const enum_1 = require("../enum/enum");
 const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)();
+(0, dotenv_1.config)({
+    path: '../../.env'
+});
 console.log(process.env.FB_ID);
 console.log(process.env.FB_SECRET);
 console.log(process.env.CALL_BACK_URL_FB);

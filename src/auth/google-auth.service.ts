@@ -5,7 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { AuthService } from './auth.service';
 import { config } from 'dotenv';
-config();
+config({
+  path: '../../.env'
+});
 
 console.log(process.env.GOOGLE_CLIENT_ID);
 console.log(process.env.GOOGLE_CLIENT_SECRET);

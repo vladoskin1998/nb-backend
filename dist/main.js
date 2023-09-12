@@ -9,7 +9,9 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 console.log("https://nb-nb.onrender.com");
 async function bootstrap() {
-    (0, dotenv_1.config)();
+    (0, dotenv_1.config)({
+        path: '../.env'
+    });
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger: new MyLogger_1.MyLogger() });
     app.enableCors({
         origin: ['http://localhost:5000', 'http://localhost:3000', "https://nb-nb.onrender.com"],
