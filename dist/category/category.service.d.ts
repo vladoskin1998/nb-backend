@@ -25,7 +25,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Model, Types } from 'mongoose';
 import { Category, SubCategory } from './category.schema';
-import { CategoryDto, SubCategoryListDto, VisiableDto } from './category.dto';
+import { CategoryDto, EditDto, SubCategoryListDto, VisiableDto } from './category.dto';
 import { FilesService } from 'src/files/files.service';
 export declare class CategoryService {
     private readonly categoryModel;
@@ -56,6 +56,6 @@ export declare class CategoryService {
     deleteSubCategory(subCatId: string): Promise<Types.ObjectId>;
     visiableCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
     visiableSubCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
-    editCategory({ id, name }: CategoryDto): Promise<CategoryDto>;
-    editSubCategory({ id, name }: CategoryDto): Promise<CategoryDto>;
+    editCategory({ id, name }: EditDto): Promise<EditDto>;
+    editSubCategory({ id, name }: EditDto): Promise<EditDto>;
 }

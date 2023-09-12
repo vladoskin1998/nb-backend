@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SubCategoryListDto = exports.CategoryDto = exports.VisiableDto = exports.IDDto = void 0;
+exports.SubCategoryListDto = exports.EditDto = exports.CategoryDto = exports.VisiableDto = exports.IDDto = void 0;
 const class_validator_1 = require("class-validator");
 class IDDto {
 }
@@ -25,13 +25,24 @@ __decorate([
     __metadata("design:type", Boolean)
 ], VisiableDto.prototype, "isVisiable", void 0);
 exports.VisiableDto = VisiableDto;
-class CategoryDto extends IDDto {
+class CategoryDto {
 }
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CategoryDto.prototype, "fileName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CategoryDto.prototype, "name", void 0);
 exports.CategoryDto = CategoryDto;
+class EditDto extends IDDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], EditDto.prototype, "name", void 0);
+exports.EditDto = EditDto;
 class SubCategoryListDto {
 }
 __decorate([

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category, SubCategory } from './category.schema'; // Импортируем схемы
-import { CategoryDto, SubCategoryListDto, VisiableDto } from './category.dto'; // Импортируем DTO
+import { CategoryDto, EditDto, SubCategoryListDto, VisiableDto } from './category.dto'; // Импортируем DTO
 import { FilesService } from 'src/files/files.service';
 
 @Injectable()
@@ -24,11 +24,12 @@ export class CategoryService {
         files: Array<Express.Multer.File>;
     }): Promise<Category> {
         try {
+            
             await this.filesService.uploadFiles(files, 'uploads/categories');
 
             const newCategory = new this.categoryModel({
                 name: category.name,
-                fileName: category.id,
+                fileName: category.fileName,
             });
 
             if (subCategory && subCategory.listSubCategory.length > 0) {
@@ -54,7 +55,7 @@ export class CategoryService {
             subCategory: SubCategoryListDto;
             files: Array<Express.Multer.File>;
         }
-    ) {
+    ) {        
         await this.filesService.uploadFiles(files, 'uploads/categories');
         const idCatRef = new Types.ObjectId(idCategory)
         await this.createSubCategory({
@@ -75,7 +76,7 @@ export class CategoryService {
     ) {
         const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
             name: it.name,
-            fileName: it.id,
+            fileName: it.fileName,
             category: idCategory
         }));
         await this.subCategoryModel.create(subCategoriesArr);
@@ -150,7 +151,7 @@ export class CategoryService {
     }
 
 
-    async editCategory({ id, name }: CategoryDto): Promise<CategoryDto> {
+    async editCategory({ id, name }: EditDto): Promise<EditDto> {
         const categoryId = new Types.ObjectId(id)
         try {
             await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { name })
@@ -160,7 +161,7 @@ export class CategoryService {
         }
     }
 
-    async editSubCategory({ id, name }: CategoryDto): Promise<CategoryDto> {
+    async editSubCategory({ id, name }: EditDto): Promise<EditDto> {
         const subCategoryId = new Types.ObjectId(id)
         try {
             await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { name })

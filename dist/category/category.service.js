@@ -29,7 +29,7 @@ let CategoryService = class CategoryService {
             await this.filesService.uploadFiles(files, 'uploads/categories');
             const newCategory = new this.categoryModel({
                 name: category.name,
-                fileName: category.id,
+                fileName: category.fileName,
             });
             if (subCategory && subCategory.listSubCategory.length > 0) {
                 this.createSubCategory({
@@ -56,7 +56,7 @@ let CategoryService = class CategoryService {
     async createSubCategory({ idCategory, subCategory, }) {
         const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
             name: it.name,
-            fileName: it.id,
+            fileName: it.fileName,
             category: idCategory
         }));
         await this.subCategoryModel.create(subCategoriesArr);

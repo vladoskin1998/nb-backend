@@ -8,7 +8,7 @@ import {
     Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CategoryDto, IDDto, SubCategoryListDto, VisiableDto } from './category.dto'; // Создайте DTO по вашим требованиям
+import { CategoryDto, EditDto, IDDto, SubCategoryListDto, VisiableDto } from './category.dto'; // Создайте DTO по вашим требованиям
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('categories')
@@ -85,12 +85,12 @@ export class CategoryController {
     }
 
     @Post('edit-category')
-    async editCategory(@Body() dto: CategoryDto) {
+    async editCategory(@Body() dto: EditDto) {
         return await this.categoryService.editCategory(dto)
     }
 
     @Post('edit-subcategory')
-    async editSubCategory(@Body() dto: CategoryDto) {
+    async editSubCategory(@Body() dto: EditDto) {
         return await this.categoryService.editSubCategory(dto)
     }
 

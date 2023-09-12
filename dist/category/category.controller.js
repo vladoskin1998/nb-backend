@@ -120,14 +120,14 @@ __decorate([
     (0, common_1.Post)('edit-category'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.CategoryDto]),
+    __metadata("design:paramtypes", [category_dto_1.EditDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "editCategory", null);
 __decorate([
     (0, common_1.Post)('edit-subcategory'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.CategoryDto]),
+    __metadata("design:paramtypes", [category_dto_1.EditDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "editSubCategory", null);
 CategoryController = __decorate([
