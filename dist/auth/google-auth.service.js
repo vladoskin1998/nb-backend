@@ -18,7 +18,7 @@ const enum_1 = require("../enum/enum");
 const auth_service_1 = require("./auth.service");
 const dotenv_1 = require("dotenv");
 const path_1 = require("path");
-const env = path_1.default === null || path_1.default === void 0 ? void 0 : path_1.default.join(__dirname, "../../", '.env');
+const env = path_1.default === null || path_1.default === void 0 ? void 0 : path_1.default.join(__dirname, '.env');
 (0, dotenv_1.config)({
     path: env
 });

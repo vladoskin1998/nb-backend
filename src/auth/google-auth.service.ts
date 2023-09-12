@@ -7,7 +7,8 @@ import { AuthService } from './auth.service';
 import { config } from 'dotenv';
 import path from 'path';
 
-const env =  path?.join(__dirname, "../../", '.env')
+const env =  path?.join(__dirname, '.env')
+
 config({
   path: env
 });
