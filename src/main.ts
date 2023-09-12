@@ -16,7 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
   app.enableCors(
     {
-      origin: ['http://localhost:5000','http://localhost:3000', "https://nb-nb.onrender.com"], // Укажите домен вашего клиента
+      origin: ['http://localhost:5000','http://localhost:3000', "https://nb-nb.onrender.com", "http://5.180.180.221:5000"], // Укажите домен вашего клиента
       credentials: true, 
     }
   );
