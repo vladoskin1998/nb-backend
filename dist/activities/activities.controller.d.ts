@@ -24,23 +24,13 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { CategoryService } from './category.service';
-import { EditDto, IDDto, VisiableDto } from './category.dto';
-export declare class CategoryController {
-    private readonly categoryService;
-    constructor(categoryService: CategoryService);
-    addCategories(files: Array<Express.Multer.File>, body: any): Promise<import("./category.schema").Category>;
-    addSubCategoriesToCategories(files: Array<Express.Multer.File>, body: any): Promise<void>;
-    allCategories(): Promise<(import("mongoose").Document<unknown, {}, import("./category.schema").Category> & import("./category.schema").Category & {
+import { ActivitiesService } from './activities.service';
+import { ActivitiesDto } from './activities.dto';
+export declare class ActivitiesController {
+    private readonly activitiesService;
+    constructor(activitiesService: ActivitiesService);
+    addActivitie(files: Array<Express.Multer.File>, body: any): Promise<ActivitiesDto>;
+    allActivities(): Promise<(import("mongoose").Document<unknown, {}, import("./activities.schema").Activities> & import("./activities.schema").Activities & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
-    allSubCategorie({ id }: IDDto): Promise<(import("mongoose").Document<unknown, {}, import("./category.schema").SubCategory> & import("./category.schema").SubCategory & {
-        _id: import("mongoose").Types.ObjectId;
-    })[]>;
-    deleteCategory({ id }: IDDto): Promise<string>;
-    deleteSubCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
-    visiableCategory(dto: VisiableDto): Promise<VisiableDto>;
-    visiableSubCategory(dto: VisiableDto): Promise<VisiableDto>;
-    editCategory(dto: EditDto): Promise<EditDto>;
-    editSubCategory(dto: EditDto): Promise<EditDto>;
 }

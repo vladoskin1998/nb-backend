@@ -8,6 +8,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ERROR_MESSAGE } from './enum/enum';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { CategoryModule } from './category/category.module';
     FilesModule,
     UserModule,
     CategoryModule,
+    ActivitiesModule,
   ],
 })
 export class AppModule {}

@@ -6,29 +6,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoryModule = void 0;
+exports.ActivitiesModule = void 0;
 const common_1 = require("@nestjs/common");
+const activities_service_1 = require("./activities.service");
+const activities_controller_1 = require("./activities.controller");
+const activities_schema_1 = require("./activities.schema");
 const mongoose_1 = require("@nestjs/mongoose");
-const category_controller_1 = require("./category.controller");
-const category_service_1 = require("./category.service");
-const category_schema_1 = require("./category.schema");
-const files_module_1 = require("../files/files.module");
 const platform_express_1 = require("@nestjs/platform-express");
-let CategoryModule = class CategoryModule {
+const files_module_1 = require("../files/files.module");
+let ActivitiesModule = class ActivitiesModule {
 };
-CategoryModule = __decorate([
+ActivitiesModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                { name: category_schema_1.Category.name, schema: category_schema_1.CategorySchema },
-                { name: category_schema_1.SubCategory.name, schema: category_schema_1.SubCategorySchema },
+                { name: activities_schema_1.Activities.name, schema: activities_schema_1.ActivitiesSchema },
             ]),
             platform_express_1.MulterModule.register({}),
             files_module_1.FilesModule,
         ],
-        controllers: [category_controller_1.CategoryController],
-        providers: [category_service_1.CategoryService],
+        controllers: [activities_controller_1.ActivitiesController],
+        providers: [activities_service_1.ActivitiesService],
     })
-], CategoryModule);
-exports.CategoryModule = CategoryModule;
-//# sourceMappingURL=category.module.js.map
+], ActivitiesModule);
+exports.ActivitiesModule = ActivitiesModule;
+//# sourceMappingURL=activities.module.js.map

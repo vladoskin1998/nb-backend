@@ -7,14 +7,9 @@ import * as cookieParser from 'cookie-parser';
 import * as express from 'express'; 
 import path from 'path';
 
-console.log("https://nb-nb.onrender.com");
-
 
 async function bootstrap() {
-  const env =  path?.join(__dirname, "../", '.env')
-  config({
-    path: env
-  });
+  config();
   const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
   app.enableCors(
     {

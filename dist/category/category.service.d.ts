@@ -37,7 +37,7 @@ export declare class CategoryService {
         subCategory: SubCategoryListDto;
         files: Array<Express.Multer.File>;
     }): Promise<Category>;
-    addSubCategoriesToCategories({ idCategory, subCategory, files }: {
+    addSubCategoriesToCategories({ idCategory, subCategory, files, }: {
         idCategory: string;
         subCategory: SubCategoryListDto;
         files: Array<Express.Multer.File>;
@@ -54,8 +54,8 @@ export declare class CategoryService {
     })[]>;
     deleteCategory(catId: string): Promise<string>;
     deleteSubCategory(subCatId: string): Promise<Types.ObjectId>;
-    visiableCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
-    visiableSubCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto>;
+    visiableCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
+    visiableSubCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
     editCategory({ id, name }: EditDto): Promise<EditDto>;
     editSubCategory({ id, name }: EditDto): Promise<EditDto>;
 }
