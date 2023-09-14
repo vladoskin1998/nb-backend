@@ -12,6 +12,8 @@ export class FilesService {
     ): Promise<string> {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
 
+        console.log("uploadSingleFile",dirPath);
+        
         this.accessDir(dirPath);
 
         try {
@@ -65,7 +67,9 @@ export class FilesService {
     accessDir(dirPath: string): void {
         //uploads/categories
         const uploadsDir = path.join(__dirname, '../../', 'uploads')
-        try {
+        console.log(dirPath);
+        
+            try {
             accessSync(
                 uploadsDir,
                 constants.R_OK | constants.W_OK,

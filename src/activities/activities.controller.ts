@@ -9,6 +9,7 @@ import {
 import { ActivitiesService } from './activities.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ActivitiesDto } from './activities.dto';
+import { IDDto, VisiableDto } from 'src/category/category.dto';
 
 @Controller('activities')
 export class ActivitiesController {
@@ -33,4 +34,15 @@ export class ActivitiesController {
     async allActivities() {
         return await this.activitiesService.getAllActivities();
     }
+    
+    @Post('delete-activities')
+    async deleteCategory(@Body() { id }: IDDto) {
+        return await this.activitiesService.deleteActivities(id);
+    }
+
+    @Post('visiable-activities')
+    async visiableCategory(@Body() dto: VisiableDto) {
+        return await this.activitiesService.visiableActivities(dto);
+    }
+
 }

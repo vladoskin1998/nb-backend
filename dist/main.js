@@ -6,11 +6,6 @@ const dotenv_1 = require("dotenv");
 const MyLogger_1 = require("./logger/MyLogger");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
-<<<<<<< HEAD
-const path_1 = require("path");
-=======
-const express = require("express");
->>>>>>> fa18083bb65eeaf6b532d9c8926e988be1264f63
 async function bootstrap() {
     (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger: new MyLogger_1.MyLogger() });

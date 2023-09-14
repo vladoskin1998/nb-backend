@@ -25,6 +25,7 @@ let ActivitiesService = class ActivitiesService {
     }
     async createActivitie({ activitie, files, }) {
         try {
+            console.log(files);
             await this.filesService.uploadFiles(files, 'uploads/activities');
             const newCategory = new this.activitiesModel({
                 name: activitie.name,
@@ -39,6 +40,29 @@ let ActivitiesService = class ActivitiesService {
     }
     async getAllActivities() {
         return await this.activitiesModel.find();
+    }
+    async deleteActivities(idAct) {
+        const idActivities = new mongoose_2.Types.ObjectId(idAct);
+        try {
+            const activitiesFile = await this.activitiesModel.findByIdAndDelete({
+                _id: idActivities,
+            });
+            await this.filesService.deleteFile(activitiesFile.fileName, 'uploads/activities');
+            return idActivities;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async visiableActivities({ id, isVisiable, }) {
+        const activitiesId = new mongoose_2.Types.ObjectId(id);
+        try {
+            await this.activitiesModel.findByIdAndUpdate({ _id: activitiesId }, { isVisiable });
+            return { id, isVisiable };
+        }
+        catch (error) {
+            throw error;
+        }
     }
 };
 ActivitiesService = __decorate([

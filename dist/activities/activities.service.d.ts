@@ -24,9 +24,10 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { FilesService } from '../files/files.service';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
 import { ActivitiesDto } from './activities.dto';
+import { VisiableDto } from 'src/category/category.dto';
 export declare class ActivitiesService {
     private readonly activitiesModel;
     private filesService;
@@ -36,6 +37,8 @@ export declare class ActivitiesService {
         files: Array<Express.Multer.File>;
     }): Promise<ActivitiesDto>;
     getAllActivities(): Promise<(import("mongoose").Document<unknown, {}, Activities> & Activities & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     })[]>;
+    deleteActivities(idAct: string): Promise<Types.ObjectId>;
+    visiableActivities({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
 }

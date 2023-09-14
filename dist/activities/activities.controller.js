@@ -16,6 +16,7 @@ exports.ActivitiesController = void 0;
 const common_1 = require("@nestjs/common");
 const activities_service_1 = require("./activities.service");
 const platform_express_1 = require("@nestjs/platform-express");
+const category_dto_1 = require("../category/category.dto");
 let ActivitiesController = class ActivitiesController {
     constructor(activitiesService) {
         this.activitiesService = activitiesService;
@@ -26,6 +27,12 @@ let ActivitiesController = class ActivitiesController {
     }
     async allActivities() {
         return await this.activitiesService.getAllActivities();
+    }
+    async deleteCategory({ id }) {
+        return await this.activitiesService.deleteActivities(id);
+    }
+    async visiableCategory(dto) {
+        return await this.activitiesService.visiableActivities(dto);
     }
 };
 __decorate([
@@ -43,6 +50,20 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "allActivities", null);
+__decorate([
+    (0, common_1.Post)('delete-activities'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "deleteCategory", null);
+__decorate([
+    (0, common_1.Post)('visiable-activities'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.VisiableDto]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "visiableCategory", null);
 ActivitiesController = __decorate([
     (0, common_1.Controller)('activities'),
     __metadata("design:paramtypes", [activities_service_1.ActivitiesService])

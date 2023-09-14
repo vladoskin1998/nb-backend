@@ -26,6 +26,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { ActivitiesService } from './activities.service';
 import { ActivitiesDto } from './activities.dto';
+import { IDDto, VisiableDto } from 'src/category/category.dto';
 export declare class ActivitiesController {
     private readonly activitiesService;
     constructor(activitiesService: ActivitiesService);
@@ -33,4 +34,6 @@ export declare class ActivitiesController {
     allActivities(): Promise<(import("mongoose").Document<unknown, {}, import("./activities.schema").Activities> & import("./activities.schema").Activities & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
+    deleteCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
+    visiableCategory(dto: VisiableDto): Promise<VisiableDto>;
 }
