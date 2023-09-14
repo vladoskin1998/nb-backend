@@ -8,10 +8,14 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ERROR_MESSAGE } from './enum/enum';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname,'.env')}),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'build')
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

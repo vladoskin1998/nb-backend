@@ -6,9 +6,7 @@ const dotenv_1 = require("dotenv");
 const MyLogger_1 = require("./logger/MyLogger");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
-const express = require("express");
 const path_1 = require("path");
-console.log("https://nb-nb.onrender.com");
 async function bootstrap() {
     const env = path_1.default === null || path_1.default === void 0 ? void 0 : path_1.default.join(__dirname, "../", '.env');
     (0, dotenv_1.config)({
@@ -22,7 +20,7 @@ async function bootstrap() {
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.setGlobalPrefix("api");
     app.use(cookieParser());
-    app.use(express.static('build'));
+    console.log(__dirname);
     await app.listen(process.env.APP_PORT || 5000, () => console.log('Server started on port ' + process.env.APP_PORT || 5000));
 }
 bootstrap();

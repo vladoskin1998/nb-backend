@@ -6,8 +6,9 @@ import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express'; 
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-console.log("https://nb-nb.onrender.com");
 
 
 async function bootstrap() {
@@ -25,7 +26,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix("api");
   app.use(cookieParser());
-  app.use(express.static('build'));
+  console.log(__dirname);
+
+
+
   await app.listen(process.env.APP_PORT || 5000, () =>
     console.log('Server started on port ' + process.env.APP_PORT || 5000),
   );
