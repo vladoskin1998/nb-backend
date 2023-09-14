@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-export type CategoryDocument = Model<Category>;
-export type SubCategoryDocument = Model<SubCategory>;
+export type CategoryDocument = HydratedDocument<Category>;
+export type SubCategoryDocument = HydratedDocument<SubCategory>;
 
 @Schema({ versionKey: false })
 export class SubCategory {
@@ -12,14 +12,14 @@ export class SubCategory {
     @Prop()
     fileName: string;
 
-    @Prop({default: true})
+    @Prop({ default: true })
     isVisiable: boolean;
-    
-    @Prop({ default: 0 })
-    numberView:number;
 
-    @Prop({ type: Types.ObjectId, ref: 'Category' }) 
-    category: Types.ObjectId; 
+    @Prop({ default: 0 })
+    numberView: number;
+
+    @Prop({ type: Types.ObjectId, ref: 'Category' })
+    category: Types.ObjectId;
 }
 
 @Schema({ versionKey: false })
@@ -28,9 +28,9 @@ export class Category {
     name: string;
 
     @Prop({ default: 0 })
-    numberView:number;
+    numberView: number;
 
-    @Prop({default: true})
+    @Prop({ default: true })
     isVisiable: boolean;
 
     @Prop()

@@ -9,6 +9,7 @@ import { ERROR_MESSAGE } from './enum/enum';
 import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -29,22 +30,11 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         };
       },
     }),
- 
-    // MulterModule.register({
-    //   limits: {
-    //     fileSize: 100000000000,
-    //   },
-    //   // fileFilter: (req, file, cb) => {
-    //   //   if (!file.originalname.toLowerCase().match(/\.(jpg|jpeg|png|mp4)$/)) {
-    //   //     return cb(new Error(ERROR_MESSAGE.ERROR_FILE_EXTENSION), false);
-    //   //   }
-    //   //   cb(null, true);
-    //   // },
-    // }),
     AuthModule,
     FilesModule,
     UserModule,
     CategoryModule,
+    ActivitiesModule,
   ],
 })
 export class AppModule {}

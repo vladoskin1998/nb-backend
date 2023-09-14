@@ -10,12 +10,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 
-
 async function bootstrap() {
-  const env =  path?.join(__dirname, "../", '.env')
-  config({
-    path: env
-  });
+  config();
   const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
   app.enableCors(
     {

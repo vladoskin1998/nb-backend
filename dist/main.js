@@ -6,12 +6,13 @@ const dotenv_1 = require("dotenv");
 const MyLogger_1 = require("./logger/MyLogger");
 const common_1 = require("@nestjs/common");
 const cookieParser = require("cookie-parser");
+<<<<<<< HEAD
 const path_1 = require("path");
+=======
+const express = require("express");
+>>>>>>> fa18083bb65eeaf6b532d9c8926e988be1264f63
 async function bootstrap() {
-    const env = path_1.default === null || path_1.default === void 0 ? void 0 : path_1.default.join(__dirname, "../", '.env');
-    (0, dotenv_1.config)({
-        path: env
-    });
+    (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger: new MyLogger_1.MyLogger() });
     app.enableCors({
         origin: ['http://localhost:5000', 'http://localhost:3000', "https://nb-nb.onrender.com", "http://5.180.180.221:5000"],

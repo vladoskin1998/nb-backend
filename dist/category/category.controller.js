@@ -23,12 +23,19 @@ let CategoryController = class CategoryController {
     }
     async addCategories(files, body) {
         const { category, subCategory, } = JSON.parse(body.payload);
-        await this.categoryService.createCategory({ category, subCategory, files });
-        return;
+        return await this.categoryService.createCategory({
+            category,
+            subCategory,
+            files,
+        });
     }
     async addSubCategoriesToCategories(files, body) {
         const { category, subCategory, } = JSON.parse(body.payload);
-        await this.categoryService.addSubCategoriesToCategories({ idCategory: category.id, subCategory, files });
+        await this.categoryService.addSubCategoriesToCategories({
+            idCategory: category.id,
+            subCategory,
+            files,
+        });
         return;
     }
     async allCategories() {

@@ -6,12 +6,8 @@ import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { config } from 'dotenv';
 import path from 'path';
 
-const env =  path?.join(__dirname, '.env')
-console.log("FacebookStrategy-------->", env);
 
-config({
-  path: env
-});
+config();
 
 console.log(process.env.FB_ID);
 console.log(process.env.FB_SECRET);

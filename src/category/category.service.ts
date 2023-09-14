@@ -2,17 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category, SubCategory } from './category.schema'; // Импортируем схемы
-import { CategoryDto, EditDto, SubCategoryListDto, VisiableDto } from './category.dto'; // Импортируем DTO
+import {
+    CategoryDto,
+    EditDto,
+    SubCategoryListDto,
+    VisiableDto,
+} from './category.dto'; // Импортируем DTO
 import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class CategoryService {
     constructor(
-        @InjectModel(Category.name) private readonly categoryModel: Model<Category>,
+        @InjectModel(Category.name)
+        private readonly categoryModel: Model<Category>,
         @InjectModel(SubCategory.name)
         private readonly subCategoryModel: Model<SubCategory>,
         private filesService: FilesService,
-    ) { }
+    ) {}
 
     async createCategory({
         category,
@@ -24,7 +30,6 @@ export class CategoryService {
         files: Array<Express.Multer.File>;
     }): Promise<Category> {
         try {
-            
             await this.filesService.uploadFiles(files, 'uploads/categories');
 
             const newCategory = new this.categoryModel({
@@ -36,7 +41,7 @@ export class CategoryService {
                 this.createSubCategory({
                     idCategory: newCategory._id,
                     subCategory,
-                })
+                });
             }
             await newCategory.save();
             return newCategory;
@@ -45,39 +50,35 @@ export class CategoryService {
         }
     }
 
-    async addSubCategoriesToCategories(
-        {
-            idCategory,
-            subCategory,
-            files
-        }: {
-            idCategory: string,
-            subCategory: SubCategoryListDto;
-            files: Array<Express.Multer.File>;
-        }
-    ) {        
+    async addSubCategoriesToCategories({
+        idCategory,
+        subCategory,
+        files,
+    }: {
+        idCategory: string;
+        subCategory: SubCategoryListDto;
+        files: Array<Express.Multer.File>;
+    }) {
         await this.filesService.uploadFiles(files, 'uploads/categories');
-        const idCatRef = new Types.ObjectId(idCategory)
+        const idCatRef = new Types.ObjectId(idCategory);
         await this.createSubCategory({
             idCategory: idCatRef,
             subCategory,
-        })
-        return
+        });
+        return;
     }
 
-    async createSubCategory(
-        {
-            idCategory,
-            subCategory,
-        }: {
-            idCategory: Types.ObjectId;
-            subCategory: SubCategoryListDto;
-        }
-    ) {
+    async createSubCategory({
+        idCategory,
+        subCategory,
+    }: {
+        idCategory: Types.ObjectId;
+        subCategory: SubCategoryListDto;
+    }) {
         const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
             name: it.name,
             fileName: it.fileName,
-            category: idCategory
+            category: idCategory,
         }));
         await this.subCategoryModel.create(subCategoriesArr);
     }
@@ -105,13 +106,23 @@ export class CategoryService {
     }
 
     async deleteCategory(catId: string): Promise<string> {
-        const categoryId = new Types.ObjectId(catId)
+        const categoryId = new Types.ObjectId(catId);
         try {
-            const subFileNames = await this.subCategoryModel.find({ category: categoryId }, "fileName")
-            const catFile = await this.categoryModel.findByIdAndDelete({ _id: catId })
-            const deletedFiles = await subFileNames.map(item => item?.fileName)
-            deletedFiles.push(catFile.fileName)
-            await this.filesService.deleteFiles(deletedFiles, 'uploads/categories')
+            const subFileNames = await this.subCategoryModel.find(
+                { category: categoryId },
+                'fileName',
+            );
+            const catFile = await this.categoryModel.findByIdAndDelete({
+                _id: catId,
+            });
+            const deletedFiles = await subFileNames.map(
+                (item) => item?.fileName,
+            );
+            deletedFiles.push(catFile.fileName);
+            await this.filesService.deleteFiles(
+                deletedFiles,
+                'uploads/categories',
+            );
             await this.subCategoryModel.deleteMany({ category: categoryId });
             return catId;
         } catch (error) {
@@ -120,52 +131,74 @@ export class CategoryService {
     }
 
     async deleteSubCategory(subCatId: string) {
-        const subCategoryId = new Types.ObjectId(subCatId)
+        const subCategoryId = new Types.ObjectId(subCatId);
         try {
-            const subCatFile = await this.subCategoryModel.findByIdAndDelete({ _id: subCategoryId });
-            await this.filesService.deleteFile(subCatFile.fileName, 'uploads/categories')
+            const subCatFile = await this.subCategoryModel.findByIdAndDelete({
+                _id: subCategoryId,
+            });
+            await this.filesService.deleteFile(
+                subCatFile.fileName,
+                'uploads/categories',
+            );
             return subCategoryId;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
-    async visiableCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto> {
-        const categoryId = new Types.ObjectId(id)
+    async visiableCategory({
+        id,
+        isVisiable,
+    }: VisiableDto): Promise<VisiableDto> {
+        const categoryId = new Types.ObjectId(id);
         try {
-            await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { isVisiable })
-            return { id, isVisiable }
+            await this.categoryModel.findByIdAndUpdate(
+                { _id: categoryId },
+                { isVisiable },
+            );
+            return { id, isVisiable };
         } catch (error) {
             throw error;
         }
     }
 
-    async visiableSubCategory({ id, isVisiable }: VisiableDto): Promise<VisiableDto> {
-        const subCategoryId = new Types.ObjectId(id)
+    async visiableSubCategory({
+        id,
+        isVisiable,
+    }: VisiableDto): Promise<VisiableDto> {
+        const subCategoryId = new Types.ObjectId(id);
         try {
-            await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { isVisiable })
-            return { id, isVisiable }
+            await this.subCategoryModel.findByIdAndUpdate(
+                { _id: subCategoryId },
+                { isVisiable },
+            );
+            return { id, isVisiable };
         } catch (error) {
             throw error;
         }
     }
-
 
     async editCategory({ id, name }: EditDto): Promise<EditDto> {
-        const categoryId = new Types.ObjectId(id)
+        const categoryId = new Types.ObjectId(id);
         try {
-            await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { name })
-            return { id, name }
+            await this.categoryModel.findByIdAndUpdate(
+                { _id: categoryId },
+                { name },
+            );
+            return { id, name };
         } catch (error) {
             throw error;
         }
     }
 
     async editSubCategory({ id, name }: EditDto): Promise<EditDto> {
-        const subCategoryId = new Types.ObjectId(id)
+        const subCategoryId = new Types.ObjectId(id);
         try {
-            await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { name })
-            return { id, name }
+            await this.subCategoryModel.findByIdAndUpdate(
+                { _id: subCategoryId },
+                { name },
+            );
+            return { id, name };
         } catch (error) {
             throw error;
         }

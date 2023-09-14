@@ -44,7 +44,7 @@ let CategoryService = class CategoryService {
             throw new Error('CategoryService createCategory' + error.message);
         }
     }
-    async addSubCategoriesToCategories({ idCategory, subCategory, files }) {
+    async addSubCategoriesToCategories({ idCategory, subCategory, files, }) {
         await this.filesService.uploadFiles(files, 'uploads/categories');
         const idCatRef = new mongoose_1.Types.ObjectId(idCategory);
         await this.createSubCategory({
@@ -57,7 +57,7 @@ let CategoryService = class CategoryService {
         const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
             name: it.name,
             fileName: it.fileName,
-            category: idCategory
+            category: idCategory,
         }));
         await this.subCategoryModel.create(subCategoriesArr);
     }
@@ -83,9 +83,11 @@ let CategoryService = class CategoryService {
     async deleteCategory(catId) {
         const categoryId = new mongoose_1.Types.ObjectId(catId);
         try {
-            const subFileNames = await this.subCategoryModel.find({ category: categoryId }, "fileName");
-            const catFile = await this.categoryModel.findByIdAndDelete({ _id: catId });
-            const deletedFiles = await subFileNames.map(item => item === null || item === void 0 ? void 0 : item.fileName);
+            const subFileNames = await this.subCategoryModel.find({ category: categoryId }, 'fileName');
+            const catFile = await this.categoryModel.findByIdAndDelete({
+                _id: catId,
+            });
+            const deletedFiles = await subFileNames.map((item) => item === null || item === void 0 ? void 0 : item.fileName);
             deletedFiles.push(catFile.fileName);
             await this.filesService.deleteFiles(deletedFiles, 'uploads/categories');
             await this.subCategoryModel.deleteMany({ category: categoryId });
@@ -98,7 +100,9 @@ let CategoryService = class CategoryService {
     async deleteSubCategory(subCatId) {
         const subCategoryId = new mongoose_1.Types.ObjectId(subCatId);
         try {
-            const subCatFile = await this.subCategoryModel.findByIdAndDelete({ _id: subCategoryId });
+            const subCatFile = await this.subCategoryModel.findByIdAndDelete({
+                _id: subCategoryId,
+            });
             await this.filesService.deleteFile(subCatFile.fileName, 'uploads/categories');
             return subCategoryId;
         }
@@ -106,7 +110,7 @@ let CategoryService = class CategoryService {
             throw error;
         }
     }
-    async visiableCategory({ id, isVisiable }) {
+    async visiableCategory({ id, isVisiable, }) {
         const categoryId = new mongoose_1.Types.ObjectId(id);
         try {
             await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { isVisiable });
@@ -116,7 +120,7 @@ let CategoryService = class CategoryService {
             throw error;
         }
     }
-    async visiableSubCategory({ id, isVisiable }) {
+    async visiableSubCategory({ id, isVisiable, }) {
         const subCategoryId = new mongoose_1.Types.ObjectId(id);
         try {
             await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { isVisiable });

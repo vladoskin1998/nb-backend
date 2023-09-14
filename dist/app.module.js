@@ -15,7 +15,11 @@ const auth_module_1 = require("./auth/auth.module");
 const files_module_1 = require("./files/files.module");
 const user_module_1 = require("./user/user.module");
 const category_module_1 = require("./category/category.module");
+<<<<<<< HEAD
 const serve_static_1 = require("@nestjs/serve-static");
+=======
+const activities_module_1 = require("./activities/activities.module");
+>>>>>>> fa18083bb65eeaf6b532d9c8926e988be1264f63
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -41,6 +45,7 @@ AppModule = __decorate([
             files_module_1.FilesModule,
             user_module_1.UserModule,
             category_module_1.CategoryModule,
+            activities_module_1.ActivitiesModule,
         ],
     })
 ], AppModule);

@@ -17,11 +17,7 @@ const config_1 = require("@nestjs/config");
 const enum_1 = require("../enum/enum");
 const auth_service_1 = require("./auth.service");
 const dotenv_1 = require("dotenv");
-const path_1 = require("path");
-const env = path_1.default === null || path_1.default === void 0 ? void 0 : path_1.default.join(__dirname, '.env');
-(0, dotenv_1.config)({
-    path: env
-});
+(0, dotenv_1.config)();
 console.log(process.env.GOOGLE_CLIENT_ID);
 console.log(process.env.GOOGLE_CLIENT_SECRET);
 console.log(process.env.CALL_BACK_URL_GOOGLE);

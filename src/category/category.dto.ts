@@ -1,11 +1,9 @@
-
 import { IsString, IsArray, ValidateNested, IsBoolean } from 'class-validator';
 
 export class IDDto {
     @IsString()
     readonly id: string;
 }
-
 
 export class VisiableDto extends IDDto {
     @IsBoolean()
@@ -20,8 +18,7 @@ export class CategoryDto {
     readonly name: string;
 }
 
-export class EditDto extends IDDto{
-    
+export class EditDto extends IDDto {
     @IsString()
     readonly name: string;
 }
