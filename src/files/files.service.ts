@@ -12,12 +12,14 @@ export class FilesService {
     ): Promise<string> {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
 
-        console.log("uploadSingleFile",dirPath);
-        
+        console.log('uploadSingleFile', dirPath);
+
         this.accessDir(dirPath);
 
         try {
-            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
+            const fileName = `${file.originalname}.${
+                file.mimetype.split('/')[1]
+            }`;
             await writeFile(`${dirPath}/${fileName}`, file.buffer);
             return fileName;
         } catch (error) {
@@ -66,23 +68,17 @@ export class FilesService {
 
     accessDir(dirPath: string): void {
         //uploads/categories
-        const uploadsDir = path.join(__dirname, '../../', 'uploads')
-        console.log(dirPath);
-        
-            try {
-            accessSync(
-                uploadsDir,
-                constants.R_OK | constants.W_OK,
-            );
+        const uploadsDir = path.join(__dirname, '../../', 'uploads');
+        try {
+            accessSync(uploadsDir, constants.R_OK | constants.W_OK);
             try {
                 accessSync(dirPath, constants.R_OK | constants.W_OK);
             } catch (error) {
                 mkdirSync(dirPath);
             }
         } catch (error) {
-            mkdirSync(uploadsDir)
+            mkdirSync(uploadsDir);
             mkdirSync(dirPath);
         }
-
     }
 }

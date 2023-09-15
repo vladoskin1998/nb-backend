@@ -14,7 +14,7 @@ const path = require("path");
 let FilesService = class FilesService {
     async uploadSingleFile(file, dirName) {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
-        console.log("uploadSingleFile", dirPath);
+        console.log('uploadSingleFile', dirPath);
         this.accessDir(dirPath);
         try {
             const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
@@ -59,7 +59,6 @@ let FilesService = class FilesService {
     }
     accessDir(dirPath) {
         const uploadsDir = path.join(__dirname, '../../', 'uploads');
-        console.log(dirPath);
         try {
             (0, fs_1.accessSync)(uploadsDir, promises_1.constants.R_OK | promises_1.constants.W_OK);
             try {
