@@ -20,6 +20,9 @@ export class User {
 
     @Prop({ default: METHOD_REGISTRATION.JWT })
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;
+    
+    @Prop({type: Object, default: { lat:  null, lng: null } })
+      coordinars: { lat: number | null; lng: number | null };
 
 }
 
