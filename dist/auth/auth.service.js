@@ -44,17 +44,8 @@ let AuthService = class AuthService {
         }
         return await this.login({ email, password: candidate === null || candidate === void 0 ? void 0 : candidate.password, methodRegistration });
     }
-    async fbLogin(req) {
-        if (!req.user) {
-            return 'No user from google';
-        }
-        return {
-            message: 'User information from google',
-            user: req.user,
-        };
-    }
     async registration({ email, password, methodRegistration }) {
-        const candidate = await this.userModel.findOne({ email });
+        const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
         if (candidate) {
             throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
         }
@@ -67,10 +58,10 @@ let AuthService = class AuthService {
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return Object.assign(Object.assign({}, tokens), { user: { email, role, id } });
+        return Object.assign(Object.assign({}, tokens), { user });
     }
     async login({ email, password, methodRegistration }) {
-        const user = await this.userModel.findOne({ email });
+        const user = await this.userModel.findOne({ email }).select('-isValidationUser -password');
         if (!user) {
             throw new common_1.HttpException(`User ${email} not found`, common_1.HttpStatus.BAD_REQUEST);
         }
@@ -81,7 +72,7 @@ let AuthService = class AuthService {
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return Object.assign(Object.assign({}, tokens), { user: { email, role, id } });
+        return Object.assign(Object.assign({}, tokens), { user });
     }
     async logout(refreshToken) {
         const token = await this.jwtTokenService.removeToken(refreshToken);
@@ -96,11 +87,11 @@ let AuthService = class AuthService {
         if (!userData || !tokenFromDb) {
             throw new common_1.HttpException(`UNAUTHORIZED`, common_1.HttpStatus.UNAUTHORIZED);
         }
-        const user = await this.userModel.findById(userData.id);
+        const user = await this.userModel.findById(userData.id).select('-isValidationUser -password');
         const { role, id, email } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return Object.assign(Object.assign({}, tokens), { user: { email, role, id } });
+        return Object.assign(Object.assign({}, tokens), { user });
     }
 };
 AuthService = __decorate([

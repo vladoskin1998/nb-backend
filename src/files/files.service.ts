@@ -13,13 +13,14 @@ export class FilesService {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
 
         console.log('uploadSingleFile', dirPath);
-        console.log('uploadSingleFile', dirPath);
-        // this.accessDir(dirPath);
+     
+        
+        this.accessDir(dirPath);
 
         try {
-            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]
-                }`;
-            await writeFile(`${dirPath}/${fileName}`, file.buffer);
+            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
+                console.log('fileName name file----------->', `${dirPath}/${fileName}`);
+            await writeFile(path.join(dirPath, fileName), file.buffer);
             return fileName;
         } catch (error) {
             throw error;

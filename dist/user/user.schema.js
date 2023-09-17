@@ -38,6 +38,26 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Object, default: { lat: null, lng: null } }),
     __metadata("design:type", Object)
 ], User.prototype, "coordinars", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: "" }),
+    __metadata("design:type", String)
+], User.prototype, "fullName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "city", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "country", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "street", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "houseNumber", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

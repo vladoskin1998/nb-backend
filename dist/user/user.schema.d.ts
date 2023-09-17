@@ -35,6 +35,11 @@ export declare class User {
         lat: number | null;
         lng: number | null;
     };
+    fullName: string;
+    city: string | null;
+    country: string | null;
+    street: string | null;
+    houseNumber: string | null;
 }
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, import("mongoose").Document<unknown, any, User> & User & {
     _id: import("mongoose").Types.ObjectId;

@@ -10,7 +10,10 @@ async function bootstrap() {
     (0, dotenv_1.config)();
     const app = await core_1.NestFactory.create(app_module_1.AppModule, { logger: new MyLogger_1.MyLogger() });
     app.enableCors({
-        origin: ['http://localhost:5000', 'http://localhost:3000', "https://nb-nb.onrender.com", "http://5.180.180.221:5000"],
+        origin: ['http://localhost:5000',
+            'http://localhost:3000',
+            'https://maps.googleapis.com',
+            "http://5.180.180.221:5000"],
         credentials: true,
     });
     app.useGlobalPipes(new common_1.ValidationPipe());

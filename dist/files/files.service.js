@@ -18,7 +18,8 @@ let FilesService = class FilesService {
         this.accessDir(dirPath);
         try {
             const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
-            await (0, promises_1.writeFile)(`${dirPath}/${fileName}`, file.buffer);
+            console.log('fileName name file----------->', `${dirPath}/${fileName}`);
+            await (0, promises_1.writeFile)(path.join(dirPath, fileName), file.buffer);
             return fileName;
         }
         catch (error) {
@@ -58,19 +59,20 @@ let FilesService = class FilesService {
         return nameFiles;
     }
     accessDir(dirPath) {
-        const uploadsDir = path.join(__dirname, '../../', 'uploads');
+        console.log("accessDir--->", dirPath);
         try {
-            (0, fs_1.accessSync)(uploadsDir, promises_1.constants.R_OK | promises_1.constants.W_OK);
-            try {
-                (0, fs_1.accessSync)(dirPath, promises_1.constants.R_OK | promises_1.constants.W_OK);
+            const uploadsDir = path.join(__dirname, '../../', 'uploads');
+            if ((0, fs_1.existsSync)(uploadsDir)) {
+                if (!(0, fs_1.existsSync)(dirPath)) {
+                    (0, fs_1.mkdirSync)(dirPath);
+                }
+                return;
             }
-            catch (error) {
-                (0, fs_1.mkdirSync)(dirPath);
-            }
-        }
-        catch (error) {
             (0, fs_1.mkdirSync)(uploadsDir);
             (0, fs_1.mkdirSync)(dirPath);
+        }
+        catch (error) {
+            throw error;
         }
     }
 };

@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 import { MyLogger } from './logger/MyLogger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import * as express from 'express'; 
+import * as express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -12,11 +12,14 @@ import { dirname } from 'path';
 
 async function bootstrap() {
   config();
-  const app = await NestFactory.create(AppModule, {logger: new MyLogger()});
+  const app = await NestFactory.create(AppModule, { logger: new MyLogger() });
   app.enableCors(
     {
-      origin: ['http://localhost:5000','http://localhost:3000', "https://nb-nb.onrender.com", "http://5.180.180.221:5000"], // Укажите домен вашего клиента
-      credentials: true, 
+      origin: ['http://localhost:5000',
+        'http://localhost:3000', 
+        'https://maps.googleapis.com', 
+        "http://5.180.180.221:5000"], 
+      credentials: true,
     }
   );
   app.useGlobalPipes(new ValidationPipe());
