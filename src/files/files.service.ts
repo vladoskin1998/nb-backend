@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { accessSync, mkdirSync } from 'fs';
+import { accessSync, existsSync, mkdirSync } from 'fs';
 import { access, constants, mkdir, unlink, writeFile } from 'fs/promises';
 import * as path from 'path';
 import { v4 } from 'uuid';
@@ -13,13 +13,12 @@ export class FilesService {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
 
         console.log('uploadSingleFile', dirPath);
-
-        this.accessDir(dirPath);
+        console.log('uploadSingleFile', dirPath);
+        // this.accessDir(dirPath);
 
         try {
-            const fileName = `${file.originalname}.${
-                file.mimetype.split('/')[1]
-            }`;
+            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]
+                }`;
             await writeFile(`${dirPath}/${fileName}`, file.buffer);
             return fileName;
         } catch (error) {
@@ -67,18 +66,24 @@ export class FilesService {
     }
 
     accessDir(dirPath: string): void {
-        //uploads/categories
-        const uploadsDir = path.join(__dirname, '../../', 'uploads');
+        console.log("accessDir--->",dirPath);
+        
         try {
-            accessSync(uploadsDir, constants.R_OK | constants.W_OK);
-            try {
-                accessSync(dirPath, constants.R_OK | constants.W_OK);
-            } catch (error) {
-                mkdirSync(dirPath);
+            const uploadsDir = path.join(__dirname, '../../', 'uploads');
+            if (existsSync(uploadsDir)) {
+                if (!existsSync(dirPath)) {
+                    mkdirSync(dirPath);
+                }
+                return
             }
-        } catch (error) {
+
             mkdirSync(uploadsDir);
             mkdirSync(dirPath);
+
+        } catch (error) {
+            throw error
         }
+
+
     }
 }
