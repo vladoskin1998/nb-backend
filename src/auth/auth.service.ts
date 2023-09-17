@@ -59,6 +59,7 @@ export class AuthService {
     // }
 
     async registration({ email, password, methodRegistration }: AuthDto) {
+
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
 
         if (candidate) {
@@ -85,7 +86,7 @@ export class AuthService {
     }
 
     async login({ email, password, methodRegistration }: AuthDto) {
-        const user = await this.userModel.findOne({ email }).select('-isValidationUser -password');
+        const user = await this.userModel.findOne({ email }).select('-isValidationUser');
         if (!user) {
             throw new HttpException(
                 `User ${email} not found`,
@@ -99,6 +100,7 @@ export class AuthService {
         const { role, id} = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
 
+        delete user.password
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         return { ...tokens, user };
     }

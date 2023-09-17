@@ -61,7 +61,7 @@ let AuthService = class AuthService {
         return Object.assign(Object.assign({}, tokens), { user });
     }
     async login({ email, password, methodRegistration }) {
-        const user = await this.userModel.findOne({ email }).select('-isValidationUser -password');
+        const user = await this.userModel.findOne({ email }).select('-isValidationUser');
         if (!user) {
             throw new common_1.HttpException(`User ${email} not found`, common_1.HttpStatus.BAD_REQUEST);
         }
@@ -71,6 +71,7 @@ let AuthService = class AuthService {
         }
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
+        delete user.password;
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         return Object.assign(Object.assign({}, tokens), { user });
     }
