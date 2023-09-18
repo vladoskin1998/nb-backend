@@ -13,8 +13,11 @@ var HTTP_MESSAGE;
 })(HTTP_MESSAGE = exports.HTTP_MESSAGE || (exports.HTTP_MESSAGE = {}));
 var ROLES;
 (function (ROLES) {
+    ROLES["ALLUSERS"] = "all users";
     ROLES["ADMIN"] = "admin";
+    ROLES["COORDINATORS"] = "coordinators";
     ROLES["USER"] = "user";
+    ROLES["BLOCKED"] = "blocked";
 })(ROLES = exports.ROLES || (exports.ROLES = {}));
 var METHOD_REGISTRATION;
 (function (METHOD_REGISTRATION) {

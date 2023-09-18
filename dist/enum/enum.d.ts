@@ -7,8 +7,11 @@ export declare enum HTTP_MESSAGE {
     EXISTING_USER = "USER ALREDY EXITING"
 }
 export declare enum ROLES {
+    ALLUSERS = "all users",
     ADMIN = "admin",
-    USER = "user"
+    COORDINATORS = "coordinators",
+    USER = "user",
+    BLOCKED = "blocked"
 }
 export declare enum METHOD_REGISTRATION {
     FACEBOOK = "facebook",

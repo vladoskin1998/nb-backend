@@ -30,7 +30,6 @@ export class User {
     @Prop({ default: null })
     city: string | null
 
-
     @Prop({ default: null })
     country: string | null
 
@@ -39,6 +38,10 @@ export class User {
 
     @Prop({ default: null })
     houseNumber: string | null
+
+    @Prop({ default: false  })
+    isLocationVerify: boolean;
+
 
 }
 

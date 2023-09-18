@@ -9,8 +9,11 @@ export enum HTTP_MESSAGE {
 }
 
 export enum ROLES {
-  ADMIN = 'admin',
-  USER = 'user',
+  ALLUSERS='all users',
+  ADMIN = "admin",
+  COORDINATORS = 'coordinators',
+  USER = "user",
+  BLOCKED = "blocked",
 }
 
 export enum METHOD_REGISTRATION {

@@ -58,6 +58,10 @@ __decorate([
     (0, mongoose_1.Prop)({ default: null }),
     __metadata("design:type", String)
 ], User.prototype, "houseNumber", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isLocationVerify", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);
