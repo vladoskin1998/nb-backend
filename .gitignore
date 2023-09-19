@@ -3,6 +3,7 @@
 /node_modules
 .env
 /upload
+/build
 /.vscode
 # Logs
 logs

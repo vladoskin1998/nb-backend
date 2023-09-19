@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkfrontend_jfit=self.webpackChunkfrontend_jfit||[]).push([[906],{9906:function(t,n,e){e.r(n),e.d(n,{Posts:function(){return a}});var s=e(9439),u=e(2791),r=e(184),a=function(){var t=(0,u.useState)(!1),n=(0,s.Z)(t,2),e=(n[0],n[1],(0,u.useState)(!1)),a=(0,s.Z)(e,2);a[0],a[1];return(0,r.jsx)("div",{className:"admin"})}}}]);
-//# sourceMappingURL=906.95e60564.chunk.js.map
