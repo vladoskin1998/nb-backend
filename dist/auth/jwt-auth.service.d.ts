@@ -25,7 +25,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { ROLES } from 'src/enum/enum';
 import { Authentication } from './auth.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 type roleType = ROLES.ADMIN | ROLES.USER;
 export declare class JwtTokenService {
     private authModel;
@@ -42,11 +42,12 @@ export declare class JwtTokenService {
     validateAccessToken(token: any): any;
     validateRefreshToken(token: any): any;
     saveToken(userId: any, refreshToken: any): Promise<import("mongoose").Document<unknown, {}, Authentication> & Authentication & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
     removeToken(refreshToken: any): Promise<import("mongodb").DeleteResult>;
     findToken(refreshToken: any): Promise<import("mongoose").Document<unknown, {}, Authentication> & Authentication & {
-        _id: import("mongoose").Types.ObjectId;
+        _id: Types.ObjectId;
     }>;
+    deleteToken(_id: string | Types.ObjectId): Promise<void>;
 }
 export {};

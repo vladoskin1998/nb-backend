@@ -12,28 +12,30 @@ import { JwtTokenService } from './jwt-auth.service';
 import { User, UserSchema } from '../user/user.schema';
 
 @Module({
-  imports: [
-    ConfigModule,
-  
-    MongooseModule.forFeature([
-      { name: Authentication.name, schema: AuthenticationSchema },
-      { name: User.name, schema: UserSchema },
-    ]),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const secret = configService.get('JWT_SECRET');
-        return {
-          secret,
-        };
-      },
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, 
-    GoogleStrategy, 
-    FacebookStrategy, 
-    JwtTokenService],
+    imports: [
+        ConfigModule,
+        MongooseModule.forFeature([
+            { name: Authentication.name, schema: AuthenticationSchema },
+            { name: User.name, schema: UserSchema },
+        ]),
+        JwtModule.registerAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                const secret = configService.get('JWT_SECRET');
+                return {
+                    secret,
+                };
+            },
+        }),
+    ],
+    controllers: [AuthController],
+    providers: [AuthService,
+        GoogleStrategy,
+        FacebookStrategy,
+        JwtTokenService],
+    exports: [
+        JwtTokenService
+    ]
 })
-export class AuthModule {}
+export class AuthModule { }

@@ -17,15 +17,52 @@ const common_1 = require("@nestjs/common");
 const user_schema_1 = require("./user.schema");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
+const enum_1 = require("../enum/enum");
+const jwt_auth_service_1 = require("../auth/jwt-auth.service");
 let UserService = class UserService {
-    constructor(userModel) {
+    constructor(userModel, jwtTokenService) {
         this.userModel = userModel;
+        this.jwtTokenService = jwtTokenService;
     }
     async changeLocation(body) {
         try {
-            const userId = new mongoose_2.Types.ObjectId(body.id);
-            const { isLocationVerify } = await this.userModel.findByIdAndUpdate(userId, { body, isLocationVerify: true });
-            return { isLocationVerify };
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const { lat, lng } = body.coordinates;
+            if (!lat || !lng) {
+                throw new common_1.HttpException("BAD COORDINtes", common_1.HttpStatus.BAD_REQUEST);
+            }
+            await this.userModel.findByIdAndUpdate(userId, Object.assign(Object.assign({}, body), { isLocationVerify: true }));
+            return { isLocationVerify: true };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async getUsersByRole(role) {
+        try {
+            if (role !== enum_1.ROLES.ALLUSERS) {
+                return this.userModel.find({ role }).select('-password');
+            }
+            return await this.userModel.find().select('-password');
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async deleteUser(_id) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(_id);
+            await this.jwtTokenService.deleteToken(userId);
+            await this.userModel.deleteOne({ _id: userId });
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async blockUser(_id) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(_id);
+            await this.userModel.findByIdAndUpdate({ _id: userId }, { role: enum_1.ROLES.BLOCKED, blockedUserDate: new Date() });
         }
         catch (error) {
             throw error;
@@ -35,7 +72,8 @@ let UserService = class UserService {
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
-    __metadata("design:paramtypes", [mongoose_2.Model])
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        jwt_auth_service_1.JwtTokenService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

@@ -66,6 +66,15 @@ let JwtTokenService = class JwtTokenService {
         const tokenData = await this.authModel.findOne({ refreshToken });
         return tokenData;
     }
+    async deleteToken(_id) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(_id);
+            await this.authModel.deleteOne({ user: userId });
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 JwtTokenService = __decorate([
     (0, common_1.Injectable)(),

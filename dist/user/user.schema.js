@@ -37,7 +37,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: Object, default: { lat: null, lng: null } }),
     __metadata("design:type", Object)
-], User.prototype, "coordinars", void 0);
+], User.prototype, "coordinates", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: "" }),
     __metadata("design:type", String)
@@ -62,6 +62,14 @@ __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "isLocationVerify", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: new Date() }),
+    __metadata("design:type", Date)
+], User.prototype, "createdUserDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: new Date() }),
+    __metadata("design:type", Date)
+], User.prototype, "blockedUserDate", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

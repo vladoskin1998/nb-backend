@@ -44,6 +44,9 @@ AuthModule = __decorate([
             google_auth_service_1.GoogleStrategy,
             fb_auth_service_1.FacebookStrategy,
             jwt_auth_service_1.JwtTokenService],
+        exports: [
+            jwt_auth_service_1.JwtTokenService
+        ]
     })
 ], AuthModule);
 exports.AuthModule = AuthModule;

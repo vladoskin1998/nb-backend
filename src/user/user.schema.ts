@@ -22,7 +22,7 @@ export class User {
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;
 
     @Prop({ type: Object, default: { lat: null, lng: null } })
-    coordinars: { lat: number | null; lng: number | null };
+    coordinates: { lat: number | null; lng: number | null };
 
     @Prop({ default: "" })
     fullName: string;
@@ -42,6 +42,11 @@ export class User {
     @Prop({ default: false  })
     isLocationVerify: boolean;
 
+    @Prop({ default: new Date()  })
+    createdUserDate: Date;
+
+    @Prop({ default: new Date()  })
+    blockedUserDate: Date;
 
 }
 

@@ -21,7 +21,20 @@ let UserController = class UserController {
         this.userService = userService;
     }
     async logout(body) {
+        console.log(body);
         return await this.userService.changeLocation(body);
+    }
+    async getUsersByRole(body) {
+        console.log(body);
+        return await this.userService.getUsersByRole(body.role);
+    }
+    async deleteUser(body) {
+        console.log(body);
+        return await this.userService.deleteUser(body._id);
+    }
+    async blockUser(body) {
+        console.log(body);
+        return await this.userService.blockUser(body._id);
     }
 };
 __decorate([
@@ -31,6 +44,27 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.LocationDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Post)('get-users'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.GetUserByRoleDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUsersByRole", null);
+__decorate([
+    (0, common_1.Post)('delete-user'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.IDUserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteUser", null);
+__decorate([
+    (0, common_1.Post)('block-user'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.IDUserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "blockUser", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService])
