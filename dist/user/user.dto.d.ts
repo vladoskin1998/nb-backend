@@ -3,8 +3,9 @@ declare class Coordinars {
     lat: number;
     lng: number;
 }
-export declare class GetUserByRoleDto {
+export declare class GetUsers {
     role: ROLES;
+    searchName: string;
 }
 export declare class IDUserDto {
     readonly _id: string;

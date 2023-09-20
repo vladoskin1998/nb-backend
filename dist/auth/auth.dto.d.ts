@@ -5,3 +5,6 @@ export declare class AuthDto {
     role?: ROLES;
     methodRegistration?: METHOD_REGISTRATION;
 }
+export declare class RegistrationDto extends AuthDto {
+    fullName: string;
+}

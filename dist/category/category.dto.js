@@ -14,6 +14,7 @@ const class_validator_1 = require("class-validator");
 class IDDto {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], IDDto.prototype, "id", void 0);
@@ -28,17 +29,20 @@ exports.VisiableDto = VisiableDto;
 class CategoryDto {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CategoryDto.prototype, "fileName", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CategoryDto.prototype, "name", void 0);
 exports.CategoryDto = CategoryDto;
 class EditDto extends IDDto {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EditDto.prototype, "name", void 0);

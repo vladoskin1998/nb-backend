@@ -26,7 +26,7 @@ let UserController = class UserController {
     }
     async getUsersByRole(body) {
         console.log(body);
-        return await this.userService.getUsersByRole(body.role);
+        return await this.userService.getUsers(body);
     }
     async deleteUser(body) {
         console.log(body);
@@ -48,7 +48,7 @@ __decorate([
     (0, common_1.Post)('get-users'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_dto_1.GetUserByRoleDto]),
+    __metadata("design:paramtypes", [user_dto_1.GetUsers]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getUsersByRole", null);
 __decorate([

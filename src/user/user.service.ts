@@ -32,12 +32,21 @@ export class UserService {
     }
 
 
-    async getUsersByRole(role: ROLES): Promise<User[]> {
+    async getUsers({role, searchName}: {role:ROLES, searchName:string}): Promise<User[]> {
         try {
             if (role !== ROLES.ALLUSERS) {
-                return this.userModel.find({ role }).select('-password');
+                return this.userModel.find(
+                    { 
+                        role, 
+                        fullName: { $regex: searchName, $options: 'i' }
+                    }
+                ).select('-password');
             }
-            return await this.userModel.find().select('-password');
+            return await this.userModel.find(
+                { 
+                    fullName: { $regex: searchName, $options: 'i' }
+                }
+            ).select('-password');
         } catch (error) {
             throw error
         }

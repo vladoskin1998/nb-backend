@@ -40,11 +40,12 @@ let AuthService = class AuthService {
                 email,
                 password,
                 methodRegistration,
+                fullName: ''
             });
         }
         return await this.login({ email, password: candidate === null || candidate === void 0 ? void 0 : candidate.password, methodRegistration });
     }
-    async registration({ email, password, methodRegistration }) {
+    async registration({ email, password, methodRegistration, fullName }) {
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
         if (candidate) {
             throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
@@ -54,6 +55,7 @@ let AuthService = class AuthService {
             email,
             password: hashPassword,
             methodRegistration,
+            fullName
         });
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });

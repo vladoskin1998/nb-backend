@@ -10,7 +10,10 @@ export declare class UserService {
     changeLocation(body: LocationDto): Promise<{
         isLocationVerify: boolean;
     }>;
-    getUsersByRole(role: ROLES): Promise<User[]>;
+    getUsers({ role, searchName }: {
+        role: ROLES;
+        searchName: string;
+    }): Promise<User[]>;
     deleteUser(_id: string): Promise<void>;
     blockUser(_id: string): Promise<void>;
 }

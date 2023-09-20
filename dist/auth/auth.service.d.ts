@@ -1,6 +1,6 @@
 import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
-import { AuthDto } from './auth.dto';
+import { AuthDto, RegistrationDto } from './auth.dto';
 import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { JwtTokenService } from './jwt-auth.service';
 export declare class AuthService {
@@ -17,7 +17,7 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
     }>;
-    registration({ email, password, methodRegistration }: AuthDto): Promise<{
+    registration({ email, password, methodRegistration, fullName }: RegistrationDto): Promise<{
         user: import("mongoose").Document<unknown, {}, User> & User & {
             _id: import("mongoose").Types.ObjectId;
         };

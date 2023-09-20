@@ -38,12 +38,17 @@ let UserService = class UserService {
             throw error;
         }
     }
-    async getUsersByRole(role) {
+    async getUsers({ role, searchName }) {
         try {
             if (role !== enum_1.ROLES.ALLUSERS) {
-                return this.userModel.find({ role }).select('-password');
+                return this.userModel.find({
+                    role,
+                    fullName: { $regex: searchName, $options: 'i' }
+                }).select('-password');
             }
-            return await this.userModel.find().select('-password');
+            return await this.userModel.find({
+                fullName: { $regex: searchName, $options: 'i' }
+            }).select('-password');
         }
         catch (error) {
             throw error;

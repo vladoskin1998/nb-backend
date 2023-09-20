@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetUserByRoleDto, IDUserDto, LocationDto } from './user.dto';
+import { GetUsers, IDUserDto, LocationDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -15,10 +15,11 @@ export class UserController {
     }
 
     @Post('get-users')
-    async getUsersByRole(@Body() body: GetUserByRoleDto) {
+    async getUsersByRole(@Body() body: GetUsers) {
         console.log(body);
 
-        return await this.userService.getUsersByRole(body.role)
+
+        return await this.userService.getUsers(body)
     }
 
 

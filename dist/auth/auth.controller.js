@@ -111,7 +111,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.AuthDto, Object]),
+    __metadata("design:paramtypes", [auth_dto_1.RegistrationDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "registration", null);
 __decorate([

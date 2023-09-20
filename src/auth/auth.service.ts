@@ -2,7 +2,7 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
-import { AuthDto } from './auth.dto';
+import { AuthDto, RegistrationDto } from './auth.dto';
 import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
 import * as bcrypt from 'bcrypt';
 //import { MailService } from 'src/mailer/mail.service';
@@ -35,6 +35,7 @@ export class AuthService {
                 email,
                 password,
                 methodRegistration,
+                fullName: ''
             });
         }
 
@@ -58,7 +59,7 @@ export class AuthService {
     //     };
     // }
 
-    async registration({ email, password, methodRegistration }: AuthDto) {
+    async registration({ email, password, methodRegistration, fullName }: RegistrationDto) {
 
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
 
@@ -75,6 +76,7 @@ export class AuthService {
             email,
             password: hashPassword,
             methodRegistration,
+            fullName
         });
 
         const { role, id } = user;

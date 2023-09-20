@@ -9,21 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocationDto = exports.IDUserDto = exports.GetUserByRoleDto = void 0;
+exports.LocationDto = exports.IDUserDto = exports.GetUsers = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
 class Coordinars {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], Coordinars.prototype, "lat", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], Coordinars.prototype, "lng", void 0);
-class GetUserByRoleDto {
+class GetUsers {
     constructor() {
         this.role = enum_1.ROLES.ALLUSERS;
     }
@@ -31,11 +33,16 @@ class GetUserByRoleDto {
 __decorate([
     (0, class_validator_1.IsEnum)(enum_1.ROLES),
     __metadata("design:type", String)
-], GetUserByRoleDto.prototype, "role", void 0);
-exports.GetUserByRoleDto = GetUserByRoleDto;
+], GetUsers.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetUsers.prototype, "searchName", void 0);
+exports.GetUsers = GetUsers;
 class IDUserDto {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], IDUserDto.prototype, "_id", void 0);
@@ -43,10 +50,12 @@ exports.IDUserDto = IDUserDto;
 class LocationDto {
 }
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], LocationDto.prototype, "_id", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], LocationDto.prototype, "city", void 0);
@@ -55,10 +64,12 @@ __decorate([
     __metadata("design:type", String)
 ], LocationDto.prototype, "country", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], LocationDto.prototype, "street", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], LocationDto.prototype, "houseNumber", void 0);

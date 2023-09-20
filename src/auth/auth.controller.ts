@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GoogleOAuthGuard } from './google-auth.guard';
-import { AuthDto } from './auth.dto';
+import { AuthDto, RegistrationDto } from './auth.dto';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
@@ -66,7 +66,7 @@ export class AuthController {
 
     @Post('registration')
     async registration(
-        @Body() authDto: AuthDto,
+        @Body() authDto: RegistrationDto,
         @Res({ passthrough: true }) res: Response,
     ) {
         const result = await this.authService.registration(authDto);
