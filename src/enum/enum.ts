@@ -21,3 +21,47 @@ export enum METHOD_REGISTRATION {
   GOOGLE = 'google',
   JWT = 'jwt',
 }
+
+export enum PRIVACY {
+  EVERYONE = "Everyone",
+  ONLYME = "Only me",
+  NEIBS = "Neibs",
+}
+
+export enum ORIENTATION {
+  HETERO = "Hetero",
+  GAY = "Gay",
+  LESBIAN = "Lesbian",
+  QUEER = "Queer",
+  ASEXUAL = "Asexual",
+  PANSEXUAL = "Pansexual",
+  DEMISEXUAL = "Demisexual",
+  BISEXUAL = "Bisexual",
+  DIDNOTDECIDE = "Did not decide",
+  OTHER = "Other"
+}
+
+export enum SEX{
+  MALE="Male",
+  FEMALE="Female"
+}
+
+export enum EDUCATION{
+  HIGHSCHOOL="High School",
+  TECHCPLLEGE="Tech. College",
+  PHDOTD="Ph.D",
+  STUDYCOLLEGE="Study in college",
+  PHD="PhD",
+  BACHERLOR="Bachelor",
+  MASTERDEGREE="Master’s degree"
+}
+
+export enum FAMILYSTATUS{
+  SINGLE="Single",
+  INRELATIONSHIP="In a relationship",
+  ENGAGED="Engaged",
+  MARRIED="Married",
+  CIVILMARIEGE="In a civil marriage",
+  COMPLICATED="It’s Complicated",
+  SEPARATETHREADING="Separate threading"
+}

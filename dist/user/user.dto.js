@@ -9,10 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LocationDto = exports.IDUserDto = exports.GetUsers = void 0;
+exports.ProfileTextInfoDTO = exports.LocationDto = exports.IDUserDto = exports.GetUsers = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
+const utils_1 = require("../utils/utils");
 class Coordinars {
 }
 __decorate([
@@ -79,4 +80,57 @@ __decorate([
     __metadata("design:type", Coordinars)
 ], LocationDto.prototype, "coordinates", void 0);
 exports.LocationDto = LocationDto;
+class ProfileTextInfoDTO {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "_id", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ProfileTextInfoDTO.prototype, "interestZone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.PRIVACY),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "privacy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "aboutMe", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Validate)(utils_1.isDateOrString),
+    __metadata("design:type", Date)
+], ProfileTextInfoDTO.prototype, "dateBirth", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "cityBirth", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.SEX),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "sex", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.ORIENTATION),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "orientation", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.ORIENTATION),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "education", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.FAMILYSTATUS),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "familyStatus", void 0);
+exports.ProfileTextInfoDTO = ProfileTextInfoDTO;
 //# sourceMappingURL=user.dto.js.map

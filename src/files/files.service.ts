@@ -11,9 +11,6 @@ export class FilesService {
         dirName?: string,
     ): Promise<string> {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
-
-        console.log('uploadSingleFile', dirPath);
-     
         
         this.accessDir(dirPath);
 

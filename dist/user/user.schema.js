@@ -70,6 +70,46 @@ __decorate([
     (0, mongoose_1.Prop)({ default: new Date() }),
     __metadata("design:type", Date)
 ], User.prototype, "blockedUserDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "avatarFileName", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 5 }),
+    __metadata("design:type", Number)
+], User.prototype, "step", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: enum_1.PRIVACY.EVERYONE, enum: enum_1.PRIVACY }),
+    __metadata("design:type", String)
+], User.prototype, "privacy", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: "" }),
+    __metadata("design:type", String)
+], User.prototype, "aboutMe", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", Date)
+], User.prototype, "dateBirth", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "cityBirth", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "sex", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: enum_1.ORIENTATION.HETERO, enum: enum_1.ORIENTATION }),
+    __metadata("design:type", String)
+], User.prototype, "orientation", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "education", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "familyStatus", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

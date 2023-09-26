@@ -87,7 +87,7 @@ let CategoryService = class CategoryService {
             const catFile = await this.categoryModel.findByIdAndDelete({
                 _id: catId,
             });
-            const deletedFiles = await subFileNames.map((item) => item === null || item === void 0 ? void 0 : item.fileName);
+            const deletedFiles = subFileNames.map((item) => item === null || item === void 0 ? void 0 : item.fileName);
             deletedFiles.push(catFile.fileName);
             await this.filesService.deleteFiles(deletedFiles, 'uploads/categories');
             await this.subCategoryModel.deleteMany({ category: categoryId });

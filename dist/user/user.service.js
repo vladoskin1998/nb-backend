@@ -19,10 +19,13 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const jwt_auth_service_1 = require("../auth/jwt-auth.service");
+const files_service_1 = require("../files/files.service");
+const uuid_1 = require("uuid");
 let UserService = class UserService {
-    constructor(userModel, jwtTokenService) {
+    constructor(userModel, jwtTokenService, filesService) {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
+        this.filesService = filesService;
     }
     async changeLocation(body) {
         try {
@@ -73,12 +76,38 @@ let UserService = class UserService {
             throw error;
         }
     }
+    async profileUploadAvatar(file, _id) {
+        try {
+            let user = await this.userModel.findById({ _id });
+            console.log("user", user);
+            if (user.avatarFileName) {
+                await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar');
+            }
+            const avatarName = (0, uuid_1.v4)();
+            file.originalname = avatarName;
+            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar');
+            await user.updateOne({ avatarFileName });
+            return { avatarFileName };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async profileTextInfo(body) {
+        4;
+        const userId = new mongoose_2.Types.ObjectId(body._id);
+        let sanitizedBody = Object.assign({}, body);
+        delete sanitizedBody._id;
+        await this.userModel.findOneAndUpdate({ _id: userId }, Object.assign({}, sanitizedBody));
+        return sanitizedBody;
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_auth_service_1.JwtTokenService])
+        jwt_auth_service_1.JwtTokenService,
+        files_service_1.FilesService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

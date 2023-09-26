@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
+import { METHOD_REGISTRATION, ROLES, PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS } from 'src/enum/enum';
 import { HydratedDocument } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
@@ -48,6 +48,35 @@ export class User {
     @Prop({ default: new Date()  })
     blockedUserDate: Date;
 
+    @Prop({ default: null})
+    avatarFileName: string | null;
+
+    @Prop({ default: 5})
+    step: number;
+
+    @Prop({ default: PRIVACY.EVERYONE, enum:PRIVACY})
+    privacy: PRIVACY;
+
+    @Prop({default: ""})
+    aboutMe: string;
+
+    @Prop({default: null})
+    dateBirth: Date | null
+
+    @Prop({default: null})
+    cityBirth: string | null
+
+    @Prop({default: null})
+    sex: SEX | null
+
+    @Prop({default: ORIENTATION.HETERO, enum: ORIENTATION})
+    orientation: ORIENTATION
+
+    @Prop({default: null })
+    education: EDUCATION | null
+
+    @Prop({default: null })
+    familyStatus: FAMILYSTATUS | null
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

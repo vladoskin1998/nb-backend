@@ -115,7 +115,7 @@ export class CategoryService {
             const catFile = await this.categoryModel.findByIdAndDelete({
                 _id: catId,
             });
-            const deletedFiles = await subFileNames.map(
+            const deletedFiles = subFileNames.map(
                 (item) => item?.fileName,
             );
             deletedFiles.push(catFile.fileName);

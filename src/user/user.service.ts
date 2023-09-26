@@ -2,9 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { LocationDto } from './user.dto';
+import { LocationDto, ProfileTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
+import { FilesService } from 'src/files/files.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -12,7 +14,8 @@ export class UserService {
     constructor(
         @InjectModel(User.name)
         private readonly userModel: Model<User>,
-        private readonly jwtTokenService: JwtTokenService
+        private readonly jwtTokenService: JwtTokenService,
+        private readonly filesService:FilesService
     ) { }
 
     async changeLocation(body: LocationDto): Promise<{ isLocationVerify: boolean }> {
@@ -70,4 +73,32 @@ export class UserService {
             throw error
         }
     }
+
+    async profileUploadAvatar(file: Express.Multer.File, _id:string){
+        try {
+    
+            let user =  await this.userModel.findById({_id})
+            console.log("user",user);
+            
+            if(user.avatarFileName){
+                await this.filesService.deleteFile(user.avatarFileName,'uploads/avatar')
+            }
+            const avatarName = uuidv4()
+            file.originalname = avatarName
+            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar') 
+            await user.updateOne({avatarFileName})
+            return {avatarFileName}
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async profileTextInfo(body:ProfileTextInfoDTO){4
+        const userId = new Types.ObjectId(body._id)
+        let sanitizedBody = { ...body };
+        delete sanitizedBody._id
+        await this.userModel.findOneAndUpdate({_id:userId}, {...sanitizedBody})
+        return sanitizedBody
+    }
+         
 }

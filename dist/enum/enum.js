@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
+exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
 var ERROR_MESSAGE;
 (function (ERROR_MESSAGE) {
     ERROR_MESSAGE["ERROR_ACCESS_DIR"] = "ERROR ACCESS DIR";
@@ -25,4 +25,48 @@ var METHOD_REGISTRATION;
     METHOD_REGISTRATION["GOOGLE"] = "google";
     METHOD_REGISTRATION["JWT"] = "jwt";
 })(METHOD_REGISTRATION = exports.METHOD_REGISTRATION || (exports.METHOD_REGISTRATION = {}));
+var PRIVACY;
+(function (PRIVACY) {
+    PRIVACY["EVERYONE"] = "Everyone";
+    PRIVACY["ONLYME"] = "Only me";
+    PRIVACY["NEIBS"] = "Neibs";
+})(PRIVACY = exports.PRIVACY || (exports.PRIVACY = {}));
+var ORIENTATION;
+(function (ORIENTATION) {
+    ORIENTATION["HETERO"] = "Hetero";
+    ORIENTATION["GAY"] = "Gay";
+    ORIENTATION["LESBIAN"] = "Lesbian";
+    ORIENTATION["QUEER"] = "Queer";
+    ORIENTATION["ASEXUAL"] = "Asexual";
+    ORIENTATION["PANSEXUAL"] = "Pansexual";
+    ORIENTATION["DEMISEXUAL"] = "Demisexual";
+    ORIENTATION["BISEXUAL"] = "Bisexual";
+    ORIENTATION["DIDNOTDECIDE"] = "Did not decide";
+    ORIENTATION["OTHER"] = "Other";
+})(ORIENTATION = exports.ORIENTATION || (exports.ORIENTATION = {}));
+var SEX;
+(function (SEX) {
+    SEX["MALE"] = "Male";
+    SEX["FEMALE"] = "Female";
+})(SEX = exports.SEX || (exports.SEX = {}));
+var EDUCATION;
+(function (EDUCATION) {
+    EDUCATION["HIGHSCHOOL"] = "High School";
+    EDUCATION["TECHCPLLEGE"] = "Tech. College";
+    EDUCATION["PHDOTD"] = "Ph.D";
+    EDUCATION["STUDYCOLLEGE"] = "Study in college";
+    EDUCATION["PHD"] = "PhD";
+    EDUCATION["BACHERLOR"] = "Bachelor";
+    EDUCATION["MASTERDEGREE"] = "Master\u2019s degree";
+})(EDUCATION = exports.EDUCATION || (exports.EDUCATION = {}));
+var FAMILYSTATUS;
+(function (FAMILYSTATUS) {
+    FAMILYSTATUS["SINGLE"] = "Single";
+    FAMILYSTATUS["INRELATIONSHIP"] = "In a relationship";
+    FAMILYSTATUS["ENGAGED"] = "Engaged";
+    FAMILYSTATUS["MARRIED"] = "Married";
+    FAMILYSTATUS["CIVILMARIEGE"] = "In a civil marriage";
+    FAMILYSTATUS["COMPLICATED"] = "It\u2019s Complicated";
+    FAMILYSTATUS["SEPARATETHREADING"] = "Separate threading";
+})(FAMILYSTATUS = exports.FAMILYSTATUS || (exports.FAMILYSTATUS = {}));
 //# sourceMappingURL=enum.js.map

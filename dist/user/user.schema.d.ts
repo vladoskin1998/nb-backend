@@ -22,7 +22,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
+import { METHOD_REGISTRATION, ROLES, PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS } from 'src/enum/enum';
 import { HydratedDocument } from 'mongoose';
 export type UserDocument = HydratedDocument<User>;
 export declare class User {
@@ -43,6 +43,16 @@ export declare class User {
     isLocationVerify: boolean;
     createdUserDate: Date;
     blockedUserDate: Date;
+    avatarFileName: string | null;
+    step: number;
+    privacy: PRIVACY;
+    aboutMe: string;
+    dateBirth: Date | null;
+    cityBirth: string | null;
+    sex: SEX | null;
+    orientation: ORIENTATION;
+    education: EDUCATION | null;
+    familyStatus: FAMILYSTATUS | null;
 }
 export declare const UserSchema: import("mongoose").Schema<User, import("mongoose").Model<User, any, any, any, import("mongoose").Document<unknown, any, User> & User & {
     _id: import("mongoose").Types.ObjectId;
