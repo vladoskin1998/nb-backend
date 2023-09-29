@@ -2,21 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { accessSync, existsSync, mkdirSync } from 'fs';
 import { access, constants, mkdir, unlink, writeFile } from 'fs/promises';
 import * as path from 'path';
-import { v4 } from 'uuid';
-
+import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class FilesService {
     async uploadSingleFile(
         file: Express.Multer.File,
         dirName?: string,
+        isOriginalFileName: boolean = true,
     ): Promise<string> {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
         
         this.accessDir(dirPath);
 
         try {
-            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
-                console.log('fileName name file----------->', `${dirPath}/${fileName}`);
+            const mimoType = file.mimetype.split('/')[1]
+            let name = file.originalname
+            if(!isOriginalFileName){
+                name = uuidv4()
+            }
+
+            const fileName = `${name}.${mimoType}`;
+                // console.log('fileName name file----------->', `${dirPath}/${fileName}`);
             await writeFile(path.join(dirPath, fileName), file.buffer);
             return fileName;
         } catch (error) {
@@ -46,13 +52,14 @@ export class FilesService {
     async uploadFiles(
         files: Array<Express.Multer.File>,
         dirName?: string,
+        isOriginalFileName: boolean = true,
     ): Promise<Array<string>> {
         const nameFiles: string[] = [];
 
         await Promise.all(
             files.map(async (file: Express.Multer.File) => {
                 try {
-                    const fileName = await this.uploadSingleFile(file, dirName);
+                    const fileName = await this.uploadSingleFile(file, dirName, isOriginalFileName);
                     nameFiles.push(fileName);
                 } catch (error) {
                     throw error;

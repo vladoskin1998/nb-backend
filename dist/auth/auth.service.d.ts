@@ -11,23 +11,29 @@ export declare class AuthService {
         email: string;
         methodRegistration: METHOD_REGISTRATION;
     }): Promise<{
-        user: import("mongoose").Document<unknown, {}, User> & User & {
+        user: User & {
             _id: import("mongoose").Types.ObjectId;
-        };
+        } & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }>;
         accessToken: string;
         refreshToken: string;
     }>;
     registration({ email, password, methodRegistration, fullName }: RegistrationDto): Promise<{
-        user: import("mongoose").Document<unknown, {}, User> & User & {
+        user: User & {
             _id: import("mongoose").Types.ObjectId;
-        };
+        } & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }>;
         accessToken: string;
         refreshToken: string;
     }>;
     login({ email, password, methodRegistration }: AuthDto): Promise<{
-        user: import("mongoose").Document<unknown, {}, User> & User & {
+        user: User & {
             _id: import("mongoose").Types.ObjectId;
-        };
+        } & Required<{
+            _id: import("mongoose").Types.ObjectId;
+        }>;
         accessToken: string;
         refreshToken: string;
     }>;

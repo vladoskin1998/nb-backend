@@ -48,17 +48,6 @@ export class AuthService {
         return await this.login({ email, password: candidate?.password, methodRegistration });
     }
 
-    // async fbLogin(req) {
-    //     if (!req.user) {
-    //         return 'No user from google';
-    //     }
-
-    //     return {
-    //         message: 'User information from google',
-    //         user: req.user,
-    //     };
-    // }
-
     async registration({ email, password, methodRegistration, fullName }: RegistrationDto) {
 
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
@@ -77,14 +66,17 @@ export class AuthService {
             password: hashPassword,
             methodRegistration,
             fullName
-        });
+        })
 
         const { role, id } = user;
 
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
 
-        return { ...tokens, user};
+        const userObject = user.toObject();
+        delete userObject.password
+
+        return { ...tokens, user: userObject };
     }
 
     async login({ email, password, methodRegistration }: AuthDto) {
@@ -99,12 +91,14 @@ export class AuthService {
         if (!isPassEquals && methodRegistration === METHOD_REGISTRATION.JWT) {
             throw new HttpException(`Bad password`, HttpStatus.BAD_REQUEST);
         }
-        const { role, id} = user;
+        const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
 
-        delete user.password
+        const userObject = user.toObject();
+        delete userObject.password
+
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return { ...tokens, user };
+        return { ...tokens, user: userObject };
     }
 
     async logout(refreshToken: string) {

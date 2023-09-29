@@ -26,9 +26,6 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.use(cookieParser());
   console.log(__dirname);
-
-
-
   await app.listen(process.env.APP_PORT || 5000, () =>
     console.log('Server started on port ' + process.env.APP_PORT || 5000),
   );

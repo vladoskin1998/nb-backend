@@ -17,12 +17,17 @@ const user_module_1 = require("./user/user.module");
 const category_module_1 = require("./category/category.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const activities_module_1 = require("./activities/activities.module");
+const user_identity_module_1 = require("./user-identity/user-identity.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname, '.env') }),
+            serve_static_1.ServeStaticModule.forRoot({
+                serveRoot: "/uploads",
+                rootPath: path.join(__dirname, '..', 'uploads'),
+            }),
             serve_static_1.ServeStaticModule.forRoot({
                 rootPath: path.join(__dirname, '..', 'build')
             }),
@@ -43,6 +48,7 @@ AppModule = __decorate([
             user_module_1.UserModule,
             category_module_1.CategoryModule,
             activities_module_1.ActivitiesModule,
+            user_identity_module_1.UserIdentityModule,
         ],
     })
 ], AppModule);

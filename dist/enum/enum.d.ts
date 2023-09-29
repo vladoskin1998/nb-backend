@@ -57,3 +57,9 @@ export declare enum FAMILYSTATUS {
     COMPLICATED = "It\u2019s Complicated",
     SEPARATETHREADING = "Separate threading"
 }
+export declare enum QUALITYENUM {
+    INTERESTS = "Interests",
+    SKILLS = "Skills",
+    PROFESSION = "Profession",
+    NATIONALITY = "Nationality"
+}

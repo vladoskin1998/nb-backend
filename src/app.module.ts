@@ -10,10 +10,16 @@ import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ActivitiesModule } from './activities/activities.module';
+import { UserIdentityModule } from './user-identity/user-identity.module';
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname,'.env')}),
+    ServeStaticModule.forRoot({
+      serveRoot: "/uploads",
+      rootPath: path.join(__dirname, '..', 'uploads'), 
+    }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'build')
     }),
@@ -35,6 +41,7 @@ import { ActivitiesModule } from './activities/activities.module';
     UserModule,
     CategoryModule,
     ActivitiesModule,
+    UserIdentityModule,
   ],
 })
 export class AppModule {}

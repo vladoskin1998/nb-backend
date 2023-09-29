@@ -6,6 +6,7 @@ import { User, UserSchema } from './user.schema';
 import { AuthModule } from '../auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from 'src/files/files.module';
+import { UserIdentityModule } from 'src/user-identity/user-identity.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { FilesModule } from 'src/files/files.module';
         MulterModule.register({}),
         AuthModule,
         FilesModule,
+        UserIdentityModule,
     ],
     controllers: [UserController],
     providers: [UserService]

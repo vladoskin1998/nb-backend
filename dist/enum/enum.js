@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
+exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
 var ERROR_MESSAGE;
 (function (ERROR_MESSAGE) {
     ERROR_MESSAGE["ERROR_ACCESS_DIR"] = "ERROR ACCESS DIR";
@@ -69,4 +69,11 @@ var FAMILYSTATUS;
     FAMILYSTATUS["COMPLICATED"] = "It\u2019s Complicated";
     FAMILYSTATUS["SEPARATETHREADING"] = "Separate threading";
 })(FAMILYSTATUS = exports.FAMILYSTATUS || (exports.FAMILYSTATUS = {}));
+var QUALITYENUM;
+(function (QUALITYENUM) {
+    QUALITYENUM["INTERESTS"] = "Interests";
+    QUALITYENUM["SKILLS"] = "Skills";
+    QUALITYENUM["PROFESSION"] = "Profession";
+    QUALITYENUM["NATIONALITY"] = "Nationality";
+})(QUALITYENUM = exports.QUALITYENUM || (exports.QUALITYENUM = {}));
 //# sourceMappingURL=enum.js.map

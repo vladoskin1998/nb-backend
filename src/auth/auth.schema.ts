@@ -7,7 +7,7 @@ export type AuthenticationDocument = HydratedDocument<Authentication>;
 @Schema()
 export class Authentication {
 
-    @Prop({ type: Types.ObjectId, ref: User.name }) // Создание ссылки на модель User
+    @Prop({ type: Types.ObjectId, ref: User.name }) 
     user: Types.ObjectId;
 
     @Prop({})

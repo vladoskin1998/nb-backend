@@ -132,5 +132,34 @@ __decorate([
     (0, class_validator_1.IsEnum)(enum_1.FAMILYSTATUS),
     __metadata("design:type", String)
 ], ProfileTextInfoDTO.prototype, "familyStatus", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.Validate)(utils_1.isValidNationality),
+    __metadata("design:type", Array)
+], ProfileTextInfoDTO.prototype, "nationality", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], ProfileTextInfoDTO.prototype, "profession", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], ProfileTextInfoDTO.prototype, "interests", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], ProfileTextInfoDTO.prototype, "skills", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    __metadata("design:type", Array)
+], ProfileTextInfoDTO.prototype, "certificatesFileName", void 0);
 exports.ProfileTextInfoDTO = ProfileTextInfoDTO;
 //# sourceMappingURL=user.dto.js.map

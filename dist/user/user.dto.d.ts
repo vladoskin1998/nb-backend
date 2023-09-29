@@ -20,14 +20,22 @@ export declare class LocationDto {
 }
 export declare class ProfileTextInfoDTO {
     readonly _id: string;
-    interestZone: number;
-    privacy: PRIVACY;
-    aboutMe: string;
-    dateBirth: Date;
-    cityBirth: string;
-    sex: SEX | null;
-    orientation: ORIENTATION;
-    education: EDUCATION | null;
-    familyStatus: FAMILYSTATUS | null;
+    interestZone?: number;
+    privacy?: PRIVACY;
+    aboutMe?: string;
+    dateBirth?: Date;
+    cityBirth?: string;
+    sex?: SEX | null;
+    orientation?: ORIENTATION;
+    education?: EDUCATION | null;
+    familyStatus?: FAMILYSTATUS | null;
+    nationality?: {
+        _id: string | number;
+        title: string;
+    }[] | [];
+    profession?: string[] | null;
+    interests?: string[] | null;
+    skills?: string[] | null;
+    certificatesFileName?: string[] | null;
 }
 export {};

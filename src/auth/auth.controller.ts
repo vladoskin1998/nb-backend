@@ -36,7 +36,6 @@ export class AuthController {
             httpOnly: true,
         });
 
-        // return res.redirect('https://nb-nb.onrender.com');
         // return res.redirect('http://localhost:3000');
         return res.redirect(this.configService.get('CALL_BACK_URL_WEB_APP'));
     }

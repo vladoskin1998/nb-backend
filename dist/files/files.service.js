@@ -11,13 +11,18 @@ const common_1 = require("@nestjs/common");
 const fs_1 = require("fs");
 const promises_1 = require("fs/promises");
 const path = require("path");
+const uuid_1 = require("uuid");
 let FilesService = class FilesService {
-    async uploadSingleFile(file, dirName) {
+    async uploadSingleFile(file, dirName, isOriginalFileName = true) {
         const dirPath = path.join(__dirname, '../../', dirName || 'uploads');
         this.accessDir(dirPath);
         try {
-            const fileName = `${file.originalname}.${file.mimetype.split('/')[1]}`;
-            console.log('fileName name file----------->', `${dirPath}/${fileName}`);
+            const mimoType = file.mimetype.split('/')[1];
+            let name = file.originalname;
+            if (!isOriginalFileName) {
+                name = (0, uuid_1.v4)();
+            }
+            const fileName = `${name}.${mimoType}`;
             await (0, promises_1.writeFile)(path.join(dirPath, fileName), file.buffer);
             return fileName;
         }
@@ -44,11 +49,11 @@ let FilesService = class FilesService {
             throw error;
         }
     }
-    async uploadFiles(files, dirName) {
+    async uploadFiles(files, dirName, isOriginalFileName = true) {
         const nameFiles = [];
         await Promise.all(files.map(async (file) => {
             try {
-                const fileName = await this.uploadSingleFile(file, dirName);
+                const fileName = await this.uploadSingleFile(file, dirName, isOriginalFileName);
                 nameFiles.push(fileName);
             }
             catch (error) {

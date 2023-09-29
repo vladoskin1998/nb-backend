@@ -60,7 +60,9 @@ let AuthService = class AuthService {
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return Object.assign(Object.assign({}, tokens), { user });
+        const userObject = user.toObject();
+        delete userObject.password;
+        return Object.assign(Object.assign({}, tokens), { user: userObject });
     }
     async login({ email, password, methodRegistration }) {
         const user = await this.userModel.findOne({ email }).select('-isValidationUser');
@@ -73,9 +75,10 @@ let AuthService = class AuthService {
         }
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
-        delete user.password;
+        const userObject = user.toObject();
+        delete userObject.password;
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        return Object.assign(Object.assign({}, tokens), { user });
+        return Object.assign(Object.assign({}, tokens), { user: userObject });
     }
     async logout(refreshToken) {
         const token = await this.jwtTokenService.removeToken(refreshToken);

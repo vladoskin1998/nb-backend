@@ -23,93 +23,21 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: enum_1.ROLES.USER, enum: [enum_1.ROLES.ADMIN, enum_1.ROLES.USER] }),
+    (0, mongoose_1.Prop)({ default: enum_1.ROLES.ADMIN, enum: [enum_1.ROLES.ADMIN, enum_1.ROLES.USER] }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
-], User.prototype, "isValidationUser", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: enum_1.METHOD_REGISTRATION.JWT }),
-    __metadata("design:type", String)
-], User.prototype, "methodRegistration", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ type: Object, default: { lat: null, lng: null } }),
-    __metadata("design:type", Object)
-], User.prototype, "coordinates", void 0);
+], User.prototype, "isCheckedEmail", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: "" }),
     __metadata("design:type", String)
 ], User.prototype, "fullName", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: null }),
+    (0, mongoose_1.Prop)({ default: enum_1.METHOD_REGISTRATION.JWT }),
     __metadata("design:type", String)
-], User.prototype, "city", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "country", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "street", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "houseNumber", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: false }),
-    __metadata("design:type", Boolean)
-], User.prototype, "isLocationVerify", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: new Date() }),
-    __metadata("design:type", Date)
-], User.prototype, "createdUserDate", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: new Date() }),
-    __metadata("design:type", Date)
-], User.prototype, "blockedUserDate", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "avatarFileName", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: 5 }),
-    __metadata("design:type", Number)
-], User.prototype, "step", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: enum_1.PRIVACY.EVERYONE, enum: enum_1.PRIVACY }),
-    __metadata("design:type", String)
-], User.prototype, "privacy", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: "" }),
-    __metadata("design:type", String)
-], User.prototype, "aboutMe", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", Date)
-], User.prototype, "dateBirth", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "cityBirth", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "sex", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: enum_1.ORIENTATION.HETERO, enum: enum_1.ORIENTATION }),
-    __metadata("design:type", String)
-], User.prototype, "orientation", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "education", void 0);
-__decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], User.prototype, "familyStatus", void 0);
+], User.prototype, "methodRegistration", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);
