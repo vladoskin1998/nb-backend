@@ -9,23 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfileTextInfoDTO = exports.LocationDto = exports.IDUserDto = exports.GetUsers = void 0;
-const class_transformer_1 = require("class-transformer");
+exports.ChangePasswordDTO = exports.UserTextInfoDTO = exports.IDUserDto = exports.GetUsers = void 0;
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
-const utils_1 = require("../utils/utils");
-class Coordinars {
-}
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], Coordinars.prototype, "lat", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], Coordinars.prototype, "lng", void 0);
 class GetUsers {
     constructor() {
         this.role = enum_1.ROLES.ALLUSERS;
@@ -48,118 +34,54 @@ __decorate([
     __metadata("design:type", String)
 ], IDUserDto.prototype, "_id", void 0);
 exports.IDUserDto = IDUserDto;
-class LocationDto {
+class UserTextInfoDTO {
 }
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], LocationDto.prototype, "_id", void 0);
+], UserTextInfoDTO.prototype, "_id", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], LocationDto.prototype, "city", void 0);
+], UserTextInfoDTO.prototype, "fullName", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], UserTextInfoDTO.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.ROLES),
+    __metadata("design:type", String)
+], UserTextInfoDTO.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], LocationDto.prototype, "country", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], LocationDto.prototype, "street", void 0);
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], LocationDto.prototype, "houseNumber", void 0);
-__decorate([
-    (0, class_validator_1.ValidateNested)(),
-    (0, class_transformer_1.Type)(() => Coordinars),
-    __metadata("design:type", Coordinars)
-], LocationDto.prototype, "coordinates", void 0);
-exports.LocationDto = LocationDto;
-class ProfileTextInfoDTO {
+], UserTextInfoDTO.prototype, "phone", void 0);
+exports.UserTextInfoDTO = UserTextInfoDTO;
+class ChangePasswordDTO {
 }
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "_id", void 0);
+], ChangePasswordDTO.prototype, "_id", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], ProfileTextInfoDTO.prototype, "interestZone", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(enum_1.PRIVACY),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "privacy", void 0);
+], ChangePasswordDTO.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ChangePasswordDTO.prototype, "newPassword1", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "aboutMe", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Validate)(utils_1.isDateOrString),
-    __metadata("design:type", Date)
-], ProfileTextInfoDTO.prototype, "dateBirth", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "cityBirth", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(enum_1.SEX),
-    __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "sex", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(enum_1.ORIENTATION),
-    __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "orientation", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(enum_1.ORIENTATION),
-    __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "education", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(enum_1.FAMILYSTATUS),
-    __metadata("design:type", String)
-], ProfileTextInfoDTO.prototype, "familyStatus", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.Validate)(utils_1.isValidNationality),
-    __metadata("design:type", Array)
-], ProfileTextInfoDTO.prototype, "nationality", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    __metadata("design:type", Array)
-], ProfileTextInfoDTO.prototype, "profession", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    __metadata("design:type", Array)
-], ProfileTextInfoDTO.prototype, "interests", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ValidateNested)({ each: true }),
-    __metadata("design:type", Array)
-], ProfileTextInfoDTO.prototype, "skills", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsArray)(),
-    __metadata("design:type", Array)
-], ProfileTextInfoDTO.prototype, "certificatesFileName", void 0);
-exports.ProfileTextInfoDTO = ProfileTextInfoDTO;
+], ChangePasswordDTO.prototype, "newPassword2", void 0);
+exports.ChangePasswordDTO = ChangePasswordDTO;
 //# sourceMappingURL=user.dto.js.map

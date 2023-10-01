@@ -1,8 +1,4 @@
-import { EDUCATION, FAMILYSTATUS, ORIENTATION, PRIVACY, ROLES, SEX } from 'src/enum/enum';
-declare class Coordinars {
-    lat: number;
-    lng: number;
-}
+import { ROLES } from 'src/enum/enum';
 export declare class GetUsers {
     role: ROLES;
     searchName: string;
@@ -10,32 +6,16 @@ export declare class GetUsers {
 export declare class IDUserDto {
     readonly _id: string;
 }
-export declare class LocationDto {
+export declare class UserTextInfoDTO {
     readonly _id: string;
-    readonly city: string;
-    readonly country: string;
-    readonly street: string;
-    readonly houseNumber: string;
-    coordinates: Coordinars;
+    fullName?: string;
+    email?: string;
+    role?: ROLES;
+    phone?: string;
 }
-export declare class ProfileTextInfoDTO {
+export declare class ChangePasswordDTO {
     readonly _id: string;
-    interestZone?: number;
-    privacy?: PRIVACY;
-    aboutMe?: string;
-    dateBirth?: Date;
-    cityBirth?: string;
-    sex?: SEX | null;
-    orientation?: ORIENTATION;
-    education?: EDUCATION | null;
-    familyStatus?: FAMILYSTATUS | null;
-    nationality?: {
-        _id: string | number;
-        title: string;
-    }[] | [];
-    profession?: string[] | null;
-    interests?: string[] | null;
-    skills?: string[] | null;
-    certificatesFileName?: string[] | null;
+    password: string;
+    newPassword1: string;
+    newPassword2: string;
 }
-export {};

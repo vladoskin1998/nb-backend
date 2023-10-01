@@ -38,7 +38,17 @@ let UserIdentityService = class UserIdentityService {
             if (!userIdentity) {
                 return await this.userIdentity.create({ user: userId });
             }
-            return userIdentity;
+            const profession = await this.userProfession.find({
+                _id: { $in: userIdentity.profession },
+            });
+            const interests = await this.userInterests.find({
+                _id: { $in: userIdentity.interests },
+            });
+            const skills = await this.userSkills.find({
+                _id: { $in: userIdentity.skills },
+            });
+            const userIdentityObject = userIdentity.toObject();
+            return Object.assign(Object.assign({}, userIdentityObject), { profession, interests, skills });
         }
         catch (error) {
             throw error;
@@ -47,14 +57,12 @@ let UserIdentityService = class UserIdentityService {
     async changeLocation(body) {
         try {
             const userId = new mongoose_1.Types.ObjectId(body._id);
-            console.log(body._id);
             const { lat, lng } = body.coordinates;
             if (!lat || !lng) {
                 throw new common_1.HttpException("BAD COORDINtes", common_1.HttpStatus.BAD_REQUEST);
             }
             delete body._id;
             const identity = await this.userIdentity.findOneAndUpdate({ user: userId }, Object.assign(Object.assign({}, body), { isLocationVerify: true }));
-            console.log(identity);
             return { isLocationVerify: true };
         }
         catch (error) {

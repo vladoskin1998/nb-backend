@@ -14,8 +14,6 @@ const mongoose_1 = require("@nestjs/mongoose");
 const user_schema_1 = require("./user.schema");
 const auth_module_1 = require("../auth/auth.module");
 const platform_express_1 = require("@nestjs/platform-express");
-const files_module_1 = require("../files/files.module");
-const user_identity_module_1 = require("../user-identity/user-identity.module");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
@@ -26,8 +24,6 @@ UserModule = __decorate([
             ]),
             platform_express_1.MulterModule.register({}),
             auth_module_1.AuthModule,
-            files_module_1.FilesModule,
-            user_identity_module_1.UserIdentityModule,
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService]

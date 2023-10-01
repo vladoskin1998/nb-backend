@@ -1,19 +1,24 @@
 import { User } from './user.schema';
 import { Model } from 'mongoose';
+import { ChangePasswordDTO, UserTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
-import { FilesService } from 'src/files/files.service';
-import { UserIdentityService } from 'src/user-identity/user-identity.service';
 export declare class UserService {
     private readonly userModel;
     private readonly jwtTokenService;
-    private readonly filesService;
-    private readonly userIdentityService;
-    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService, filesService: FilesService, userIdentityService: UserIdentityService);
+    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService);
     getUsers({ role, searchName }: {
         role: ROLES;
         searchName: string;
     }): Promise<User[]>;
     deleteUser(_id: string): Promise<void>;
     blockUser(_id: string): Promise<void>;
+    userTextInfo(body: UserTextInfoDTO): Promise<{
+        _id: string;
+        fullName?: string;
+        email?: string;
+        role?: ROLES;
+        phone?: string;
+    }>;
+    userChangePassword(body: ChangePasswordDTO): Promise<string>;
 }

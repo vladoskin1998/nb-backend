@@ -19,14 +19,11 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const jwt_auth_service_1 = require("../auth/jwt-auth.service");
-const files_service_1 = require("../files/files.service");
-const user_identity_service_1 = require("../user-identity/user-identity.service");
+const bcrypt = require("bcrypt");
 let UserService = class UserService {
-    constructor(userModel, jwtTokenService, filesService, userIdentityService) {
+    constructor(userModel, jwtTokenService) {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
-        this.filesService = filesService;
-        this.userIdentityService = userIdentityService;
     }
     async getUsers({ role, searchName }) {
         try {
@@ -63,14 +60,53 @@ let UserService = class UserService {
             throw error;
         }
     }
+    async userTextInfo(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            let sanitizedBody = Object.assign({}, body);
+            delete sanitizedBody._id;
+            let isUniq = false;
+            if (body === null || body === void 0 ? void 0 : body.email) {
+                isUniq = await this.userModel.findOne({ email: body === null || body === void 0 ? void 0 : body.email });
+            }
+            if (isUniq) {
+                throw new common_1.HttpException(`Email is NOT uniq`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            await this.userModel.findOneAndUpdate({ _id: userId }, Object.assign({}, sanitizedBody));
+            return sanitizedBody;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async userChangePassword(body) {
+        try {
+            const { password, newPassword1, newPassword2 } = body;
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const user = await this.userModel.findById({ _id: userId }).select('-isValidationUser');
+            if (!user) {
+                throw new common_1.HttpException(`User not found`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            const isPassEquals = await bcrypt.compare(password, user.password);
+            if (!isPassEquals) {
+                throw new common_1.HttpException(`Bad password`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            if (newPassword1 !== newPassword2) {
+                throw new common_1.HttpException("New passwords have not arrived", common_1.HttpStatus.BAD_REQUEST);
+            }
+            const hashPassword = await bcrypt.hash(newPassword1, 3);
+            await user.updateOne({ password: hashPassword });
+            return "Password successful changed";
+        }
+        catch (error) {
+        }
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_auth_service_1.JwtTokenService,
-        files_service_1.FilesService,
-        user_identity_service_1.UserIdentityService])
+        jwt_auth_service_1.JwtTokenService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

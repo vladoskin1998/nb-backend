@@ -30,7 +30,47 @@ import { IDUserDto } from 'src/user/user.dto';
 export declare class UserIdentityController {
     private readonly userIdentityService;
     constructor(userIdentityService: UserIdentityService);
-    getIdentityInforamation(body: IDUserDto): Promise<import("mongoose").Document<unknown, {}, import("./user-identity.schema").UserIdentity> & import("./user-identity.schema").UserIdentity & {
+    getIdentityInforamation(body: IDUserDto): Promise<(import("mongoose").Document<unknown, {}, import("./user-identity.schema").UserIdentity> & import("./user-identity.schema").UserIdentity & {
+        _id: import("mongoose").Types.ObjectId;
+    }) | {
+        profession: (import("mongoose").Document<unknown, {}, import("./user-profession.schema").UserProfession> & import("./user-profession.schema").UserProfession & {
+            _id: import("mongoose").Types.ObjectId;
+        })[];
+        interests: (import("mongoose").Document<unknown, {}, import("./user-interests.schema").UserInterests> & import("./user-interests.schema").UserInterests & {
+            _id: import("mongoose").Types.ObjectId;
+        })[];
+        skills: (import("mongoose").Document<unknown, {}, import("./user-skills.schema").UserSkills> & import("./user-skills.schema").UserSkills & {
+            _id: import("mongoose").Types.ObjectId;
+        })[];
+        user: import("mongoose").Types.ObjectId;
+        isLocationVerify: boolean;
+        isGotAllProfileInfo: boolean;
+        coordinates: {
+            lat: number;
+            lng: number;
+        };
+        city: string;
+        country: string;
+        street: string;
+        houseNumber: string;
+        createdUserDate: Date;
+        blockedUserDate: Date;
+        avatarFileName: string;
+        step: number;
+        privacy: import("src/enum/enum").PRIVACY;
+        aboutMe: string;
+        dateBirth: Date;
+        cityBirth: string;
+        certificatesFileName: string[];
+        sex: import("src/enum/enum").SEX;
+        orientation: import("src/enum/enum").ORIENTATION;
+        education: import("src/enum/enum").EDUCATION;
+        studySchool: string;
+        familyStatus: import("src/enum/enum").FAMILYSTATUS;
+        nationality: {
+            _id: string | number;
+            title: string;
+        }[] | [];
         _id: import("mongoose").Types.ObjectId;
     }>;
     profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{

@@ -1,9 +1,6 @@
-import { Body, Controller, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetUsers, IDUserDto, LocationDto , ProfileTextInfoDTO } from './user.dto';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { QUALITYENUM } from 'src/enum/enum';
-import { ProfileSelectDTO } from 'src/user-identity/user-identity.dto';
+import { ChangePasswordDTO, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,40 +30,21 @@ export class UserController {
         return await this.userService.blockUser(body._id)
     }
 
-    // @Post('upload-avatar')
-    // @UseInterceptors(FileInterceptor('file'))
-    // async profileUploadAvatar(
-    //     @Body() body,
-    //     @UploadedFile() file: Express.Multer.File,
-    // ) {
-    //     const userId = JSON.parse(body.payload)?._id
-    //     return await this.userService.profileUploadAvatar(file, userId)
 
-    // }
 
-    // @Post('upload-certificates')
-    // @UseInterceptors(FilesInterceptor('files'))
-    // async profileUploadCertificates(
-    //     @Body() body,
-    //     @UploadedFiles() files:Array<Express.Multer.File>,
-    // ) {
-    //     const userId = JSON.parse(body.payload)?._id
-    //     return await this.userService.profileUploadCertificates(files, userId)
+    @Post('user-text-info')
+    async userTextInfo(
+        @Body() body: UserTextInfoDTO
+    ){
+        return await this.userService.userTextInfo(body)
+    }
 
-    // }
 
-    // @Post('profile-text-info')
-    // async profileTextInfo(
-    //     @Body() body: ProfileTextInfoDTO
-    // ){
-    //     return await this.userService.profileTextInfo(body)
-    // }
+    @Post('user-change-password')
+    async userChangePassword(
+        @Body() body: ChangePasswordDTO
+    ){
+        return await this.userService.userChangePassword(body)
+    }
 
-    // /// user profile Profession Skills Interests Nationality
-    // @Post('put-profile-identity')
-    // async profileIdentity(
-    //     @Body() body: ProfileSelectDTO
-    // ) {         
-    //     return await this.userService.profileIdentity(body)
-    // }
 }

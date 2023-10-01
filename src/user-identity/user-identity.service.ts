@@ -24,16 +24,28 @@ export class UserIdentityService {
         private readonly userSkills: Model<UserSkills>,
         private readonly filesService: FilesService,
     ) { }
-    
 
-    async getIdentityInforamation(_id:string){
+
+    async getIdentityInforamation(_id: string) {
         try {
             const userId = new Types.ObjectId(_id)
-            const userIdentity =  await this.userIdentity.findOne({user: userId}).select("-_id")
-            if(!userIdentity){
-                return await this.userIdentity.create({user: userId})
+            const userIdentity = await this.userIdentity.findOne({ user: userId }).select("-_id")
+            if (!userIdentity) {
+                return await this.userIdentity.create({ user: userId })
             }
-            return userIdentity
+
+            const profession = await this.userProfession.find({
+                _id: { $in: userIdentity.profession },
+            });
+            const interests = await this.userInterests.find({
+                _id: { $in: userIdentity.interests },
+            });
+            const skills = await this.userSkills.find({
+                _id: { $in: userIdentity.skills },
+            });
+
+            const userIdentityObject = userIdentity.toObject()
+            return { ...userIdentityObject, profession, interests, skills }
         } catch (error) {
             throw error
         }
@@ -41,26 +53,16 @@ export class UserIdentityService {
 
     async changeLocation(body: LocationDto): Promise<{ isLocationVerify: boolean }> {
         try {
-
-            
             const userId = new Types.ObjectId(body._id)
-            console.log(body._id);
-            
             const { lat, lng } = body.coordinates
             if (!lat || !lng) {
                 throw new HttpException("BAD COORDINtes", HttpStatus.BAD_REQUEST)
             }
-            
             delete body._id
 
-     
-            
-            
-            const identity = await this.userIdentity.findOneAndUpdate({user: userId},
+            const identity = await this.userIdentity.findOneAndUpdate({ user: userId },
                 { ...body, isLocationVerify: true }
             )
-
-            console.log(identity);
 
             return { isLocationVerify: true }
         } catch (error) {
@@ -68,11 +70,11 @@ export class UserIdentityService {
         }
     }
 
-    
+
     async profileUploadAvatar(file: Express.Multer.File, _id: string) {
         const userId = new Types.ObjectId(_id)
         try {
-            let user = await this.userIdentity.findOne({user: userId})
+            let user = await this.userIdentity.findOne({ user: userId })
             if (user.avatarFileName) {
                 await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar')
             }
@@ -84,10 +86,10 @@ export class UserIdentityService {
         }
     }
 
-    async profileUploadCertificates(files:Array<Express.Multer.File>, _id: string) {
+    async profileUploadCertificates(files: Array<Express.Multer.File>, _id: string) {
         const userId = new Types.ObjectId(_id)
         try {
-            let user = await this.userIdentity.findOne({user: userId})
+            let user = await this.userIdentity.findOne({ user: userId })
             const certificatesFileName = await this.filesService.uploadFiles(files, 'uploads/certificates', false)
             await user.updateOne({ certificatesFileName })
             return { certificatesFileName }

@@ -38,7 +38,47 @@ export declare class UserIdentityService {
     private readonly userSkills;
     private readonly filesService;
     constructor(userIdentity: Model<UserIdentity>, userProfession: Model<UserProfession>, userInterests: Model<UserInterests>, userSkills: Model<UserSkills>, filesService: FilesService);
-    getIdentityInforamation(_id: string): Promise<import("mongoose").Document<unknown, {}, UserIdentity> & UserIdentity & {
+    getIdentityInforamation(_id: string): Promise<(import("mongoose").Document<unknown, {}, UserIdentity> & UserIdentity & {
+        _id: Types.ObjectId;
+    }) | {
+        profession: (import("mongoose").Document<unknown, {}, UserProfession> & UserProfession & {
+            _id: Types.ObjectId;
+        })[];
+        interests: (import("mongoose").Document<unknown, {}, UserInterests> & UserInterests & {
+            _id: Types.ObjectId;
+        })[];
+        skills: (import("mongoose").Document<unknown, {}, UserSkills> & UserSkills & {
+            _id: Types.ObjectId;
+        })[];
+        user: Types.ObjectId;
+        isLocationVerify: boolean;
+        isGotAllProfileInfo: boolean;
+        coordinates: {
+            lat: number;
+            lng: number;
+        };
+        city: string;
+        country: string;
+        street: string;
+        houseNumber: string;
+        createdUserDate: Date;
+        blockedUserDate: Date;
+        avatarFileName: string;
+        step: number;
+        privacy: import("src/enum/enum").PRIVACY;
+        aboutMe: string;
+        dateBirth: Date;
+        cityBirth: string;
+        certificatesFileName: string[];
+        sex: import("src/enum/enum").SEX;
+        orientation: import("src/enum/enum").ORIENTATION;
+        education: import("src/enum/enum").EDUCATION;
+        studySchool: string;
+        familyStatus: import("src/enum/enum").FAMILYSTATUS;
+        nationality: {
+            _id: string | number;
+            title: string;
+        }[] | [];
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{

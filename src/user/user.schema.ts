@@ -25,6 +25,10 @@ export class User {
     @Prop({ default: "" })
     fullName: string;
 
+    @Prop({ default: "" })
+    phone: string;
+
+
     @Prop({ default: METHOD_REGISTRATION.JWT })
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;
 

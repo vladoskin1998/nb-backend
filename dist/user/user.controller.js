@@ -30,6 +30,12 @@ let UserController = class UserController {
         console.log(body);
         return await this.userService.blockUser(body._id);
     }
+    async userTextInfo(body) {
+        return await this.userService.userTextInfo(body);
+    }
+    async userChangePassword(body) {
+        return await this.userService.userChangePassword(body);
+    }
 };
 __decorate([
     (0, common_1.Post)('get-users'),
@@ -52,6 +58,20 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.IDUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "blockUser", null);
+__decorate([
+    (0, common_1.Post)('user-text-info'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.UserTextInfoDTO]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "userTextInfo", null);
+__decorate([
+    (0, common_1.Post)('user-change-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.ChangePasswordDTO]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "userChangePassword", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService])
