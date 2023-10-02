@@ -101,10 +101,7 @@ export declare class UserIdentityController {
         certificatesFileName?: string[];
     }>;
     profileIdentity(body: ProfileSelectDTO): Promise<{
-        [x: string]: {
-            title: string;
-            _id: string;
-        }[];
+        [x: string]: import("./user-identity.dto").ProfessionDto[];
     }>;
     logout(body: LocationDto): Promise<{
         isLocationVerify: boolean;

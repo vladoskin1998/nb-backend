@@ -112,10 +112,7 @@ export declare class UserIdentityService {
         certificatesFileName?: string[];
     }>;
     profileIdentity(body: ProfileSelectDTO): Promise<{
-        [x: string]: {
-            title: string;
-            _id: string;
-        }[];
+        [x: string]: import("./user-identity.dto").ProfessionDto[];
     }>;
     getCountriesList(country: string): Promise<{
         _id: string;

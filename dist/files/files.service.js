@@ -36,7 +36,7 @@ let FilesService = class FilesService {
             await (0, promises_1.unlink)(`${dirPath}/${fileName}`);
         }
         catch (error) {
-            throw error;
+            return fileName;
         }
     }
     async deleteFiles(fileNames, dirName) {

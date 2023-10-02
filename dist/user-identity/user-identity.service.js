@@ -109,7 +109,7 @@ let UserIdentityService = class UserIdentityService {
                 _id: body._id,
                 nationality: body.value
             });
-            return;
+            return { [body.quality.toLowerCase()]: body.value };
         }
         const idList = await this.checkCreateSkillProfInterest(body);
         switch (body.quality) {

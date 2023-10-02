@@ -35,7 +35,7 @@ export class FilesService {
         try {
             await unlink(`${dirPath}/${fileName}`);
         } catch (error) {
-            throw error;
+            return fileName;
         }
     }
 
