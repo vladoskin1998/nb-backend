@@ -19,7 +19,9 @@ import { MessageType } from '../types'
         cors: {
             origin: ['http://localhost:5000',
                 'http://localhost:3000',
-                "http://5.180.180.221:5000"],
+                "http://5.180.180.221:5000",
+                "http://185.237.14.239:5001"
+            ],
             credentials: true,
         },
     })

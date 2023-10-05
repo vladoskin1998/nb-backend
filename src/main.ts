@@ -18,7 +18,9 @@ async function bootstrap() {
       origin: ['http://localhost:5000',
         'http://localhost:3000', 
         'https://maps.googleapis.com', 
-        "http://5.180.180.221:5000"], 
+        "http://5.180.180.221:5000",
+        "http://5.180.180.221:5001"
+      ], 
       credentials: true,
     }
   );
