@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ActivitiesModule } from './activities/activities.module';
 import { UserIdentityModule } from './user-identity/user-identity.module';
+import { MessengerModule } from './messenger/messenger.module';
 
 
 @Module({
@@ -42,6 +43,9 @@ import { UserIdentityModule } from './user-identity/user-identity.module';
     CategoryModule,
     ActivitiesModule,
     UserIdentityModule,
+    MessengerModule,
+
+    
   ],
 })
 export class AppModule {}

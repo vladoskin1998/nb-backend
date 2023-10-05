@@ -25,17 +25,16 @@ let UserService = class UserService {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
     }
-    async getUsers({ role, searchName }) {
+    async getUsers({ _id, role, searchName }) {
         try {
+            let query = { fullName: { $regex: searchName, $options: 'i' } };
             if (role !== enum_1.ROLES.ALLUSERS) {
-                return await this.userModel.find({
-                    role,
-                    fullName: { $regex: searchName, $options: 'i' }
-                }).select('-password');
+                query.role = role;
             }
-            return await this.userModel.find({
-                fullName: { $regex: searchName, $options: 'i' }
-            }).select('-password');
+            if (_id) {
+                query._id = { $ne: _id };
+            }
+            return await this.userModel.find(query).select('-password');
         }
         catch (error) {
             throw error;
@@ -100,6 +99,14 @@ let UserService = class UserService {
         }
         catch (error) {
         }
+    }
+    async checkUsersExist(userIds) {
+        const userExistPromises = userIds.map(async (userId) => {
+            const userExists = await this.userModel.exists({ _id: new mongoose_2.Types.ObjectId(userId) });
+            return userExists;
+        });
+        const userExistResults = await Promise.all(userExistPromises);
+        return userExistResults;
     }
 };
 UserService = __decorate([

@@ -16,23 +16,21 @@ export class UserService {
         private readonly jwtTokenService: JwtTokenService,
     ) { }
 
-    async getUsers({ role, searchName }: { role: ROLES, searchName: string }): Promise<User[]> {
+    async getUsers({ _id, role, searchName }: { _id: string; role: ROLES; searchName: string }): Promise<User[]> {
         try {
+            let query: any = { fullName: { $regex: searchName, $options: 'i' } };
+
             if (role !== ROLES.ALLUSERS) {
-                return await this.userModel.find(
-                    {
-                        role,
-                        fullName: { $regex: searchName, $options: 'i' }
-                    }
-                ).select('-password');
+                query.role = role;
             }
-            return await this.userModel.find(
-                {
-                    fullName: { $regex: searchName, $options: 'i' }
-                }
-            ).select('-password');
+
+            if (_id) {
+                query._id = { $ne: _id };
+            }
+
+            return await this.userModel.find(query).select('-password');
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
@@ -63,10 +61,10 @@ export class UserService {
             delete sanitizedBody._id
 
             let isUniq = false
-            if(body?.email){
-                isUniq = await this.userModel.findOne({email:body?.email})
+            if (body?.email) {
+                isUniq = await this.userModel.findOne({ email: body?.email })
             }
-            if(isUniq){
+            if (isUniq) {
                 throw new HttpException(`Email is NOT uniq`, HttpStatus.BAD_REQUEST);
             }
 
@@ -76,10 +74,10 @@ export class UserService {
             throw error
         }
     }
-    
-    async userChangePassword(body:ChangePasswordDTO){
+
+    async userChangePassword(body: ChangePasswordDTO) {
         try {
-            const { password, newPassword1,newPassword2 } = body
+            const { password, newPassword1, newPassword2 } = body
             const userId = new Types.ObjectId(body._id)
 
             const user = await this.userModel.findById({ _id: userId }).select('-isValidationUser');
@@ -95,18 +93,30 @@ export class UserService {
                 throw new HttpException(`Bad password`, HttpStatus.BAD_REQUEST);
             }
 
-            if(newPassword1 !== newPassword2){
-               throw new HttpException("New passwords have not arrived", HttpStatus.BAD_REQUEST)
+            if (newPassword1 !== newPassword2) {
+                throw new HttpException("New passwords have not arrived", HttpStatus.BAD_REQUEST)
             }
 
             const hashPassword = await bcrypt.hash(newPassword1, 3);
 
-            await user.updateOne({password: hashPassword})
+            await user.updateOne({ password: hashPassword })
 
             return "Password successful changed"
         } catch (error) {
-            
-        }
 
+        }
+    }
+
+    async checkUsersExist(userIds: string[]): Promise<{
+        _id: Types.ObjectId;
+    }[]> {
+        const userExistPromises = userIds.map(async (userId) => {
+            const userExists = await this.userModel.exists({ _id: new Types.ObjectId(userId) });
+            return userExists;
+        });
+
+        const userExistResults = await Promise.all(userExistPromises);
+
+        return userExistResults;
     }
 }

@@ -9,8 +9,7 @@ export class ProfessionDto {
     _id: string;
 
     @IsString()
-    title: string;
-    
+    title: string;   
 }
 
 export class ProfileSelectDTO extends IDUserDto{

@@ -67,10 +67,10 @@ export declare class UserIdentityController {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: {
+        nationality: [] | {
             _id: string | number;
             title: string;
-        }[] | [];
+        }[];
         _id: import("mongoose").Types.ObjectId;
     }>;
     profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{

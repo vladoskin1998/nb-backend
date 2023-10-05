@@ -75,10 +75,10 @@ export declare class UserIdentityService {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: {
+        nationality: [] | {
             _id: string | number;
             title: string;
-        }[] | [];
+        }[];
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{

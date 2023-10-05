@@ -1,10 +1,10 @@
 import { ROLES } from 'src/enum/enum';
-export declare class GetUsers {
-    role: ROLES;
-    searchName: string;
-}
 export declare class IDUserDto {
     readonly _id: string;
+}
+export declare class GetUsers extends IDUserDto {
+    role: ROLES;
+    searchName: string;
 }
 export declare class UserTextInfoDTO {
     readonly _id: string;

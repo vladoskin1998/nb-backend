@@ -5,13 +5,7 @@ import { EDUCATION, FAMILYSTATUS, ORIENTATION, PRIVACY, QUALITYENUM, ROLES, SEX 
 import { isDateOrString, isValidNationality } from 'src/utils/utils';
 
 
-export class GetUsers {
-    @IsEnum(ROLES)
-    role: ROLES = ROLES.ALLUSERS;
 
-    @IsString()
-    searchName: string
-}
 
 export class IDUserDto {
     @IsNotEmpty()
@@ -19,7 +13,13 @@ export class IDUserDto {
     readonly _id: string;
 }
 
+export class GetUsers extends IDUserDto{
+    @IsEnum(ROLES)
+    role: ROLES = ROLES.ALLUSERS;
 
+    @IsString()
+    searchName: string
+}
 
 export class UserTextInfoDTO {
     @IsNotEmpty()

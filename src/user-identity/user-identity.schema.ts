@@ -24,7 +24,6 @@ export class UserIdentity {
     @Prop({ type: Object, default: { lat: null, lng: null } })
     coordinates: { lat: number | null; lng: number | null };
 
-
     @Prop({ default: null })
     city: string | null
 
