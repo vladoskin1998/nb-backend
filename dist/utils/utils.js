@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isValidNationality = exports.isDateOrString = void 0;
+exports.isValidNationality = exports.isNullOrString = exports.isDateOrString = void 0;
 function isDateOrString(value) {
     if (value instanceof Date) {
         return true;
@@ -11,6 +11,13 @@ function isDateOrString(value) {
     return false;
 }
 exports.isDateOrString = isDateOrString;
+function isNullOrString(value) {
+    if (typeof value === 'string' || value === null) {
+        return true;
+    }
+    return false;
+}
+exports.isNullOrString = isNullOrString;
 function isValidNationality(nationality) {
     if (!Array.isArray(nationality)) {
         return false;

@@ -19,6 +19,7 @@ const serve_static_1 = require("@nestjs/serve-static");
 const activities_module_1 = require("./activities/activities.module");
 const user_identity_module_1 = require("./user-identity/user-identity.module");
 const messenger_module_1 = require("./messenger/messenger.module");
+const statistics_module_1 = require("./statistics/statistics.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -51,6 +52,7 @@ AppModule = __decorate([
             activities_module_1.ActivitiesModule,
             user_identity_module_1.UserIdentityModule,
             messenger_module_1.MessengerModule,
+            statistics_module_1.StatisticsModule,
         ],
     })
 ], AppModule);

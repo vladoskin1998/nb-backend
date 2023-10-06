@@ -1,6 +1,6 @@
 export declare class ParticipantDto {
     userId: string;
-    avatarFileName: string;
+    avatarFileName: string | null;
     fullName: string;
 }
 export declare class NewChatDto {
@@ -14,4 +14,5 @@ export declare class AddNewMessageDto extends ChatIDDto {
     content: string;
     timestamp: Date;
     isRead: boolean;
+    file: null | string;
 }

@@ -36,6 +36,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Boolean, default: false }),
     __metadata("design:type", Boolean)
 ], Message.prototype, "isRead", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, default: null }),
+    __metadata("design:type", String)
+], Message.prototype, "file", void 0);
 Message = __decorate([
     (0, mongoose_1.Schema)()
 ], Message);

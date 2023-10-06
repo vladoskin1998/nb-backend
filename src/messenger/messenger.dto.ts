@@ -1,13 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsString, IsEmail, IsOptional, IsEnum, IsNotEmpty, IsArray, ValidateNested, IsDate, IsBoolean } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsEnum, IsNotEmpty, IsArray, ValidateNested, IsDate, IsBoolean, IsEmpty, Validate } from 'class-validator';
 import { METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
+import { isNullOrString } from 'src/utils/utils';
 
 export class ParticipantDto {
     @IsString()
     userId: string
 
-    @IsString()
-    avatarFileName: string
+    @Validate(isNullOrString)
+    avatarFileName: string | null
 
     @IsString()
     fullName: string
@@ -44,4 +45,9 @@ export class AddNewMessageDto extends ChatIDDto{
     @IsOptional()
     @IsBoolean()
     isRead:boolean
+
+    @IsOptional()
+    @Validate(isNullOrString)
+    file:null | string
+
 }

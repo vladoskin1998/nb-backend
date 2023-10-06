@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -25,18 +26,18 @@
 import { AddNewMessageDto, ChatIDDto, NewChatDto } from './messenger.dto';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
-import { UserService } from 'src/user/user.service';
 import { Message } from './message.schema';
 import { User } from 'src/user/user.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { IDUserDto } from 'src/user/user.dto';
+import { FilesService } from 'src/files/files.service';
 export declare class MessengerService {
     private userIdentityModel;
     private userModel;
     private chatsModel;
     private messageModel;
-    private userService;
-    constructor(userIdentityModel: Model<UserIdentity>, userModel: Model<User>, chatsModel: Model<Chats>, messageModel: Model<Message>, userService: UserService);
+    private filesService;
+    constructor(userIdentityModel: Model<UserIdentity>, userModel: Model<User>, chatsModel: Model<Chats>, messageModel: Model<Message>, filesService: FilesService);
     openChat(dto: NewChatDto): Promise<{
         participants: {
             userId: string;
@@ -62,4 +63,5 @@ export declare class MessengerService {
         _id: Types.ObjectId;
     })[]>;
     addMessage(payload: AddNewMessageDto): Promise<void>;
+    fileMessage(file: Express.Multer.File): Promise<string>;
 }

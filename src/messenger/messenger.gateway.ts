@@ -72,7 +72,8 @@ export class MessengerGateway {
             senderId,
             content,
             timestamp,
-            isRead
+            isRead,
+            file
         } = payload
 
         await this.messengerService.addMessage({
@@ -80,7 +81,8 @@ export class MessengerGateway {
             senderId,
             content,
             timestamp,
-            isRead
+            isRead,
+            file
         })
 
         console.log("sendmessage", chatId);
@@ -95,7 +97,8 @@ export class MessengerGateway {
                 senderId,
                 content,
                 timestamp,
-                isRead
+                isRead,
+                file
             )
     }
 

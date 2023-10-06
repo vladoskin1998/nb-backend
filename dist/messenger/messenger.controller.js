@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const messenger_service_1 = require("./messenger.service");
 const messenger_dto_1 = require("./messenger.dto");
 const user_dto_1 = require("../user/user.dto");
+const platform_express_1 = require("@nestjs/platform-express");
 let MessengerController = class MessengerController {
     constructor(messengerService) {
         this.messengerService = messengerService;
@@ -32,6 +33,9 @@ let MessengerController = class MessengerController {
     async getChatHistory(dto) {
         const history = await this.messengerService.getChatHistory(dto);
         return history;
+    }
+    async messageFile(file) {
+        return await this.messengerService.fileMessage(file);
     }
 };
 __decorate([
@@ -55,6 +59,14 @@ __decorate([
     __metadata("design:paramtypes", [messenger_dto_1.ChatIDDto]),
     __metadata("design:returntype", Promise)
 ], MessengerController.prototype, "getChatHistory", null);
+__decorate([
+    (0, common_1.Post)('file-message'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MessengerController.prototype, "messageFile", null);
 MessengerController = __decorate([
     (0, common_1.Controller)('messenger'),
     __metadata("design:paramtypes", [messenger_service_1.MessengerService])

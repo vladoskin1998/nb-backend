@@ -34,19 +34,20 @@ let MessengerGateway = class MessengerGateway {
         socket.leave(String(chatId));
     }
     async handleMessage(payload, socket) {
-        const { chatId, senderId, content, timestamp, isRead } = payload;
+        const { chatId, senderId, content, timestamp, isRead, file } = payload;
         await this.messengerService.addMessage({
             chatId,
             senderId,
             content,
             timestamp,
-            isRead
+            isRead,
+            file
         });
         console.log("sendmessage", chatId);
         console.log("sendmessage room", this.server.sockets.adapter.rooms);
         socket
             .to(String(chatId))
-            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, isRead);
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, isRead, file);
     }
 };
 __decorate([

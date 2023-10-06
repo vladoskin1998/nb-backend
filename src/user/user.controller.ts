@@ -30,8 +30,6 @@ export class UserController {
         return await this.userService.blockUser(body._id)
     }
 
-
-
     @Post('user-text-info')
     async userTextInfo(
         @Body() body: UserTextInfoDTO

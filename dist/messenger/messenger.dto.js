@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddNewMessageDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const utils_1 = require("../utils/utils");
 class ParticipantDto {
 }
 __decorate([
@@ -19,7 +20,7 @@ __decorate([
     __metadata("design:type", String)
 ], ParticipantDto.prototype, "userId", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Validate)(utils_1.isNullOrString),
     __metadata("design:type", String)
 ], ParticipantDto.prototype, "avatarFileName", void 0);
 __decorate([
@@ -64,5 +65,10 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], AddNewMessageDto.prototype, "isRead", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Validate)(utils_1.isNullOrString),
+    __metadata("design:type", String)
+], AddNewMessageDto.prototype, "file", void 0);
 exports.AddNewMessageDto = AddNewMessageDto;
 //# sourceMappingURL=messenger.dto.js.map

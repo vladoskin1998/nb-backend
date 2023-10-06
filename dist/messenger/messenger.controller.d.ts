@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -53,4 +54,5 @@ export declare class MessengerController {
     getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
+    messageFile(file: Express.Multer.File): Promise<string>;
 }

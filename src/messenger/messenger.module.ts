@@ -8,6 +8,7 @@ import { UserModule } from 'src/user/user.module';
 import { Message, MessageSchema } from './message.schema';
 import { User, UserSchema } from 'src/user/user.schema';
 import { UserIdentity, UserIdentitySchema } from 'src/user-identity/user-identity.schema';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { UserIdentity, UserIdentitySchema } from 'src/user-identity/user-identit
             { name: UserIdentity.name, schema: UserIdentitySchema },
         ]),
         UserModule,
+        FilesModule,
     ],
     controllers: [MessengerController],
     providers: [MessengerService, MessengerGateway]

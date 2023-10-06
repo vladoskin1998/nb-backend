@@ -4,4 +4,5 @@ export type MessageType = {
     content: string;
     timestamp: Date;
     isRead: boolean;
+    file: string | null;
 };

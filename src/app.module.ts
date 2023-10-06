@@ -12,6 +12,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ActivitiesModule } from './activities/activities.module';
 import { UserIdentityModule } from './user-identity/user-identity.module';
 import { MessengerModule } from './messenger/messenger.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 
 @Module({
@@ -44,6 +45,7 @@ import { MessengerModule } from './messenger/messenger.module';
     ActivitiesModule,
     UserIdentityModule,
     MessengerModule,
+    StatisticsModule,
 
     
   ],

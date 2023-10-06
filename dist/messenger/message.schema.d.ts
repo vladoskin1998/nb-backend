@@ -30,6 +30,7 @@ export declare class Message {
     content: string;
     timestamp: Date;
     isRead: boolean;
+    file: string;
 }
 export declare const MessageSchema: import("mongoose").Schema<Message, import("mongoose").Model<Message, any, any, any, import("mongoose").Document<unknown, any, Message> & Message & {
     _id: Types.ObjectId;

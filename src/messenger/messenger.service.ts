@@ -9,6 +9,7 @@ import { User } from 'src/user/user.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { MessageType } from '../types'
 import { IDUserDto } from 'src/user/user.dto';
+import { FilesService } from 'src/files/files.service';
 @Injectable()
 export class MessengerService {
 
@@ -17,7 +18,7 @@ export class MessengerService {
         @InjectModel(User.name) private userModel: Model<User>,
         @InjectModel(Chats.name) private chatsModel: Model<Chats>,
         @InjectModel(Message.name) private messageModel: Model<Message>,
-        private userService: UserService
+        private filesService: FilesService
     ) { }
 
     async openChat(dto: NewChatDto)
@@ -94,6 +95,15 @@ export class MessengerService {
             await this.messageModel.create({ ...payload, chatId, senderId })
         } catch (error) {
             throw new Error('SERVER ERROR')
+        }
+    }
+
+
+    async fileMessage(file: Express.Multer.File){
+        try {  
+            return await this.filesService.uploadSingleFile(file, 'uploads/messenger', false)
+         } catch (error) {
+            throw error
         }
     }
 }

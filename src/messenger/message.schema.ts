@@ -23,6 +23,9 @@ export class Message {
 
     @Prop({ type: Boolean, default: false })
     isRead: boolean
+
+    @Prop({ type: String, default: null })
+    file: string
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

@@ -17,17 +17,17 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const chats_schema_1 = require("./chats.schema");
 const mongoose_2 = require("mongoose");
-const user_service_1 = require("../user/user.service");
 const message_schema_1 = require("./message.schema");
 const user_schema_1 = require("../user/user.schema");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
+const files_service_1 = require("../files/files.service");
 let MessengerService = class MessengerService {
-    constructor(userIdentityModel, userModel, chatsModel, messageModel, userService) {
+    constructor(userIdentityModel, userModel, chatsModel, messageModel, filesService) {
         this.userIdentityModel = userIdentityModel;
         this.userModel = userModel;
         this.chatsModel = chatsModel;
         this.messageModel = messageModel;
-        this.userService = userService;
+        this.filesService = filesService;
     }
     async openChat(dto) {
         try {
@@ -87,6 +87,14 @@ let MessengerService = class MessengerService {
             throw new Error('SERVER ERROR');
         }
     }
+    async fileMessage(file) {
+        try {
+            return await this.filesService.uploadSingleFile(file, 'uploads/messenger', false);
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 MessengerService = __decorate([
     (0, common_1.Injectable)(),
@@ -98,7 +106,7 @@ MessengerService = __decorate([
         mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
-        user_service_1.UserService])
+        files_service_1.FilesService])
 ], MessengerService);
 exports.MessengerService = MessengerService;
 //# sourceMappingURL=messenger.service.js.map

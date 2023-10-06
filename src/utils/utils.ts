@@ -10,6 +10,15 @@ export function isDateOrString(value: any): boolean {
   return false;
 }
 
+export function isNullOrString(value: any): boolean {
+
+  if (typeof value === 'string' || value === null) {
+    return true;
+  }
+
+  return false;
+}
+
 export function isValidNationality(nationality: any): boolean {
 
   if (!Array.isArray(nationality)) {
