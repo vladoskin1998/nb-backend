@@ -25,22 +25,24 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { CategoryService } from './category.service';
-import { EditDto, IDDto, VisiableDto } from './category.dto';
+import { IDDto, VisiableDto } from './category.dto';
 export declare class CategoryController {
     private readonly categoryService;
     constructor(categoryService: CategoryService);
-    addCategories(files: Array<Express.Multer.File>, body: any): Promise<import("./category.schema").Category>;
-    addSubCategoriesToCategories(files: Array<Express.Multer.File>, body: any): Promise<void>;
+    addCategorie(file: Express.Multer.File | null, body: any): Promise<import("mongoose").Document<unknown, {}, import("./category.schema").Category> & import("./category.schema").Category & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    addSubCategorie(file: Express.Multer.File | null, body: any): Promise<import("mongoose").Document<unknown, {}, import("./category.schema").SubCategory> & import("./category.schema").SubCategory & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     allCategories(): Promise<(import("mongoose").Document<unknown, {}, import("./category.schema").Category> & import("./category.schema").Category & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
     allSubCategorie({ id }: IDDto): Promise<(import("mongoose").Document<unknown, {}, import("./category.schema").SubCategory> & import("./category.schema").SubCategory & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
-    deleteCategory({ id }: IDDto): Promise<string>;
-    deleteSubCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
     visiableCategory(dto: VisiableDto): Promise<VisiableDto>;
     visiableSubCategory(dto: VisiableDto): Promise<VisiableDto>;
-    editCategory(dto: EditDto): Promise<EditDto>;
-    editSubCategory(dto: EditDto): Promise<EditDto>;
+    deleteCategory({ id }: IDDto): Promise<string>;
+    deleteSubCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
 }

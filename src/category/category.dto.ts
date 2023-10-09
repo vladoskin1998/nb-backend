@@ -1,4 +1,4 @@
-import { IsString, IsArray, ValidateNested, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsArray, ValidateNested, IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class IDDto {
     @IsNotEmpty()
@@ -33,3 +33,4 @@ export class SubCategoryListDto {
     @ValidateNested({ each: true })
     readonly listSubCategory: CategoryDto[];
 }
+

@@ -12,13 +12,89 @@ import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class CategoryService {
+
     constructor(
         @InjectModel(Category.name)
         private readonly categoryModel: Model<Category>,
         @InjectModel(SubCategory.name)
         private readonly subCategoryModel: Model<SubCategory>,
         private filesService: FilesService,
-    ) {}
+    ) { }
+
+
+    async createOrUpdateCategorie({ payload, file }: { payload: { name?: string, categorieId?: string }, file?: Express.Multer.File | null }) {
+
+        try {
+            if (payload?.categorieId) {
+                const categorieId = new Types.ObjectId(payload.categorieId)
+
+                const categorie = await this.categoryModel.findOne({ _id: categorieId })
+
+                if(file){
+                    await this.filesService.deleteFile(categorie.fileName, 'uploads/categories', )
+                    const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
+                    await categorie.updateOne({fileName})
+                }
+
+                if(payload?.name){
+                    await categorie.updateOne({name: payload?.name })
+                }
+
+                return categorie
+            }
+
+            const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
+
+            return await this.categoryModel.create({fileName, name: payload.name })
+
+        } catch (e) {
+
+        }
+    }
+
+
+
+    async createOrUpdateSubCategorie({ payload, file }: { payload: { name?: string, categorieId?: string, subCategorieId?: string }, file?: Express.Multer.File | null}) {
+            console.log(payload, file );
+            
+        
+        try {
+            if (payload?.subCategorieId) {
+                const subCategorieId = new Types.ObjectId(payload.subCategorieId)
+
+                const subCategorie = await this.subCategoryModel.findOne({ _id: subCategorieId })
+
+                if(file){
+                    await this.filesService.deleteFile(subCategorie.fileName, 'uploads/categories', )
+                    const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
+                    await subCategorie.updateOne({fileName})
+                }
+
+                if(payload?.name){
+                    await subCategorie.updateOne({name: payload?.name })
+                }
+
+                return subCategorie
+            }
+
+            const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
+
+            const category = new Types.ObjectId(payload?.categorieId)
+
+            return await this.subCategoryModel.create({fileName, name: payload.name, category  })
+            
+        } catch (e) {
+
+        }
+    }
+
+
+
+
+
+
+
+
 
     async createCategory({
         category,
@@ -85,7 +161,7 @@ export class CategoryService {
 
     async getAllCategories() {
         try {
-            return await this.categoryModel.find().select('-fileName');
+            return await this.categoryModel.find()
         } catch (error) {
             throw new Error('CategoryService getAllCategories' + error.message);
         }
@@ -178,29 +254,5 @@ export class CategoryService {
         }
     }
 
-    async editCategory({ id, name }: EditDto): Promise<EditDto> {
-        const categoryId = new Types.ObjectId(id);
-        try {
-            await this.categoryModel.findByIdAndUpdate(
-                { _id: categoryId },
-                { name },
-            );
-            return { id, name };
-        } catch (error) {
-            throw error;
-        }
-    }
 
-    async editSubCategory({ id, name }: EditDto): Promise<EditDto> {
-        const subCategoryId = new Types.ObjectId(id);
-        try {
-            await this.subCategoryModel.findByIdAndUpdate(
-                { _id: subCategoryId },
-                { name },
-            );
-            return { id, name };
-        } catch (error) {
-            throw error;
-        }
-    }
 }

@@ -24,6 +24,50 @@ let CategoryService = class CategoryService {
         this.subCategoryModel = subCategoryModel;
         this.filesService = filesService;
     }
+    async createOrUpdateCategorie({ payload, file }) {
+        try {
+            if (payload === null || payload === void 0 ? void 0 : payload.categorieId) {
+                const categorieId = new mongoose_1.Types.ObjectId(payload.categorieId);
+                const categorie = await this.categoryModel.findOne({ _id: categorieId });
+                if (file) {
+                    await this.filesService.deleteFile(categorie.fileName, 'uploads/categories');
+                    const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false);
+                    await categorie.updateOne({ fileName });
+                }
+                if (payload === null || payload === void 0 ? void 0 : payload.name) {
+                    await categorie.updateOne({ name: payload === null || payload === void 0 ? void 0 : payload.name });
+                }
+                return categorie;
+            }
+            const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false);
+            return await this.categoryModel.create({ fileName, name: payload.name });
+        }
+        catch (e) {
+        }
+    }
+    async createOrUpdateSubCategorie({ payload, file }) {
+        console.log(payload, file);
+        try {
+            if (payload === null || payload === void 0 ? void 0 : payload.subCategorieId) {
+                const subCategorieId = new mongoose_1.Types.ObjectId(payload.subCategorieId);
+                const subCategorie = await this.subCategoryModel.findOne({ _id: subCategorieId });
+                if (file) {
+                    await this.filesService.deleteFile(subCategorie.fileName, 'uploads/categories');
+                    const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false);
+                    await subCategorie.updateOne({ fileName });
+                }
+                if (payload === null || payload === void 0 ? void 0 : payload.name) {
+                    await subCategorie.updateOne({ name: payload === null || payload === void 0 ? void 0 : payload.name });
+                }
+                return subCategorie;
+            }
+            const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false);
+            const category = new mongoose_1.Types.ObjectId(payload === null || payload === void 0 ? void 0 : payload.categorieId);
+            return await this.subCategoryModel.create({ fileName, name: payload.name, category });
+        }
+        catch (e) {
+        }
+    }
     async createCategory({ category, subCategory, files, }) {
         try {
             await this.filesService.uploadFiles(files, 'uploads/categories');
@@ -63,7 +107,7 @@ let CategoryService = class CategoryService {
     }
     async getAllCategories() {
         try {
-            return await this.categoryModel.find().select('-fileName');
+            return await this.categoryModel.find();
         }
         catch (error) {
             throw new Error('CategoryService getAllCategories' + error.message);
@@ -125,26 +169,6 @@ let CategoryService = class CategoryService {
         try {
             await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { isVisiable });
             return { id, isVisiable };
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    async editCategory({ id, name }) {
-        const categoryId = new mongoose_1.Types.ObjectId(id);
-        try {
-            await this.categoryModel.findByIdAndUpdate({ _id: categoryId }, { name });
-            return { id, name };
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    async editSubCategory({ id, name }) {
-        const subCategoryId = new mongoose_1.Types.ObjectId(id);
-        try {
-            await this.subCategoryModel.findByIdAndUpdate({ _id: subCategoryId }, { name });
-            return { id, name };
         }
         catch (error) {
             throw error;
