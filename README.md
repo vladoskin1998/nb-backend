@@ -1,5 +1,5 @@
 https://www.figma.com/file/xcp0m84Ymc5Hpd783yr2Pd/%D0%9F%D1%80%D0%BE%D0%B5%D0%BA%D1%82?type=design&node-id=47%3A551904&mode=design&t=Q4dkkM3G8ANv03JW-1
 
-http://185.237.14.239:5000/
+http://157.90.34.24
 
-ssh root@185.237.14.239
+cd /home/admin1/nb-backend/
