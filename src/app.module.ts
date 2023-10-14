@@ -22,19 +22,17 @@ import { StatisticsModule } from './statistics/statistics.module';
     //   serveRoot: "/uploads",
     //   rootPath: path.join(__dirname, '..', 'uploads'), 
     // }),
-    // ServeStaticModule.forRoot({
-    //   rootPath: path.join(__dirname, '..', 'build')
-    // }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const uri = configService.get('MONGO_LINK');
+        const appEnv = configService.get('APP_ENV');
         console.log(uri);
         
         return {
           uri,
-          dbName: 'nb_hb'
+          dbName: appEnv === 'DEV' ? 'jfit' : 'nb_hb'
         };
       },
     }),

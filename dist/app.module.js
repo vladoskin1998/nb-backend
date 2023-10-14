@@ -15,7 +15,6 @@ const auth_module_1 = require("./auth/auth.module");
 const files_module_1 = require("./files/files.module");
 const user_module_1 = require("./user/user.module");
 const category_module_1 = require("./category/category.module");
-const serve_static_1 = require("@nestjs/serve-static");
 const activities_module_1 = require("./activities/activities.module");
 const user_identity_module_1 = require("./user-identity/user-identity.module");
 const messenger_module_1 = require("./messenger/messenger.module");
@@ -26,22 +25,16 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname, '.env') }),
-            serve_static_1.ServeStaticModule.forRoot({
-                serveRoot: "/uploads",
-                rootPath: path.join(__dirname, '..', 'uploads'),
-            }),
-            serve_static_1.ServeStaticModule.forRoot({
-                rootPath: path.join(__dirname, '..', 'build')
-            }),
             mongoose_1.MongooseModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 inject: [config_1.ConfigService],
                 useFactory: async (configService) => {
                     const uri = configService.get('MONGO_LINK');
+                    const appEnv = configService.get('APP_ENV');
                     console.log(uri);
                     return {
                         uri,
-                        dbName: 'jfit'
+                        dbName: appEnv === 'DEV' ? 'jfit' : 'nb_hb'
                     };
                 },
             }),
