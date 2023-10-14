@@ -5,6 +5,8 @@
 /upload
 /build
 /.vscode
+/mongo-init
+/mongo-data
 # Logs
 logs
 *.log
