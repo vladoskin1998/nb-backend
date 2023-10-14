@@ -14,6 +14,9 @@ export class Chats {
         fullName: string,
     }[];
 
+    @Prop({default: false})
+    isSupport: boolean
+
 }
 
 export const ChatsSchema = SchemaFactory.createForClass(Chats);

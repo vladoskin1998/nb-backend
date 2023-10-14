@@ -30,6 +30,7 @@ export declare class Chats {
         avatarFileName: string;
         fullName: string;
     }[];
+    isSupport: boolean;
 }
 export declare const ChatsSchema: import("mongoose").Schema<Chats, import("mongoose").Model<Chats, any, any, any, import("mongoose").Document<unknown, any, Chats> & Chats & {
     _id: Types.ObjectId;

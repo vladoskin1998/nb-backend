@@ -5,7 +5,6 @@ import { Authentication } from './auth.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
-type roleType = ROLES.ADMIN | ROLES.USER;
 
 @Injectable()
 export class JwtTokenService {
@@ -14,7 +13,7 @@ export class JwtTokenService {
         private readonly jwtService: JwtService,
     ) { }
 
-    generateTokens(payload: { email: string; role: roleType; id: string }) {
+    generateTokens(payload: { email: string; role: ROLES; id: string }) {
         const accessToken = this.jwtService.sign(
             payload,
             { expiresIn: '1500s' },

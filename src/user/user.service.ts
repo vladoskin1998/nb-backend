@@ -2,10 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { ChangePasswordDTO, UserTextInfoDTO } from './user.dto';
+import { ChangePasswordDTO, ClosestUserDto, UserTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
 import * as bcrypt from 'bcrypt';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 
 @Injectable()
 export class UserService {
@@ -13,12 +14,17 @@ export class UserService {
     constructor(
         @InjectModel(User.name)
         private readonly userModel: Model<User>,
+        @InjectModel(UserIdentity.name)
+        private userIdentityModel: Model<UserIdentity>,
         private readonly jwtTokenService: JwtTokenService,
+
     ) { }
 
     async getUsers({ _id, role, searchName }: { _id: string; role: ROLES; searchName: string }): Promise<User[]> {
         try {
             let query: any = { fullName: { $regex: searchName, $options: 'i' } };
+
+
 
             if (role !== ROLES.ALLUSERS) {
                 query.role = role;
@@ -118,5 +124,71 @@ export class UserService {
         const userExistResults = await Promise.all(userExistPromises);
 
         return userExistResults;
+    }
+
+    async getClosestUserByRole(body: ClosestUserDto) {
+        const { role, myLat, myLng } = body;
+
+        const usersByRole = await this.userModel.find({ role }).select('_id fullName')
+
+        console.log(usersByRole);
+
+        const userWithCoord = await Promise.all(
+            usersByRole.map(
+                async (item) => {
+                    const userId = new Types.ObjectId(item._id)
+                    const { coordinates, avatarFileName } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates')
+                    return { ...item.toObject(), avatarFileName, coordinates }
+                }
+            )
+        )
+
+
+
+        let closestUser = null;
+        let minDistance = Infinity;
+
+        for (const user of userWithCoord) {
+            const distance = this.getDistance({
+                  myLat,
+            myLng,
+            lat:  user.coordinates.lat,
+            lng: user.coordinates.lng
+            }
+           
+            );
+          
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestUser = user;
+            }
+          }
+
+        return {
+            ...closestUser, userId: closestUser._id
+        }
+    }
+
+
+    getDistance({ myLat, myLng, lat, lng }: {
+        myLat: number;
+        myLng: number;
+        lat: number;
+        lng: number;
+    }):number {
+
+        const toRad = (value) => (value * Math.PI) / 180;
+        const R = 6371; 
+        const dLat = toRad(lat - myLat);
+        const dLon = toRad(lng - myLng);
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(myLat)) *
+            Math.cos(toRad(lat)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        return distance;
     }
 }

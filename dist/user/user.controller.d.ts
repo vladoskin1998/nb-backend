@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { ChangePasswordDTO, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { ChangePasswordDTO, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
@@ -14,4 +14,5 @@ export declare class UserController {
         phone?: string;
     }>;
     userChangePassword(body: ChangePasswordDTO): Promise<string>;
+    getClosestUserByRole(body: ClosestUserDto): Promise<any>;
 }

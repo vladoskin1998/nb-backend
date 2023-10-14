@@ -34,7 +34,7 @@ import { StatisticsModule } from './statistics/statistics.module';
         
         return {
           uri,
-          dbName: 'jfit'
+          dbName: 'nb_hb'
         };
       },
     }),

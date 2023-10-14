@@ -15,20 +15,27 @@ const activities_schema_1 = require("../activities/activities.schema");
 const category_schema_1 = require("../category/category.schema");
 const message_schema_1 = require("../messenger/message.schema");
 const user_schema_1 = require("../user/user.schema");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
+const statistic_schema_1 = require("./statistic.schema");
+const schedule_1 = require("@nestjs/schedule");
+const statistic_scheduler_1 = require("./statistic.scheduler");
 let StatisticsModule = class StatisticsModule {
 };
 StatisticsModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            schedule_1.ScheduleModule.forRoot(),
             mongoose_1.MongooseModule.forFeature([
                 { name: activities_schema_1.Activities.name, schema: activities_schema_1.ActivitiesSchema },
                 { name: message_schema_1.Message.name, schema: message_schema_1.MessageSchema },
                 { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },
                 { name: category_schema_1.Category.name, schema: category_schema_1.CategorySchema },
+                { name: user_identity_schema_1.UserIdentity.name, schema: user_identity_schema_1.UserIdentitySchema },
+                { name: statistic_schema_1.Statistic.name, schema: statistic_schema_1.StatisticSchema }
             ]),
         ],
         controllers: [statistics_controller_1.StatisticsController],
-        providers: [statistics_service_1.StatisticsService]
+        providers: [statistics_service_1.StatisticsService, statistic_scheduler_1.ScheduledTasksService]
     })
 ], StatisticsModule);
 exports.StatisticsModule = StatisticsModule;

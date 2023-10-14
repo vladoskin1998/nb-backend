@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { MessengerService } from './messenger.service';
-import { AddNewMessageDto, ChatIDDto, NewChatDto, ParticipantDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto } from './messenger.dto';
 import { IDUserDto } from 'src/user/user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -16,7 +16,7 @@ export class MessengerController {
 
     @Post('list-chat')
     async listChat(
-        @Body() dto: IDUserDto
+        @Body() dto: ListChatDto
     ) {
         const userChatList = await this.messengerService.listChat(dto)
         return userChatList

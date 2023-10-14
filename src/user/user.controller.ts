@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ChangePasswordDTO, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { ChangePasswordDTO, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -45,4 +45,11 @@ export class UserController {
         return await this.userService.userChangePassword(body)
     }
 
+    
+    @Post('get-closest-user')
+    async getClosestUserByRole(
+        @Body() body: ClosestUserDto
+    ){
+        return await this.userService.getClosestUserByRole(body)
+    }
 }

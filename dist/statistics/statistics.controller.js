@@ -19,6 +19,12 @@ let StatisticsController = class StatisticsController {
     async countDocumentsDb() {
         return await this.statisticsService.countDocumentsDb();
     }
+    async countUser() {
+        return await this.statisticsService.countUser();
+    }
+    async getTenDocumentUsers() {
+        return await this.statisticsService.getTenDocumentUsers();
+    }
 };
 __decorate([
     (0, common_1.Get)('shortcuts'),
@@ -26,6 +32,18 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], StatisticsController.prototype, "countDocumentsDb", null);
+__decorate([
+    (0, common_1.Get)('statistic-users-one'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], StatisticsController.prototype, "countUser", null);
+__decorate([
+    (0, common_1.Get)('statistic-users-ten'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], StatisticsController.prototype, "getTenDocumentUsers", null);
 StatisticsController = __decorate([
     (0, common_1.Controller)('statistics'),
     __metadata("design:paramtypes", [statistics_service_1.StatisticsService])

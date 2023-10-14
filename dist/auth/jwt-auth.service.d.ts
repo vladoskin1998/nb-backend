@@ -26,14 +26,13 @@ import { JwtService } from '@nestjs/jwt';
 import { ROLES } from 'src/enum/enum';
 import { Authentication } from './auth.schema';
 import { Model, Types } from 'mongoose';
-type roleType = ROLES.ADMIN | ROLES.USER;
 export declare class JwtTokenService {
     private authModel;
     private readonly jwtService;
     constructor(authModel: Model<Authentication>, jwtService: JwtService);
     generateTokens(payload: {
         email: string;
-        role: roleType;
+        role: ROLES;
         id: string;
     }): {
         accessToken: string;
@@ -50,4 +49,3 @@ export declare class JwtTokenService {
     }>;
     deleteToken(_id: string | Types.ObjectId): Promise<void>;
 }
-export {};

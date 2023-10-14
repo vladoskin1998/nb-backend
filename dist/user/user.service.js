@@ -20,9 +20,11 @@ const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const jwt_auth_service_1 = require("../auth/jwt-auth.service");
 const bcrypt = require("bcrypt");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 let UserService = class UserService {
-    constructor(userModel, jwtTokenService) {
+    constructor(userModel, userIdentityModel, jwtTokenService) {
         this.userModel = userModel;
+        this.userIdentityModel = userIdentityModel;
         this.jwtTokenService = jwtTokenService;
     }
     async getUsers({ _id, role, searchName }) {
@@ -108,11 +110,52 @@ let UserService = class UserService {
         const userExistResults = await Promise.all(userExistPromises);
         return userExistResults;
     }
+    async getClosestUserByRole(body) {
+        const { role, myLat, myLng } = body;
+        const usersByRole = await this.userModel.find({ role }).select('_id fullName');
+        console.log(usersByRole);
+        const userWithCoord = await Promise.all(usersByRole.map(async (item) => {
+            const userId = new mongoose_2.Types.ObjectId(item._id);
+            const { coordinates, avatarFileName } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates');
+            return Object.assign(Object.assign({}, item.toObject()), { avatarFileName, coordinates });
+        }));
+        let closestUser = null;
+        let minDistance = Infinity;
+        for (const user of userWithCoord) {
+            const distance = this.getDistance({
+                myLat,
+                myLng,
+                lat: user.coordinates.lat,
+                lng: user.coordinates.lng
+            });
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestUser = user;
+            }
+        }
+        return Object.assign(Object.assign({}, closestUser), { userId: closestUser._id });
+    }
+    getDistance({ myLat, myLng, lat, lng }) {
+        const toRad = (value) => (value * Math.PI) / 180;
+        const R = 6371;
+        const dLat = toRad(lat - myLat);
+        const dLon = toRad(lng - myLng);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(myLat)) *
+                Math.cos(toRad(lat)) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+        return distance;
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __param(1, (0, mongoose_1.InjectModel)(user_identity_schema_1.UserIdentity.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         jwt_auth_service_1.JwtTokenService])
 ], UserService);
 exports.UserService = UserService;

@@ -23,7 +23,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: enum_1.ROLES.ADMIN, enum: [enum_1.ROLES.ADMIN, enum_1.ROLES.USER] }),
+    (0, mongoose_1.Prop)({ default: enum_1.ROLES.USER, enum: enum_1.ROLES }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([

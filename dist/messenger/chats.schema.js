@@ -17,6 +17,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Array }),
     __metadata("design:type", Array)
 ], Chats.prototype, "participants", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], Chats.prototype, "isSupport", void 0);
 Chats = __decorate([
     (0, mongoose_1.Schema)()
 ], Chats);

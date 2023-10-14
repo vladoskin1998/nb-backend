@@ -23,13 +23,12 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { AddNewMessageDto, ChatIDDto, NewChatDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto } from './messenger.dto';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
 import { Message } from './message.schema';
 import { User } from 'src/user/user.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
-import { IDUserDto } from 'src/user/user.dto';
 import { FilesService } from 'src/files/files.service';
 export declare class MessengerService {
     private userIdentityModel;
@@ -45,8 +44,9 @@ export declare class MessengerService {
             fullName: string;
         }[];
         chatId: string | Types.ObjectId;
+        isSupport: boolean;
     }>;
-    listChat(dto: IDUserDto): Promise<{
+    listChat(dto: ListChatDto): Promise<{
         participants: {
             userId: string;
             avatarFileName: string;
@@ -58,6 +58,7 @@ export declare class MessengerService {
         } & Required<{
             _id: Types.ObjectId;
         }>;
+        isSupport: boolean;
     }[]>;
     getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, Message> & Message & {
         _id: Types.ObjectId;

@@ -4,7 +4,9 @@ import { Model } from 'mongoose';
 import { Activities } from 'src/activities/activities.schema';
 import { Category } from 'src/category/category.schema';
 import { Message } from 'src/messenger/message.schema';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { User } from 'src/user/user.schema';
+import { Statistic } from './statistic.schema';
 
 @Injectable()
 export class StatisticsService {
@@ -14,10 +16,11 @@ export class StatisticsService {
         @InjectModel(Category.name) private categoryModel: Model<Category>,
         @InjectModel(User.name) private userModel: Model<User>,
         @InjectModel(Message.name) private messageModel: Model<Message>,
-
+        @InjectModel(UserIdentity.name) private userIdentityModel: Model<UserIdentity>,
+        @InjectModel(Statistic.name) private statisticModel: Model<Statistic>,
     ) { }
 
-    async countDocumentsDb(){
+    async countDocumentsDb() {
         try {
             const countServices = await this.categoryModel.countDocuments()
             const countActivities = await this.activitiesModel.countDocuments()
@@ -31,7 +34,49 @@ export class StatisticsService {
 
             }
         } catch (error) {
-            
+
         }
     }
+
+    async countUser() {
+   
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        const totalUsers = await this.userModel.countDocuments()
+
+        const activeUsers = await this.userIdentityModel
+            .countDocuments({
+                createdUserDate: { $gte: today},
+                isGotAllProfileInfo: true,
+            })
+            .exec();
+
+        const nonActiveUsers = await this.userIdentityModel
+            .countDocuments({
+                createdUserDate: { $gte: today },
+                isGotAllProfileInfo: false,
+            })
+            .exec();
+
+        const newUsers = activeUsers + nonActiveUsers
+
+        return {
+            totalUsers,
+            newUsers,
+            activeUsers,
+            nonActiveUsers,
+        }
+    }
+
+    async getTenDocumentUsers(){
+        return await this.statisticModel.find().sort({ createdAt: -1 }).limit(10)
+    }
+
+    async saveStatistic(){
+        const getStatisticOneDay = await  this.countUser()
+        await this.statisticModel.create(getStatisticOneDay)
+    }
 }
+
+

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChangePasswordDTO = exports.UserTextInfoDTO = exports.GetUsers = exports.IDUserDto = void 0;
+exports.ClosestUserDto = exports.ChangePasswordDTO = exports.UserTextInfoDTO = exports.GetUsers = exports.IDUserDto = void 0;
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
 class IDUserDto {
@@ -85,4 +85,19 @@ __decorate([
     __metadata("design:type", String)
 ], ChangePasswordDTO.prototype, "newPassword2", void 0);
 exports.ChangePasswordDTO = ChangePasswordDTO;
+class ClosestUserDto {
+}
+__decorate([
+    (0, class_validator_1.IsEnum)(enum_1.ROLES),
+    __metadata("design:type", String)
+], ClosestUserDto.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ClosestUserDto.prototype, "myLat", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ClosestUserDto.prototype, "myLng", void 0);
+exports.ClosestUserDto = ClosestUserDto;
 //# sourceMappingURL=user.dto.js.map

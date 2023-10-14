@@ -64,4 +64,15 @@ export class ChangePasswordDTO {
 
 }
 
+export class ClosestUserDto{
+
+    @IsEnum(ROLES)
+    role: ROLES;
+
+    @IsNumber()
+    myLat: number
+
+    @IsNumber()
+    myLng: number
+}
 

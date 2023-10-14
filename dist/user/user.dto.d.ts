@@ -19,3 +19,8 @@ export declare class ChangePasswordDTO {
     newPassword1: string;
     newPassword2: string;
 }
+export declare class ClosestUserDto {
+    role: ROLES;
+    myLat: number;
+    myLng: number;
+}

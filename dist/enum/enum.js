@@ -15,7 +15,9 @@ var ROLES;
 (function (ROLES) {
     ROLES["ALLUSERS"] = "all users";
     ROLES["ADMIN"] = "admin";
+    ROLES["REGIONAL_ADMIN"] = "regional admin";
     ROLES["COORDINATORS"] = "coordinators";
+    ROLES["TECH_SUPPORT"] = "tech support";
     ROLES["USER"] = "user";
     ROLES["BLOCKED"] = "blocked";
 })(ROLES = exports.ROLES || (exports.ROLES = {}));

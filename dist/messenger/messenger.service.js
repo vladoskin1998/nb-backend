@@ -39,12 +39,14 @@ let MessengerService = class MessengerService {
                 return {
                     participants: existingChat.participants,
                     chatId: existingChat._id,
+                    isSupport: existingChat.isSupport,
                 };
             }
-            const newChat = await this.chatsModel.create({ participants: dto.participants });
+            const newChat = await this.chatsModel.create({ participants: dto.participants, isSupport: dto.isSupport });
             return {
                 participants: newChat.participants,
                 chatId: newChat._id,
+                isSupport: newChat.isSupport
             };
         }
         catch (error) {
@@ -56,10 +58,16 @@ let MessengerService = class MessengerService {
             const userId = dto._id;
             const chats = await this.chatsModel.find({
                 participants: { $elemMatch: { userId: userId } },
+                isSupport: dto.isSupport
             });
             const chatsWithLastMessage = await Promise.all(chats.map(async (item) => {
                 const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
-                return { participants: item.toObject().participants, chatId: item._id, lastMessage: message ? message.toObject() : null };
+                return {
+                    participants: item.toObject().participants,
+                    chatId: item._id,
+                    lastMessage: message ? message.toObject() : null,
+                    isSupport: item.isSupport
+                };
             }));
             return chatsWithLastMessage;
         }

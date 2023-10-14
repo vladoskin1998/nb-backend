@@ -19,13 +19,17 @@ const mongoose_2 = require("mongoose");
 const activities_schema_1 = require("../activities/activities.schema");
 const category_schema_1 = require("../category/category.schema");
 const message_schema_1 = require("../messenger/message.schema");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const user_schema_1 = require("../user/user.schema");
+const statistic_schema_1 = require("./statistic.schema");
 let StatisticsService = class StatisticsService {
-    constructor(activitiesModel, categoryModel, userModel, messageModel) {
+    constructor(activitiesModel, categoryModel, userModel, messageModel, userIdentityModel, statisticModel) {
         this.activitiesModel = activitiesModel;
         this.categoryModel = categoryModel;
         this.userModel = userModel;
         this.messageModel = messageModel;
+        this.userIdentityModel = userIdentityModel;
+        this.statisticModel = statisticModel;
     }
     async countDocumentsDb() {
         try {
@@ -43,6 +47,37 @@ let StatisticsService = class StatisticsService {
         catch (error) {
         }
     }
+    async countUser() {
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+        const totalUsers = await this.userModel.countDocuments();
+        const activeUsers = await this.userIdentityModel
+            .countDocuments({
+            createdUserDate: { $gte: today },
+            isGotAllProfileInfo: true,
+        })
+            .exec();
+        const nonActiveUsers = await this.userIdentityModel
+            .countDocuments({
+            createdUserDate: { $gte: today },
+            isGotAllProfileInfo: false,
+        })
+            .exec();
+        const newUsers = activeUsers + nonActiveUsers;
+        return {
+            totalUsers,
+            newUsers,
+            activeUsers,
+            nonActiveUsers,
+        };
+    }
+    async getTenDocumentUsers() {
+        return await this.statisticModel.find().sort({ createdAt: -1 }).limit(10);
+    }
+    async saveStatistic() {
+        const getStatisticOneDay = await this.countUser();
+        await this.statisticModel.create(getStatisticOneDay);
+    }
 };
 StatisticsService = __decorate([
     (0, common_1.Injectable)(),
@@ -50,7 +85,11 @@ StatisticsService = __decorate([
     __param(1, (0, mongoose_1.InjectModel)(category_schema_1.Category.name)),
     __param(2, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __param(3, (0, mongoose_1.InjectModel)(message_schema_1.Message.name)),
+    __param(4, (0, mongoose_1.InjectModel)(user_identity_schema_1.UserIdentity.name)),
+    __param(5, (0, mongoose_1.InjectModel)(statistic_schema_1.Statistic.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model])

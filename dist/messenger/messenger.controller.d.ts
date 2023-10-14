@@ -25,8 +25,7 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { MessengerService } from './messenger.service';
-import { ChatIDDto, NewChatDto } from './messenger.dto';
-import { IDUserDto } from 'src/user/user.dto';
+import { ChatIDDto, ListChatDto, NewChatDto } from './messenger.dto';
 export declare class MessengerController {
     private readonly messengerService;
     constructor(messengerService: MessengerService);
@@ -37,8 +36,9 @@ export declare class MessengerController {
             fullName: string;
         }[];
         chatId: string | import("mongoose").Types.ObjectId;
+        isSupport: boolean;
     }>;
-    listChat(dto: IDUserDto): Promise<{
+    listChat(dto: ListChatDto): Promise<{
         participants: {
             userId: string;
             avatarFileName: string;
@@ -50,6 +50,7 @@ export declare class MessengerController {
         } & Required<{
             _id: import("mongoose").Types.ObjectId;
         }>;
+        isSupport: boolean;
     }[]>;
     getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
         _id: import("mongoose").Types.ObjectId;

@@ -14,6 +14,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const user_schema_1 = require("./user.schema");
 const auth_module_1 = require("../auth/auth.module");
 const platform_express_1 = require("@nestjs/platform-express");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
@@ -21,6 +22,7 @@ UserModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: user_schema_1.User.name, schema: user_schema_1.UserSchema },
+                { name: user_identity_schema_1.UserIdentity.name, schema: user_identity_schema_1.UserIdentitySchema },
             ]),
             platform_express_1.MulterModule.register({}),
             auth_module_1.AuthModule,

@@ -11,7 +11,9 @@ export enum HTTP_MESSAGE {
 export enum ROLES {
   ALLUSERS = 'all users',
   ADMIN = "admin",
+  REGIONAL_ADMIN = "regional admin",
   COORDINATORS = 'coordinators',
+  TECH_SUPPORT = 'tech support',
   USER = "user",
   BLOCKED = "blocked",
 }

@@ -9,4 +9,15 @@ export class StatisticsController {
   async countDocumentsDb(){
     return await this.statisticsService.countDocumentsDb()
   }
+
+  
+  @Get('statistic-users-one')
+  async countUser(){
+    return await this.statisticsService.countUser()
+  }
+
+  @Get('statistic-users-ten')
+  async getTenDocumentUsers(){
+    return await this.statisticsService.getTenDocumentUsers()
+  }
 }

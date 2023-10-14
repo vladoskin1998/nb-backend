@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddNewMessageDto, ChatIDDto, NewChatDto, ParticipantDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto } from './messenger.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
@@ -28,7 +28,8 @@ export class MessengerService {
                 avatarFileName: string,
                 fullName: string,
             }[],
-            chatId: string | Types.ObjectId
+            chatId: string | Types.ObjectId,
+            isSupport: boolean
         }> {
         try {
 
@@ -42,31 +43,39 @@ export class MessengerService {
                 return {
                     participants: existingChat.participants,
                     chatId: existingChat._id,
+                    isSupport: existingChat.isSupport,
                 };
             }
 
-            const newChat = await this.chatsModel.create({ participants: dto.participants });
+            const newChat = await this.chatsModel.create({ participants: dto.participants, isSupport: dto.isSupport });
 
             return {
                 participants: newChat.participants,
                 chatId: newChat._id,
+                isSupport: newChat.isSupport
             };
         } catch (error) {
             throw new Error('SERVER ERROR openChat')
         }
     }
-    async listChat(dto: IDUserDto) {
+    async listChat(dto: ListChatDto) {
         try {
             const userId = dto._id;
 
             const chats = await this.chatsModel.find({
                 participants: { $elemMatch: { userId: userId } },
+                isSupport: dto.isSupport
             });
 
             const chatsWithLastMessage = await Promise.all(
                 chats.map(async (item) => {
                     const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
-                    return {participants : item.toObject().participants, chatId: item._id ,lastMessage: message ? message.toObject() : null };
+                    return {
+                        participants: item.toObject().participants,
+                        chatId: item._id, 
+                        lastMessage: message ? message.toObject() : null,
+                        isSupport: item.isSupport
+                    };
                 })
             );
 
@@ -99,10 +108,10 @@ export class MessengerService {
     }
 
 
-    async fileMessage(file: Express.Multer.File){
-        try {  
+    async fileMessage(file: Express.Multer.File) {
+        try {
             return await this.filesService.uploadSingleFile(file, 'uploads/messenger', false)
-         } catch (error) {
+        } catch (error) {
             throw error
         }
     }

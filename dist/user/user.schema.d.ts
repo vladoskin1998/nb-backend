@@ -28,7 +28,7 @@ export type UserDocument = HydratedDocument<User>;
 export declare class User {
     email: string;
     password: string;
-    role: ROLES.ADMIN | ROLES.USER;
+    role: ROLES;
     isCheckedEmail: boolean;
     fullName: string;
     phone: string;

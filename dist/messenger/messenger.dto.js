@@ -9,9 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddNewMessageDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
+exports.ListChatDto = exports.AddNewMessageDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+const user_dto_1 = require("../user/user.dto");
 const utils_1 = require("../utils/utils");
 class ParticipantDto {
 }
@@ -37,6 +38,11 @@ __decorate([
     (0, class_transformer_1.Type)(() => ParticipantDto),
     __metadata("design:type", Array)
 ], NewChatDto.prototype, "participants", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], NewChatDto.prototype, "isSupport", void 0);
 exports.NewChatDto = NewChatDto;
 class ChatIDDto {
 }
@@ -71,4 +77,12 @@ __decorate([
     __metadata("design:type", String)
 ], AddNewMessageDto.prototype, "file", void 0);
 exports.AddNewMessageDto = AddNewMessageDto;
+class ListChatDto extends user_dto_1.IDUserDto {
+}
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], ListChatDto.prototype, "isSupport", void 0);
+exports.ListChatDto = ListChatDto;
 //# sourceMappingURL=messenger.dto.js.map
