@@ -18,10 +18,9 @@ import { StatisticsModule } from './statistics/statistics.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname,'.env')}),
-    // ServeStaticModule.forRoot({
-    //   serveRoot: "/uploads",
-    //   rootPath: path.join(__dirname, '..', 'uploads'), 
-    // }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'build')
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
