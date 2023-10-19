@@ -13,11 +13,11 @@ export class StatisticsController {
   
   @Get('statistic-users-one')
   async countUser(){
-    return await this.statisticsService.countUser()
+    return await this.statisticsService.getDocumentUsersNumber({limit:1})
   }
 
   @Get('statistic-users-ten')
   async getTenDocumentUsers(){
-    return await this.statisticsService.getTenDocumentUsers()
+    return await this.statisticsService.getDocumentUsersNumber({limit:10})
   }
 }

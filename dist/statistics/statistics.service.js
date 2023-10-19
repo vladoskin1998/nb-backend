@@ -71,8 +71,8 @@ let StatisticsService = class StatisticsService {
             nonActiveUsers,
         };
     }
-    async getTenDocumentUsers() {
-        return await this.statisticModel.find().sort({ createdAt: -1 }).limit(10);
+    async getDocumentUsersNumber({ limit = 10 }) {
+        return (await this.statisticModel.find().sort({ createdStatisticDate: -1 }).limit(limit)).reverse();
     }
     async saveStatistic() {
         const getStatisticOneDay = await this.countUser();

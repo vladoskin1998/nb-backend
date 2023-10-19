@@ -20,10 +20,10 @@ let StatisticsController = class StatisticsController {
         return await this.statisticsService.countDocumentsDb();
     }
     async countUser() {
-        return await this.statisticsService.countUser();
+        return await this.statisticsService.getDocumentUsersNumber({ limit: 1 });
     }
     async getTenDocumentUsers() {
-        return await this.statisticsService.getTenDocumentUsers();
+        return await this.statisticsService.getDocumentUsersNumber({ limit: 10 });
     }
 };
 __decorate([

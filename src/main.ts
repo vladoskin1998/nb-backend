@@ -4,11 +4,6 @@ import { config } from 'dotenv';
 import { MyLogger } from './logger/MyLogger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
 
 async function bootstrap() {
   config();

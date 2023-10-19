@@ -85,8 +85,8 @@ MessengerGateway = __decorate([
             origin: ['http://localhost:5000',
                 'http://localhost:3000',
                 'https://maps.googleapis.com',
-                "http://185.237.14.239:5000",
-                "http://185.237.14.239:5001"
+                "http://157.90.34.24:5000",
+                "http://157.90.34.24:5001"
             ],
             credentials: true,
         },

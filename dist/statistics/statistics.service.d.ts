@@ -49,7 +49,9 @@ export declare class StatisticsService {
         activeUsers: number;
         nonActiveUsers: number;
     }>;
-    getTenDocumentUsers(): Promise<(import("mongoose").Document<unknown, {}, Statistic> & Statistic & {
+    getDocumentUsersNumber({ limit }: {
+        limit?: number;
+    }): Promise<(import("mongoose").Document<unknown, {}, Statistic> & Statistic & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
     saveStatistic(): Promise<void>;

@@ -33,12 +33,9 @@ export declare class StatisticsController {
         countUsers: number;
         countMessages: number;
     }>;
-    countUser(): Promise<{
-        totalUsers: number;
-        newUsers: number;
-        activeUsers: number;
-        nonActiveUsers: number;
-    }>;
+    countUser(): Promise<(import("mongoose").Document<unknown, {}, import("./statistic.schema").Statistic> & import("./statistic.schema").Statistic & {
+        _id: import("mongoose").Types.ObjectId;
+    })[]>;
     getTenDocumentUsers(): Promise<(import("mongoose").Document<unknown, {}, import("./statistic.schema").Statistic> & import("./statistic.schema").Statistic & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;

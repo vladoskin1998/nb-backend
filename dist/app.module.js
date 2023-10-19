@@ -27,6 +27,10 @@ AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true, envFilePath: path.join(__dirname, '.env') }),
             serve_static_1.ServeStaticModule.forRoot({
+                serveRoot: "/uploads",
+                rootPath: path.join(__dirname, '..', 'uploads'),
+            }),
+            serve_static_1.ServeStaticModule.forRoot({
                 rootPath: path.join(__dirname, '..', 'build')
             }),
             mongoose_1.MongooseModule.forRootAsync({

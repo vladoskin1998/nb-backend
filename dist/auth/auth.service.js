@@ -64,12 +64,13 @@ let AuthService = class AuthService {
         delete userObject.password;
         return Object.assign(Object.assign({}, tokens), { user: userObject });
     }
-    async login({ email, password, methodRegistration }) {
+    async login({ email, password, methodRegistration = enum_1.METHOD_REGISTRATION.JWT }) {
         const user = await this.userModel.findOne({ email }).select('-isValidationUser');
         if (!user) {
             throw new common_1.HttpException(`User ${email} not found`, common_1.HttpStatus.BAD_REQUEST);
         }
         const isPassEquals = await bcrypt.compare(password, user.password);
+        console.log(isPassEquals, methodRegistration);
         if (!isPassEquals && methodRegistration === enum_1.METHOD_REGISTRATION.JWT) {
             throw new common_1.HttpException(`Bad password`, common_1.HttpStatus.BAD_REQUEST);
         }

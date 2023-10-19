@@ -79,7 +79,7 @@ export class AuthService {
         return { ...tokens, user: userObject };
     }
 
-    async login({ email, password, methodRegistration }: AuthDto) {
+    async login({ email, password, methodRegistration = METHOD_REGISTRATION.JWT }: AuthDto) {
         const user = await this.userModel.findOne({ email }).select('-isValidationUser');
         if (!user) {
             throw new HttpException(
@@ -87,7 +87,10 @@ export class AuthService {
                 HttpStatus.BAD_REQUEST,
             );
         }
+       
+        
         const isPassEquals = await bcrypt.compare(password, user.password);
+        console.log(isPassEquals,methodRegistration);
         if (!isPassEquals && methodRegistration === METHOD_REGISTRATION.JWT) {
             throw new HttpException(`Bad password`, HttpStatus.BAD_REQUEST);
         }

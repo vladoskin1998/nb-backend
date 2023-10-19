@@ -69,8 +69,8 @@ export class StatisticsService {
         }
     }
 
-    async getTenDocumentUsers(){
-        return await this.statisticModel.find().sort({ createdAt: -1 }).limit(10)
+    async getDocumentUsersNumber({limit=10}:{limit?:number}){
+        return (await this.statisticModel.find().sort({ createdStatisticDate: -1 }).limit(limit)).reverse()
     }
 
     async saveStatistic(){
