@@ -55,9 +55,7 @@ export class CategoryService {
 
 
     async createOrUpdateSubCategorie({ payload, file }: { payload: { name?: string, categorieId?: string, subCategorieId?: string }, file?: Express.Multer.File | null}) {
-            console.log(payload, file );
-            
-        
+         
         try {
             if (payload?.subCategorieId) {
                 const subCategorieId = new Types.ObjectId(payload.subCategorieId)
@@ -87,14 +85,6 @@ export class CategoryService {
 
         }
     }
-
-
-
-
-
-
-
-
 
     async createCategory({
         category,

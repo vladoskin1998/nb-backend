@@ -46,7 +46,6 @@ let CategoryService = class CategoryService {
         }
     }
     async createOrUpdateSubCategorie({ payload, file }) {
-        console.log(payload, file);
         try {
             if (payload === null || payload === void 0 ? void 0 : payload.subCategorieId) {
                 const subCategorieId = new mongoose_1.Types.ObjectId(payload.subCategorieId);

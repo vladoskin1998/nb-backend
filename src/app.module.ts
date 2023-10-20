@@ -13,6 +13,7 @@ import { ActivitiesModule } from './activities/activities.module';
 import { UserIdentityModule } from './user-identity/user-identity.module';
 import { MessengerModule } from './messenger/messenger.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { PostsModule } from './posts/posts.module';
 
 
 @Module({
@@ -47,6 +48,7 @@ import { StatisticsModule } from './statistics/statistics.module';
     UserIdentityModule,
     MessengerModule,
     StatisticsModule,
+    PostsModule,
 
     
   ],
