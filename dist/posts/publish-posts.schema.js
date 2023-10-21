@@ -13,6 +13,7 @@ exports.PublishPostsSchema = exports.PublishPosts = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const user_schema_1 = require("../user/user.schema");
 let PublishPosts = class PublishPosts {
 };
@@ -20,6 +21,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], PublishPosts.prototype, "userId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_identity_schema_1.UserIdentity.name }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], PublishPosts.prototype, "userIdentityId", void 0);
 __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
@@ -40,6 +45,14 @@ __decorate([
     (0, mongoose_1.Prop)({ default: enum_1.PRIVACY.EVERYONE, enum: enum_1.PRIVACY }),
     __metadata("design:type", String)
 ], PublishPosts.prototype, "privacyPost", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: new Date() }),
+    __metadata("design:type", Date)
+], PublishPosts.prototype, "createdPostDate", void 0);
+__decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], PublishPosts.prototype, "addressLocation", void 0);
 PublishPosts = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], PublishPosts);

@@ -18,7 +18,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserProfession.prototype, "title", void 0);
 UserProfession = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ versionKey: false })
 ], UserProfession);
 exports.UserProfession = UserProfession;
 exports.UserProfessionSchema = mongoose_1.SchemaFactory.createForClass(UserProfession);

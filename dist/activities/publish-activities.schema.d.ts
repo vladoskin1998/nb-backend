@@ -22,16 +22,24 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { HydratedDocument } from 'mongoose';
-export type ActivitiesDocument = HydratedDocument<Activities>;
-export declare class Activities {
-    name: string;
-    numberView: number;
-    isVisiable: boolean;
-    fileName: string;
+import { HydratedDocument, Types } from 'mongoose';
+import { PRIVACY } from 'src/enum/enum';
+export type PublishActivitiesDocument = HydratedDocument<PublishActivities>;
+export declare class PublishActivities {
+    userId: Types.ObjectId;
+    activitiesId: Types.ObjectId;
+    title: string;
+    text: string;
+    filesName: string[];
+    coordinates: {
+        lat: number | null;
+        lng: number | null;
+    };
+    privacyPost: PRIVACY;
+    startDate: Date | null;
 }
-export declare const ActivitiesSchema: import("mongoose").Schema<Activities, import("mongoose").Model<Activities, any, any, any, import("mongoose").Document<unknown, any, Activities> & Activities & {
-    _id: import("mongoose").Types.ObjectId;
-}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Activities, import("mongoose").Document<unknown, {}, Activities> & Activities & {
-    _id: import("mongoose").Types.ObjectId;
+export declare const PublishActivitiesSchema: import("mongoose").Schema<PublishActivities, import("mongoose").Model<PublishActivities, any, any, any, import("mongoose").Document<unknown, any, PublishActivities> & PublishActivities & {
+    _id: Types.ObjectId;
+}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, PublishActivities, import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+    _id: Types.ObjectId;
 }>;

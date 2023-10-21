@@ -50,6 +50,7 @@ export declare class UserIdentityService {
         skills: (import("mongoose").Document<unknown, {}, UserSkills> & UserSkills & {
             _id: Types.ObjectId;
         })[];
+        userIdentityId: Types.ObjectId;
         user: Types.ObjectId;
         isLocationVerify: boolean;
         isGotAllProfileInfo: boolean;
@@ -75,10 +76,10 @@ export declare class UserIdentityService {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: [] | {
+        nationality: {
             _id: string | number;
             title: string;
-        }[];
+        }[] | [];
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{

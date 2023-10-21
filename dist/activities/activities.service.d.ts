@@ -28,10 +28,13 @@ import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
 import { ActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
+import { PRIVACY } from 'src/enum/enum';
+import { PublishActivities } from './publish-activities.schema';
 export declare class ActivitiesService {
     private readonly activitiesModel;
+    private readonly publishActivities;
     private filesService;
-    constructor(activitiesModel: Model<Activities>, filesService: FilesService);
+    constructor(activitiesModel: Model<Activities>, publishActivities: Model<PublishActivities>, filesService: FilesService);
     createActivitie({ activitie, files, }: {
         activitie: ActivitiesDto;
         files: Array<Express.Multer.File>;
@@ -41,4 +44,21 @@ export declare class ActivitiesService {
     })[]>;
     deleteActivities(idAct: string): Promise<Types.ObjectId>;
     visiableActivities({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
+    addPublishActivities({ payload, files }: {
+        payload: {
+            privacyPost: PRIVACY;
+            title: string;
+            text: string;
+            userId: string;
+            activitiesId: string;
+            coordinates: {
+                lat: number;
+                lng: number;
+            };
+            startDate: Date;
+        };
+        files: Array<Express.Multer.File>;
+    }): Promise<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+        _id: Types.ObjectId;
+    }>;
 }

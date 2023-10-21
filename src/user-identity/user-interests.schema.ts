@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
-@Schema()
+@Schema({ versionKey: false })
 export class UserInterests {
 
     @Prop({type: String})

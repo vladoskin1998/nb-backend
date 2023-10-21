@@ -25,10 +25,16 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { PostsService } from './posts.service';
+import { GetPostsDto } from './posts.dto';
 export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
-    getPost(): Promise<void>;
+    getPosts(body: GetPostsDto): Promise<{
+        posts: Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-posts.schema").PublishPosts> & import("./publish-posts.schema").PublishPosts & {
+            _id: import("mongoose").Types.ObjectId;
+        }, never>, never>[];
+        allPageNumber: number;
+    }>;
     addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-posts.schema").PublishPosts> & import("./publish-posts.schema").PublishPosts & {
         _id: import("mongoose").Types.ObjectId;
     }>;

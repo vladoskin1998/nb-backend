@@ -34,7 +34,8 @@ let UserIdentityService = class UserIdentityService {
     async getIdentityInforamation(_id) {
         try {
             const userId = new mongoose_1.Types.ObjectId(_id);
-            const userIdentity = await this.userIdentity.findOne({ user: userId }).select("-_id");
+            let userIdentity = await this.userIdentity.findOne({ user: userId });
+            const userIdentityId = userIdentity._id;
             if (!userIdentity) {
                 return await this.userIdentity.create({ user: userId });
             }
@@ -48,7 +49,7 @@ let UserIdentityService = class UserIdentityService {
                 _id: { $in: userIdentity.skills },
             });
             const userIdentityObject = userIdentity.toObject();
-            return Object.assign(Object.assign({}, userIdentityObject), { profession, interests, skills });
+            return Object.assign(Object.assign({}, userIdentityObject), { profession, interests, skills, userIdentityId });
         }
         catch (error) {
             throw error;

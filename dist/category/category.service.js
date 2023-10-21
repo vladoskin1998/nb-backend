@@ -18,10 +18,12 @@ const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 const category_schema_1 = require("./category.schema");
 const files_service_1 = require("../files/files.service");
+const publish_service_schema_1 = require("./publish-service.schema");
 let CategoryService = class CategoryService {
-    constructor(categoryModel, subCategoryModel, filesService) {
+    constructor(categoryModel, subCategoryModel, publishServiceModel, filesService) {
         this.categoryModel = categoryModel;
         this.subCategoryModel = subCategoryModel;
+        this.publishServiceModel = publishServiceModel;
         this.filesService = filesService;
     }
     async createOrUpdateCategorie({ payload, file }) {
@@ -173,12 +175,23 @@ let CategoryService = class CategoryService {
             throw error;
         }
     }
+    async addPublishServices({ payload, files }) {
+        try {
+            const userId = new mongoose_1.Types.ObjectId(payload.userId);
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false);
+            return await this.publishServiceModel.create(Object.assign(Object.assign({}, payload), { filesName, userId }));
+        }
+        catch (error) {
+        }
+    }
 };
 CategoryService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_2.InjectModel)(category_schema_1.Category.name)),
     __param(1, (0, mongoose_2.InjectModel)(category_schema_1.SubCategory.name)),
+    __param(2, (0, mongoose_2.InjectModel)(publish_service_schema_1.PublishService.name)),
     __metadata("design:paramtypes", [mongoose_1.Model,
+        mongoose_1.Model,
         mongoose_1.Model,
         files_service_1.FilesService])
 ], CategoryService);

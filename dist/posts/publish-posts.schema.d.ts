@@ -27,6 +27,7 @@ import { PRIVACY } from 'src/enum/enum';
 export type PublishPostsDocument = HydratedDocument<PublishPosts>;
 export declare class PublishPosts {
     userId: Types.ObjectId;
+    userIdentityId: Types.ObjectId;
     title: string;
     text: string;
     filesName: string[];
@@ -35,6 +36,8 @@ export declare class PublishPosts {
         lng: number | null;
     };
     privacyPost: PRIVACY;
+    createdPostDate: Date;
+    addressLocation: string;
 }
 export declare const PublishPostsSchema: import("mongoose").Schema<PublishPosts, import("mongoose").Model<PublishPosts, any, any, any, import("mongoose").Document<unknown, any, PublishPosts> & PublishPosts & {
     _id: Types.ObjectId;

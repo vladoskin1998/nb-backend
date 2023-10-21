@@ -9,7 +9,7 @@ import { User } from 'src/user/user.schema';
 
 export type UserIdentityDocument = HydratedDocument<UserIdentity>;
 
-@Schema()
+@Schema({ versionKey: false })
 export class UserIdentity {
 
     @Prop({ type: Types.ObjectId, ref: User.name }) 

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { PRIVACY } from 'src/enum/enum';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { User } from 'src/user/user.schema';
 
 export type PublishPostsDocument = HydratedDocument<PublishPosts>;
@@ -10,6 +11,9 @@ export class PublishPosts {
 
     @Prop({ type: Types.ObjectId, ref: User.name }) 
     userId: Types.ObjectId;
+
+    @Prop({ type: Types.ObjectId, ref: UserIdentity.name }) 
+    userIdentityId: Types.ObjectId;
 
     @Prop()
     title: string;
@@ -25,6 +29,13 @@ export class PublishPosts {
 
     @Prop({ default: PRIVACY.EVERYONE, enum:PRIVACY})
     privacyPost: PRIVACY;
+
+    @Prop({ default: new Date()  })
+    createdPostDate: Date;
+
+    @Prop()
+    addressLocation: string;
+    
 
 }
 

@@ -10,11 +10,13 @@ import {
 } from './category.schema';
 import { FilesModule } from '../files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { PublishService, PublishServiceSchema } from './publish-service.schema';
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: Category.name, schema: CategorySchema },
             { name: SubCategory.name, schema: SubCategorySchema },
+            { name: PublishService.name, schema: PublishServiceSchema },
         ]),
         MulterModule.register({}),
         FilesModule,

@@ -48,6 +48,10 @@ let CategoryController = class CategoryController {
     async deleteSubCategory({ id }) {
         return await this.categoryService.deleteSubCategory(id);
     }
+    async addPost(body, files) {
+        const payload = JSON.parse(body.payload);
+        return await this.categoryService.addPublishServices({ files, payload });
+    }
 };
 __decorate([
     (0, common_1.Post)('add-categorie'),
@@ -108,6 +112,15 @@ __decorate([
     __metadata("design:paramtypes", [category_dto_1.IDDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "deleteSubCategory", null);
+__decorate([
+    (0, common_1.Post)('add-publish-service'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Array]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "addPost", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])

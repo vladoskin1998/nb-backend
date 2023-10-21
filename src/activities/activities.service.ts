@@ -5,12 +5,16 @@ import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
 import { ActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
+import { PRIVACY } from 'src/enum/enum';
+import { PublishActivities } from './publish-activities.schema';
 
 @Injectable()
 export class ActivitiesService {
     constructor(
         @InjectModel(Activities.name)
         private readonly activitiesModel: Model<Activities>,
+        @InjectModel(PublishActivities.name)
+        private readonly publishActivities: Model<PublishActivities>,
         private filesService: FilesService,
     ) {}
 
@@ -72,6 +76,31 @@ export class ActivitiesService {
             return { id, isVisiable };
         } catch (error) {
             throw error;
+        }
+    }
+
+    async addPublishActivities(
+        { payload, files }: { payload: {
+            privacyPost: PRIVACY 
+            title: string 
+            text: string
+            userId: string
+            activitiesId: string
+            coordinates: { lat: number; lng: number } 
+            startDate: Date 
+        }, files: Array<Express.Multer.File> }
+    ) {
+        try {
+            console.log(payload);
+            
+            const userId = new Types.ObjectId(payload.userId)
+            const activitiesId = new Types.ObjectId(payload.activitiesId)
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false)
+            return await this.publishActivities.create({
+                ...payload, filesName, userId, activitiesId
+            })
+        } catch (error) {
+
         }
     }
 }

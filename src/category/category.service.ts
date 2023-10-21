@@ -9,6 +9,8 @@ import {
     VisiableDto,
 } from './category.dto'; // Импортируем DTO
 import { FilesService } from 'src/files/files.service';
+import { PRIVACY } from 'src/enum/enum';
+import { PublishService } from './publish-service.schema';
 
 @Injectable()
 export class CategoryService {
@@ -18,6 +20,8 @@ export class CategoryService {
         private readonly categoryModel: Model<Category>,
         @InjectModel(SubCategory.name)
         private readonly subCategoryModel: Model<SubCategory>,
+        @InjectModel(PublishService.name)
+        private readonly publishServiceModel: Model<PublishService>,
         private filesService: FilesService,
     ) { }
 
@@ -244,5 +248,19 @@ export class CategoryService {
         }
     }
 
+
+    async addPublishServices(
+        { payload, files }: { payload: { privacyPost: PRIVACY, title: string, text: string, userId: string, coordinates: { lat: number; lng: number } }, files: Array<Express.Multer.File> }
+    ) {
+        try {
+            const userId = new Types.ObjectId(payload.userId)
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false)
+            return await this.publishServiceModel.create({
+                ...payload, filesName, userId
+            })
+        } catch (error) {
+
+        }
+    }
 
 }

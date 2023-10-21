@@ -27,11 +27,17 @@ import { PublishPosts } from './publish-posts.schema';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
+import { GetPostsDto } from './posts.dto';
 export declare class PostsService {
     private readonly publishPostsModel;
     private filesService;
     constructor(publishPostsModel: Model<PublishPosts>, filesService: FilesService);
-    getPost(): Promise<void>;
+    getPosts(body: GetPostsDto): Promise<{
+        posts: Omit<Omit<import("mongoose").Document<unknown, {}, PublishPosts> & PublishPosts & {
+            _id: Types.ObjectId;
+        }, never>, never>[];
+        allPageNumber: number;
+    }>;
     addPost({ payload, files }: {
         payload: {
             privacyPost: PRIVACY;

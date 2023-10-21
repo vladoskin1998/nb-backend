@@ -23,7 +23,25 @@ let PostsService = class PostsService {
         this.publishPostsModel = publishPostsModel;
         this.filesService = filesService;
     }
-    async getPost() {
+    async getPosts(body) {
+        const pageSize = 4;
+        const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments()) / pageSize);
+        const skip = (body.pageNumber - 1) * pageSize;
+        const posts = await this.publishPostsModel
+            .find()
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ createdPostDate: -1 })
+            .populate({
+            path: 'userId',
+            select: 'fullName',
+        })
+            .populate({
+            path: 'userIdentityId',
+            select: 'avatarFileName',
+        })
+            .exec();
+        return { posts, allPageNumber };
     }
     async addPost({ payload, files }) {
         try {

@@ -45,4 +45,7 @@ export declare class CategoryController {
     visiableSubCategory(dto: VisiableDto): Promise<VisiableDto>;
     deleteCategory({ id }: IDDto): Promise<string>;
     deleteSubCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
+    addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-service.schema").PublishService> & import("./publish-service.schema").PublishService & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
 }

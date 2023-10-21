@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
+import { GetPostsDto } from './posts.dto';
 
 @Injectable()
 export class PostsService {
@@ -15,8 +16,28 @@ export class PostsService {
         private filesService: FilesService
     ) { }
 
-    async getPost() {
+    async getPosts(body: GetPostsDto) {
+        const pageSize = 4
+        const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments())/pageSize) 
 
+        
+        const skip = ( body.pageNumber - 1) * pageSize;
+        const posts = await this.publishPostsModel
+          .find()
+          .skip(skip)
+          .limit(pageSize)
+          .sort({createdPostDate: -1})
+          .populate({
+            path: 'userId',
+            select: 'fullName',
+          })
+          .populate({
+            path: 'userIdentityId',
+            select: 'avatarFileName',
+          })
+          .exec();
+          
+        return {posts, allPageNumber };
     }
 
     async addPost(

@@ -124,7 +124,7 @@ __decorate([
     __metadata("design:type", Array)
 ], UserIdentity.prototype, "skills", void 0);
 UserIdentity = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ versionKey: false })
 ], UserIdentity);
 exports.UserIdentity = UserIdentity;
 exports.UserIdentitySchema = mongoose_1.SchemaFactory.createForClass(UserIdentity);

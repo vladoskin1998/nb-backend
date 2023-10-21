@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { User } from 'src/user/user.schema';
 
-@Schema()
+@Schema({ versionKey: false })
 export class UserProfession {
     @Prop({ type: String })
     title: string;

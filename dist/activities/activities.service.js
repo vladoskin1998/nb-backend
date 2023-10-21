@@ -18,9 +18,11 @@ const files_service_1 = require("../files/files.service");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const activities_schema_1 = require("./activities.schema");
+const publish_activities_schema_1 = require("./publish-activities.schema");
 let ActivitiesService = class ActivitiesService {
-    constructor(activitiesModel, filesService) {
+    constructor(activitiesModel, publishActivities, filesService) {
         this.activitiesModel = activitiesModel;
+        this.publishActivities = publishActivities;
         this.filesService = filesService;
     }
     async createActivitie({ activitie, files, }) {
@@ -64,11 +66,24 @@ let ActivitiesService = class ActivitiesService {
             throw error;
         }
     }
+    async addPublishActivities({ payload, files }) {
+        try {
+            console.log(payload);
+            const userId = new mongoose_2.Types.ObjectId(payload.userId);
+            const activitiesId = new mongoose_2.Types.ObjectId(payload.activitiesId);
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false);
+            return await this.publishActivities.create(Object.assign(Object.assign({}, payload), { filesName, userId, activitiesId }));
+        }
+        catch (error) {
+        }
+    }
 };
 ActivitiesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(activities_schema_1.Activities.name)),
+    __param(1, (0, mongoose_1.InjectModel)(publish_activities_schema_1.PublishActivities.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         files_service_1.FilesService])
 ], ActivitiesService);
 exports.ActivitiesService = ActivitiesService;

@@ -29,7 +29,8 @@ export class UserIdentityService {
     async getIdentityInforamation(_id: string) {
         try {
             const userId = new Types.ObjectId(_id)
-            const userIdentity = await this.userIdentity.findOne({ user: userId }).select("-_id")
+            let userIdentity = await this.userIdentity.findOne({ user: userId })
+            const userIdentityId = userIdentity._id
             if (!userIdentity) {
                 return await this.userIdentity.create({ user: userId })
             }
@@ -45,7 +46,7 @@ export class UserIdentityService {
             });
 
             const userIdentityObject = userIdentity.toObject()
-            return { ...userIdentityObject, profession, interests, skills }
+            return { ...userIdentityObject, profession, interests, skills, userIdentityId }
         } catch (error) {
             throw error
         }

@@ -18,7 +18,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserSkills.prototype, "title", void 0);
 UserSkills = __decorate([
-    (0, mongoose_1.Schema)()
+    (0, mongoose_1.Schema)({ versionKey: false })
 ], UserSkills);
 exports.UserSkills = UserSkills;
 exports.UserSkillsSchema = mongoose_1.SchemaFactory.createForClass(UserSkills);

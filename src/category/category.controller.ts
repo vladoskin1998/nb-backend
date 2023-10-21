@@ -74,5 +74,17 @@ export class CategoryController {
         return await this.categoryService.deleteSubCategory(id);
     }
 
+
+    @Post('add-publish-service')
+    @UseInterceptors(FilesInterceptor('files'))
+    async addPost(
+        @Body() body,
+        @UploadedFiles() files: Array<Express.Multer.File> | null,
+    ) {
+       const payload = JSON.parse(body.payload);
+       return await this.categoryService.addPublishServices({files, payload})
+    }
+
+
 }
 

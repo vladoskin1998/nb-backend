@@ -45,4 +45,21 @@ export class ActivitiesController {
         return await this.activitiesService.visiableActivities(dto);
     }
 
+
+    
+    @Post('get-publish-activities')
+    async getPost() {
+
+    }
+
+    @Post('add-publish-activities')
+    @UseInterceptors(FilesInterceptor('files'))
+    async addPost(
+        @Body() body,
+        @UploadedFiles() files: Array<Express.Multer.File> | null,
+    ) {
+       const payload = JSON.parse(body.payload);
+       return await this.activitiesService.addPublishActivities({files, payload})
+    }
+
 }

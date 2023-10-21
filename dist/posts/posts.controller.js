@@ -16,11 +16,13 @@ exports.PostsController = void 0;
 const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
 const platform_express_1 = require("@nestjs/platform-express");
+const posts_dto_1 = require("./posts.dto");
 let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
     }
-    async getPost() {
+    async getPosts(body) {
+        return await this.postsService.getPosts(body);
     }
     async addPost(body, files) {
         const payload = JSON.parse(body.payload);
@@ -29,10 +31,11 @@ let PostsController = class PostsController {
 };
 __decorate([
     (0, common_1.Post)('get-posts'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [posts_dto_1.GetPostsDto]),
     __metadata("design:returntype", Promise)
-], PostsController.prototype, "getPost", null);
+], PostsController.prototype, "getPosts", null);
 __decorate([
     (0, common_1.Post)('add-post'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),

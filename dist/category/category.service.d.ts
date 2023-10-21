@@ -27,11 +27,14 @@ import { Model, Types } from 'mongoose';
 import { Category, SubCategory } from './category.schema';
 import { CategoryDto, SubCategoryListDto, VisiableDto } from './category.dto';
 import { FilesService } from 'src/files/files.service';
+import { PRIVACY } from 'src/enum/enum';
+import { PublishService } from './publish-service.schema';
 export declare class CategoryService {
     private readonly categoryModel;
     private readonly subCategoryModel;
+    private readonly publishServiceModel;
     private filesService;
-    constructor(categoryModel: Model<Category>, subCategoryModel: Model<SubCategory>, filesService: FilesService);
+    constructor(categoryModel: Model<Category>, subCategoryModel: Model<SubCategory>, publishServiceModel: Model<PublishService>, filesService: FilesService);
     createOrUpdateCategorie({ payload, file }: {
         payload: {
             name?: string;
@@ -75,4 +78,19 @@ export declare class CategoryService {
     deleteSubCategory(subCatId: string): Promise<Types.ObjectId>;
     visiableCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
     visiableSubCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
+    addPublishServices({ payload, files }: {
+        payload: {
+            privacyPost: PRIVACY;
+            title: string;
+            text: string;
+            userId: string;
+            coordinates: {
+                lat: number;
+                lng: number;
+            };
+        };
+        files: Array<Express.Multer.File>;
+    }): Promise<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
+        _id: Types.ObjectId;
+    }>;
 }

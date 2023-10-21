@@ -14,6 +14,7 @@ const category_service_1 = require("./category.service");
 const category_schema_1 = require("./category.schema");
 const files_module_1 = require("../files/files.module");
 const platform_express_1 = require("@nestjs/platform-express");
+const publish_service_schema_1 = require("./publish-service.schema");
 let CategoryModule = class CategoryModule {
 };
 CategoryModule = __decorate([
@@ -22,6 +23,7 @@ CategoryModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: category_schema_1.Category.name, schema: category_schema_1.CategorySchema },
                 { name: category_schema_1.SubCategory.name, schema: category_schema_1.SubCategorySchema },
+                { name: publish_service_schema_1.PublishService.name, schema: publish_service_schema_1.PublishServiceSchema },
             ]),
             platform_express_1.MulterModule.register({}),
             files_module_1.FilesModule,

@@ -34,6 +34,12 @@ let ActivitiesController = class ActivitiesController {
     async visiableCategory(dto) {
         return await this.activitiesService.visiableActivities(dto);
     }
+    async getPost() {
+    }
+    async addPost(body, files) {
+        const payload = JSON.parse(body.payload);
+        return await this.activitiesService.addPublishActivities({ files, payload });
+    }
 };
 __decorate([
     (0, common_1.Post)('add-activitie'),
@@ -64,6 +70,21 @@ __decorate([
     __metadata("design:paramtypes", [category_dto_1.VisiableDto]),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "visiableCategory", null);
+__decorate([
+    (0, common_1.Post)('get-publish-activities'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getPost", null);
+__decorate([
+    (0, common_1.Post)('add-publish-activities'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Array]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "addPost", null);
 ActivitiesController = __decorate([
     (0, common_1.Controller)('activities'),
     __metadata("design:paramtypes", [activities_service_1.ActivitiesService])

@@ -36,4 +36,8 @@ export declare class ActivitiesController {
     })[]>;
     deleteCategory({ id }: IDDto): Promise<import("mongoose").Types.ObjectId>;
     visiableCategory(dto: VisiableDto): Promise<VisiableDto>;
+    getPost(): Promise<void>;
+    addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-activities.schema").PublishActivities> & import("./publish-activities.schema").PublishActivities & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
 }
