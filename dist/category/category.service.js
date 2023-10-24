@@ -63,52 +63,16 @@ let CategoryService = class CategoryService {
                 return subCategorie;
             }
             const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false);
-            const category = new mongoose_1.Types.ObjectId(payload === null || payload === void 0 ? void 0 : payload.categorieId);
-            return await this.subCategoryModel.create({ fileName, name: payload.name, category });
+            const categoryId = new mongoose_1.Types.ObjectId(payload === null || payload === void 0 ? void 0 : payload.categorieId);
+            return await this.subCategoryModel.create({ fileName, name: payload.name, categoryId });
         }
         catch (e) {
         }
     }
-    async createCategory({ category, subCategory, files, }) {
-        try {
-            await this.filesService.uploadFiles(files, 'uploads/categories');
-            const newCategory = new this.categoryModel({
-                name: category.name,
-                fileName: category.fileName,
-            });
-            if (subCategory && subCategory.listSubCategory.length > 0) {
-                this.createSubCategory({
-                    idCategory: newCategory._id,
-                    subCategory,
-                });
-            }
-            await newCategory.save();
-            return newCategory;
-        }
-        catch (error) {
-            throw new Error('CategoryService createCategory' + error.message);
-        }
-    }
-    async addSubCategoriesToCategories({ idCategory, subCategory, files, }) {
-        await this.filesService.uploadFiles(files, 'uploads/categories');
-        const idCatRef = new mongoose_1.Types.ObjectId(idCategory);
-        await this.createSubCategory({
-            idCategory: idCatRef,
-            subCategory,
-        });
-        return;
-    }
-    async createSubCategory({ idCategory, subCategory, }) {
-        const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
-            name: it.name,
-            fileName: it.fileName,
-            category: idCategory,
-        }));
-        await this.subCategoryModel.create(subCategoriesArr);
-    }
     async getAllCategories() {
         try {
-            return await this.categoryModel.find();
+            let allCategories = await this.categoryModel.find();
+            return allCategories.map(category => (Object.assign(Object.assign({}, category.toObject()), { categoryId: category._id.toString() })));
         }
         catch (error) {
             throw new Error('CategoryService getAllCategories' + error.message);
@@ -117,9 +81,10 @@ let CategoryService = class CategoryService {
     async getSubCategories(categoryId) {
         try {
             await this.categoryModel.findOneAndUpdate({ _id: categoryId }, { $inc: { numberView: 1 } });
-            return await this.subCategoryModel.find({
-                category: new mongoose_1.Types.ObjectId(categoryId),
+            let allSubCategories = await this.subCategoryModel.find({
+                categoryId: new mongoose_1.Types.ObjectId(categoryId),
             });
+            return allSubCategories.map(subCategory => (Object.assign(Object.assign({}, subCategory.toObject()), { subCategoryId: subCategory._id.toString() })));
         }
         catch (error) {
             throw new Error('CategoryService getSubCategories' + error.message);
@@ -128,14 +93,16 @@ let CategoryService = class CategoryService {
     async deleteCategory(catId) {
         const categoryId = new mongoose_1.Types.ObjectId(catId);
         try {
-            const subFileNames = await this.subCategoryModel.find({ category: categoryId }, 'fileName');
-            const catFile = await this.categoryModel.findByIdAndDelete({
-                _id: catId,
-            });
+            const subFileNames = await this.subCategoryModel.find({ categoryId }).select('fileName');
+            const publishFileNames = await this.publishServiceModel.find({ servicesId: categoryId }).select('filesName');
+            const deletedPublishFiles = publishFileNames.map((item) => item === null || item === void 0 ? void 0 : item.filesName).flat(1);
+            await this.filesService.deleteFiles(deletedPublishFiles, 'uploads/publish_services');
+            const catFile = await this.categoryModel.findByIdAndDelete({ _id: catId });
             const deletedFiles = subFileNames.map((item) => item === null || item === void 0 ? void 0 : item.fileName);
             deletedFiles.push(catFile.fileName);
             await this.filesService.deleteFiles(deletedFiles, 'uploads/categories');
-            await this.subCategoryModel.deleteMany({ category: categoryId });
+            await this.subCategoryModel.deleteMany({ categoryId });
+            await this.publishServiceModel.deleteMany({ servicesId: categoryId });
             return catId;
         }
         catch (error) {
@@ -148,8 +115,35 @@ let CategoryService = class CategoryService {
             const subCatFile = await this.subCategoryModel.findByIdAndDelete({
                 _id: subCategoryId,
             });
+            const publishFileNames = await this.publishServiceModel.find({ subServicesId: subCatId }).select('filesName');
+            const deletedPublishFiles = publishFileNames.map((item) => item === null || item === void 0 ? void 0 : item.filesName).flat(1);
+            await this.filesService.deleteFiles(deletedPublishFiles, 'uploads/publish_services');
             await this.filesService.deleteFile(subCatFile.fileName, 'uploads/categories');
+            await this.publishServiceModel.deleteMany({ subServicesId: subCatId });
             return subCategoryId;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async deletePublishCategory(pubCategiryId) {
+        const publishCategiryId = new mongoose_1.Types.ObjectId(pubCategiryId);
+        try {
+            const publishFileNames = await this.publishServiceModel.findByIdAndDelete({
+                _id: publishCategiryId,
+            });
+            await this.filesService.deleteFiles(publishFileNames.filesName, 'uploads/publish_services');
+            return publishCategiryId;
+        }
+        catch (error) {
+            throw error;
+        }
+    }
+    async moveSubcategory({ newCategoryId, subCategiryId }) {
+        try {
+            const categoryId = new mongoose_1.Types.ObjectId(newCategoryId);
+            const _id = new mongoose_1.Types.ObjectId(subCategiryId);
+            await this.subCategoryModel.findByIdAndUpdate({ _id }, { categoryId });
         }
         catch (error) {
             throw error;
@@ -178,11 +172,35 @@ let CategoryService = class CategoryService {
     async addPublishServices({ payload, files }) {
         try {
             const userId = new mongoose_1.Types.ObjectId(payload.userId);
-            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false);
-            return await this.publishServiceModel.create(Object.assign(Object.assign({}, payload), { filesName, userId }));
+            const userIdentityId = new mongoose_1.Types.ObjectId(payload.userIdentityId);
+            const servicesId = new mongoose_1.Types.ObjectId(payload.servicesId);
+            const subServicesId = new mongoose_1.Types.ObjectId(payload.subServicesId);
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_services', false);
+            return await this.publishServiceModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId, servicesId, subServicesId }));
         }
         catch (error) {
         }
+    }
+    async getPublishServices(body) {
+        const pageSize = 20;
+        const allPageNumber = Math.ceil((await this.publishServiceModel.countDocuments()) / pageSize);
+        const subServicesId = new mongoose_1.Types.ObjectId(body.subServicesId);
+        const skip = (body.pageNumber - 1) * pageSize;
+        const publishServices = await this.publishServiceModel
+            .find({ subServicesId })
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ createdPublishServiceDate: -1 })
+            .populate({
+            path: 'userId',
+            select: 'fullName',
+        })
+            .populate({
+            path: 'userIdentityId',
+            select: 'avatarFileName',
+        })
+            .exec();
+        return { publishServices, allPageNumber };
     }
 };
 CategoryService = __decorate([

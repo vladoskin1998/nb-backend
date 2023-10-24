@@ -20,9 +20,9 @@ const mongoose_2 = require("mongoose");
 const activities_schema_1 = require("./activities.schema");
 const publish_activities_schema_1 = require("./publish-activities.schema");
 let ActivitiesService = class ActivitiesService {
-    constructor(activitiesModel, publishActivities, filesService) {
+    constructor(activitiesModel, publishActivitiesModel, filesService) {
         this.activitiesModel = activitiesModel;
-        this.publishActivities = publishActivities;
+        this.publishActivitiesModel = publishActivitiesModel;
         this.filesService = filesService;
     }
     async createActivitie({ activitie, files, }) {
@@ -72,10 +72,31 @@ let ActivitiesService = class ActivitiesService {
             const userId = new mongoose_2.Types.ObjectId(payload.userId);
             const activitiesId = new mongoose_2.Types.ObjectId(payload.activitiesId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false);
-            return await this.publishActivities.create(Object.assign(Object.assign({}, payload), { filesName, userId, activitiesId }));
+            return await this.publishActivitiesModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, activitiesId }));
         }
         catch (error) {
         }
+    }
+    async getPublishActivities(body) {
+        const pageSize = 20;
+        const allPageNumber = Math.ceil((await this.publishActivitiesModel.countDocuments()) / pageSize);
+        const activitiesId = new mongoose_2.Types.ObjectId(body.activitiesId);
+        const skip = (body.pageNumber - 1) * pageSize;
+        const publishActivities = await this.publishActivitiesModel
+            .find({ activitiesId })
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ createEventDate: -1 })
+            .populate({
+            path: 'userId',
+            select: 'fullName',
+        })
+            .populate({
+            path: 'userIdentityId',
+            select: 'avatarFileName',
+        })
+            .exec();
+        return { publishActivities, allPageNumber };
     }
 };
 ActivitiesService = __decorate([

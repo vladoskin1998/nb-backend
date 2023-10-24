@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SubCategoryListDto = exports.EditDto = exports.CategoryDto = exports.VisiableDto = exports.IDDto = void 0;
+exports.GetPublishServiceDto = exports.SubCategoryListDto = exports.EditDto = exports.CategoryDto = exports.VisiableDto = exports.MoveSubCategoryIDDto = exports.PublishCategoryIDDto = exports.SubCategoryIDDto = exports.CategoryIDDto = exports.IDDto = void 0;
 const class_validator_1 = require("class-validator");
 class IDDto {
 }
@@ -19,6 +19,43 @@ __decorate([
     __metadata("design:type", String)
 ], IDDto.prototype, "id", void 0);
 exports.IDDto = IDDto;
+class CategoryIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CategoryIDDto.prototype, "categiryId", void 0);
+exports.CategoryIDDto = CategoryIDDto;
+class SubCategoryIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], SubCategoryIDDto.prototype, "subCategiryId", void 0);
+exports.SubCategoryIDDto = SubCategoryIDDto;
+class PublishCategoryIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], PublishCategoryIDDto.prototype, "publishCategiryId", void 0);
+exports.PublishCategoryIDDto = PublishCategoryIDDto;
+class MoveSubCategoryIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MoveSubCategoryIDDto.prototype, "newCategoryId", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], MoveSubCategoryIDDto.prototype, "subCategiryId", void 0);
+exports.MoveSubCategoryIDDto = MoveSubCategoryIDDto;
 class VisiableDto extends IDDto {
 }
 __decorate([
@@ -55,4 +92,15 @@ __decorate([
     __metadata("design:type", Array)
 ], SubCategoryListDto.prototype, "listSubCategory", void 0);
 exports.SubCategoryListDto = SubCategoryListDto;
+class GetPublishServiceDto {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], GetPublishServiceDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Number)
+], GetPublishServiceDto.prototype, "subServicesId", void 0);
+exports.GetPublishServiceDto = GetPublishServiceDto;
 //# sourceMappingURL=category.dto.js.map

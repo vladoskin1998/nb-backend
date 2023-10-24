@@ -16,6 +16,7 @@ exports.ActivitiesController = void 0;
 const common_1 = require("@nestjs/common");
 const activities_service_1 = require("./activities.service");
 const platform_express_1 = require("@nestjs/platform-express");
+const activities_dto_1 = require("./activities.dto");
 const category_dto_1 = require("../category/category.dto");
 let ActivitiesController = class ActivitiesController {
     constructor(activitiesService) {
@@ -34,11 +35,13 @@ let ActivitiesController = class ActivitiesController {
     async visiableCategory(dto) {
         return await this.activitiesService.visiableActivities(dto);
     }
-    async getPost() {
-    }
     async addPost(body, files) {
         const payload = JSON.parse(body.payload);
         return await this.activitiesService.addPublishActivities({ files, payload });
+    }
+    async getPublishActivities(body) {
+        console.log('get-publish-activities');
+        return await this.activitiesService.getPublishActivities(body);
     }
 };
 __decorate([
@@ -71,12 +74,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "visiableCategory", null);
 __decorate([
-    (0, common_1.Post)('get-publish-activities'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ActivitiesController.prototype, "getPost", null);
-__decorate([
     (0, common_1.Post)('add-publish-activities'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
     __param(0, (0, common_1.Body)()),
@@ -85,6 +82,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Array]),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "addPost", null);
+__decorate([
+    (0, common_1.Post)('get-publish-activities'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [activities_dto_1.GetPublishActivitiesDto]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getPublishActivities", null);
 ActivitiesController = __decorate([
     (0, common_1.Controller)('activities'),
     __metadata("design:paramtypes", [activities_service_1.ActivitiesService])

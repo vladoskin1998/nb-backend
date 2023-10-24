@@ -30,7 +30,7 @@ export declare class SubCategory {
     fileName: string;
     isVisiable: boolean;
     numberView: number;
-    category: Types.ObjectId;
+    categoryId: Types.ObjectId;
 }
 export declare class Category {
     name: string;

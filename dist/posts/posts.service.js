@@ -24,7 +24,7 @@ let PostsService = class PostsService {
         this.filesService = filesService;
     }
     async getPosts(body) {
-        const pageSize = 4;
+        const pageSize = 50;
         const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments()) / pageSize);
         const skip = (body.pageNumber - 1) * pageSize;
         const posts = await this.publishPostsModel
@@ -46,8 +46,9 @@ let PostsService = class PostsService {
     async addPost({ payload, files }) {
         try {
             const userId = new mongoose_2.Types.ObjectId(payload.userId);
+            const userIdentityId = new mongoose_2.Types.ObjectId(payload.userIdentityId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false);
-            return await this.publishPostsModel.create(Object.assign(Object.assign({}, payload), { filesName, userId }));
+            return await this.publishPostsModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId }));
         }
         catch (error) {
         }

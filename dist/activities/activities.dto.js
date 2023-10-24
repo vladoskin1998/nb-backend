@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ActivitiesDto = void 0;
+exports.GetPublishActivitiesDto = exports.ActivitiesDto = void 0;
 const class_validator_1 = require("class-validator");
 class ActivitiesDto {
 }
@@ -24,4 +24,15 @@ __decorate([
     __metadata("design:type", String)
 ], ActivitiesDto.prototype, "name", void 0);
 exports.ActivitiesDto = ActivitiesDto;
+class GetPublishActivitiesDto {
+}
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], GetPublishActivitiesDto.prototype, "pageNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetPublishActivitiesDto.prototype, "activitiesId", void 0);
+exports.GetPublishActivitiesDto = GetPublishActivitiesDto;
 //# sourceMappingURL=activities.dto.js.map

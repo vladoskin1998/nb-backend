@@ -17,7 +17,7 @@ export class PostsService {
     ) { }
 
     async getPosts(body: GetPostsDto) {
-        const pageSize = 4
+        const pageSize = 50
         const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments())/pageSize) 
 
         
@@ -41,13 +41,14 @@ export class PostsService {
     }
 
     async addPost(
-        { payload, files }: { payload: { privacyPost: PRIVACY, title: string, text: string, userId: string, coordinates: { lat: number; lng: number } }, files: Array<Express.Multer.File> }
+        { payload, files }: { payload: {userIdentityId:string, privacyPost: PRIVACY, title: string, text: string, userId: string, coordinates: { lat: number; lng: number } }, files: Array<Express.Multer.File> }
     ) {
         try {
             const userId = new Types.ObjectId(payload.userId)
+            const userIdentityId = new Types.ObjectId(payload.userIdentityId)
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false)
             return await this.publishPostsModel.create({
-                ...payload, filesName, userId
+                ...payload, filesName, userId, userIdentityId
             })
         } catch (error) {
 

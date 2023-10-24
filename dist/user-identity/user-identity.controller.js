@@ -24,7 +24,8 @@ let UserIdentityController = class UserIdentityController {
         this.userIdentityService = userIdentityService;
     }
     async getIdentityInforamation(body) {
-        return await this.userIdentityService.getIdentityInforamation(body._id);
+        console.log("---->", body);
+        return await this.userIdentityService.getIdentityInforamation(body === null || body === void 0 ? void 0 : body._id);
     }
     async profileUploadAvatar(body, file) {
         var _a;

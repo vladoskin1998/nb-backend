@@ -33,7 +33,7 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: 'Category' }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
-], SubCategory.prototype, "category", void 0);
+], SubCategory.prototype, "categoryId", void 0);
 SubCategory = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], SubCategory);

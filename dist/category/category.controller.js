@@ -33,8 +33,10 @@ let CategoryController = class CategoryController {
         return await this.categoryService.getAllCategories();
     }
     async allSubCategorie({ id }) {
-        console.log(id);
         return await this.categoryService.getSubCategories(id);
+    }
+    async moveSubCategory(dto) {
+        return await this.categoryService.moveSubcategory(dto);
     }
     async visiableCategory(dto) {
         return await this.categoryService.visiableCategory(dto);
@@ -42,15 +44,21 @@ let CategoryController = class CategoryController {
     async visiableSubCategory(dto) {
         return await this.categoryService.visiableSubCategory(dto);
     }
-    async deleteCategory({ id }) {
-        return await this.categoryService.deleteCategory(id);
+    async deleteCategory({ categiryId }) {
+        return await this.categoryService.deleteCategory(categiryId);
     }
-    async deleteSubCategory({ id }) {
-        return await this.categoryService.deleteSubCategory(id);
+    async deleteSubCategory({ subCategiryId }) {
+        return await this.categoryService.deleteSubCategory(subCategiryId);
+    }
+    async deletePublishCategory({ publishCategiryId }) {
+        return await this.categoryService.deleteSubCategory(publishCategiryId);
     }
     async addPost(body, files) {
         const payload = JSON.parse(body.payload);
         return await this.categoryService.addPublishServices({ files, payload });
+    }
+    async getPosts(body) {
+        return await this.categoryService.getPublishServices(body);
     }
 };
 __decorate([
@@ -85,6 +93,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "allSubCategorie", null);
 __decorate([
+    (0, common_1.Post)('move-subcategory'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.MoveSubCategoryIDDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "moveSubCategory", null);
+__decorate([
     (0, common_1.Post)('visiable-category'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -102,16 +117,23 @@ __decorate([
     (0, common_1.Post)('delete-category'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:paramtypes", [category_dto_1.CategoryIDDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "deleteCategory", null);
 __decorate([
     (0, common_1.Post)('delete-subcategory'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [category_dto_1.IDDto]),
+    __metadata("design:paramtypes", [category_dto_1.SubCategoryIDDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "deleteSubCategory", null);
+__decorate([
+    (0, common_1.Post)('delete-publish-category'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.PublishCategoryIDDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "deletePublishCategory", null);
 __decorate([
     (0, common_1.Post)('add-publish-service'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
@@ -121,6 +143,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Array]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "addPost", null);
+__decorate([
+    (0, common_1.Post)('get-publish-service'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.GetPublishServiceDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "getPosts", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])

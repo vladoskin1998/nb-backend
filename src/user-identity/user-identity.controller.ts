@@ -11,7 +11,9 @@ export class UserIdentityController {
     
     @Post('get-user-identity')
     async getIdentityInforamation(@Body() body: IDUserDto){
-        return await this.userIdentityService.getIdentityInforamation(body._id)
+        console.log("---->",body);
+        
+        return await this.userIdentityService.getIdentityInforamation(body?._id)
     }
     
     @Post('upload-avatar')

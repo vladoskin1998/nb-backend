@@ -56,7 +56,7 @@ __decorate([
     __metadata("design:type", Date)
 ], UserIdentity.prototype, "createdUserDate", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: new Date() }),
+    (0, mongoose_1.Prop)({ default: null }),
     __metadata("design:type", Date)
 ], UserIdentity.prototype, "blockedUserDate", void 0);
 __decorate([

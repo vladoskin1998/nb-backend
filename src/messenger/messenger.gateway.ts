@@ -20,8 +20,9 @@ import { MessageType } from '../types'
             origin: ['http://localhost:5000',
             'http://localhost:3000', 
             'https://maps.googleapis.com', 
-            "http://157.90.34.24:5000",
-            "http://157.90.34.24:5001"
+            "http://178.20.154.144:5000",
+            "http://178.20.154.144:5001",
+            "https://environs.life",
             ],
             credentials: true,
         },

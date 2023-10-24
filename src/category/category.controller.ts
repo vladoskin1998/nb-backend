@@ -10,50 +10,56 @@ import {
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import {
-    CategoryDto,
-    EditDto,
+    CategoryIDDto,
+    GetPublishServiceDto,
     IDDto,
-    SubCategoryListDto,
+    MoveSubCategoryIDDto,
+    PublishCategoryIDDto,
+    SubCategoryIDDto,
     VisiableDto,
-} from './category.dto'; // Создайте DTO по вашим требованиям
+} from './category.dto'; 
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('categories')
 export class CategoryController {
-    constructor(private readonly categoryService: CategoryService) {}
+    constructor(private readonly categoryService: CategoryService) { }
 
     @Post('add-categorie')
     @UseInterceptors(FileInterceptor('file'))
     async addCategorie(
         @UploadedFile() file: Express.Multer.File | null,
         @Body() body,
-    ){
-       const payload = JSON.parse(body.payload);
-      
-        return await this.categoryService.createOrUpdateCategorie({file ,payload})
+    ) {
+        const payload = JSON.parse(body.payload);
+
+        return await this.categoryService.createOrUpdateCategorie({ file, payload })
     }
-    
+
     @Post('add-sub-categorie')
     @UseInterceptors(FileInterceptor('file'))
     async addSubCategorie(
         @UploadedFile() file: Express.Multer.File | null,
         @Body() body,
-    ){
-      const payload = JSON.parse(body.payload);
-         return await this.categoryService.createOrUpdateSubCategorie({file ,payload})
+    ) {
+        const payload = JSON.parse(body.payload);
+        return await this.categoryService.createOrUpdateSubCategorie({ file, payload })
     }
 
     @Get('all-categories')
     async allCategories() {
-        return await this.categoryService.getAllCategories();
+        return await this.categoryService.getAllCategories()
     }
 
     @Get('sub-categories')
     async allSubCategorie(@Query() { id }: IDDto) {
-        console.log(id);
         return await this.categoryService.getSubCategories(id);
     }
-    
+
+    @Post('move-subcategory')
+    async moveSubCategory(@Body() dto: MoveSubCategoryIDDto) {
+        return await this.categoryService.moveSubcategory(dto);
+    }
+
     @Post('visiable-category')
     async visiableCategory(@Body() dto: VisiableDto) {
         return await this.categoryService.visiableCategory(dto);
@@ -65,15 +71,19 @@ export class CategoryController {
     }
 
     @Post('delete-category')
-    async deleteCategory(@Body() { id }: IDDto) {
-        return await this.categoryService.deleteCategory(id);
+    async deleteCategory(@Body() { categiryId }: CategoryIDDto) {
+        return await this.categoryService.deleteCategory(categiryId);
     }
 
     @Post('delete-subcategory')
-    async deleteSubCategory(@Body() { id }: IDDto) {
-        return await this.categoryService.deleteSubCategory(id);
+    async deleteSubCategory(@Body() { subCategiryId }: SubCategoryIDDto) {
+        return await this.categoryService.deleteSubCategory(subCategiryId);
     }
 
+    @Post('delete-publish-category')
+    async deletePublishCategory(@Body() { publishCategiryId }: PublishCategoryIDDto) {
+        return await this.categoryService.deleteSubCategory(publishCategiryId);
+    }
 
     @Post('add-publish-service')
     @UseInterceptors(FilesInterceptor('files'))
@@ -81,10 +91,14 @@ export class CategoryController {
         @Body() body,
         @UploadedFiles() files: Array<Express.Multer.File> | null,
     ) {
-       const payload = JSON.parse(body.payload);
-       return await this.categoryService.addPublishServices({files, payload})
+        const payload = JSON.parse(body.payload);
+        return await this.categoryService.addPublishServices({ files, payload })
     }
 
+    @Post('get-publish-service')
+    async getPosts(@Body() body: GetPublishServiceDto) {
+        return await this.categoryService.getPublishServices(body)
+    }
 
 }
 

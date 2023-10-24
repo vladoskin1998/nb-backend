@@ -5,6 +5,8 @@ import { Category, SubCategory } from './category.schema'; // Импортиру
 import {
     CategoryDto,
     EditDto,
+    GetPublishServiceDto,
+    MoveSubCategoryIDDto,
     SubCategoryListDto,
     VisiableDto,
 } from './category.dto'; // Импортируем DTO
@@ -25,7 +27,6 @@ export class CategoryService {
         private filesService: FilesService,
     ) { }
 
-
     async createOrUpdateCategorie({ payload, file }: { payload: { name?: string, categorieId?: string }, file?: Express.Multer.File | null }) {
 
         try {
@@ -34,14 +35,14 @@ export class CategoryService {
 
                 const categorie = await this.categoryModel.findOne({ _id: categorieId })
 
-                if(file){
-                    await this.filesService.deleteFile(categorie.fileName, 'uploads/categories', )
+                if (file) {
+                    await this.filesService.deleteFile(categorie.fileName, 'uploads/categories',)
                     const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
-                    await categorie.updateOne({fileName})
+                    await categorie.updateOne({ fileName })
                 }
 
-                if(payload?.name){
-                    await categorie.updateOne({name: payload?.name })
+                if (payload?.name) {
+                    await categorie.updateOne({ name: payload?.name })
                 }
 
                 return categorie
@@ -49,7 +50,7 @@ export class CategoryService {
 
             const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
 
-            return await this.categoryModel.create({fileName, name: payload.name })
+            return await this.categoryModel.create({ fileName, name: payload.name })
 
         } catch (e) {
 
@@ -57,23 +58,22 @@ export class CategoryService {
     }
 
 
+    async createOrUpdateSubCategorie({ payload, file }: { payload: { name?: string, categorieId?: string, subCategorieId?: string }, file?: Express.Multer.File | null }) {
 
-    async createOrUpdateSubCategorie({ payload, file }: { payload: { name?: string, categorieId?: string, subCategorieId?: string }, file?: Express.Multer.File | null}) {
-         
         try {
             if (payload?.subCategorieId) {
                 const subCategorieId = new Types.ObjectId(payload.subCategorieId)
 
                 const subCategorie = await this.subCategoryModel.findOne({ _id: subCategorieId })
 
-                if(file){
-                    await this.filesService.deleteFile(subCategorie.fileName, 'uploads/categories', )
+                if (file) {
+                    await this.filesService.deleteFile(subCategorie.fileName, 'uploads/categories',)
                     const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
-                    await subCategorie.updateOne({fileName})
+                    await subCategorie.updateOne({ fileName })
                 }
 
-                if(payload?.name){
-                    await subCategorie.updateOne({name: payload?.name })
+                if (payload?.name) {
+                    await subCategorie.updateOne({ name: payload?.name })
                 }
 
                 return subCategorie
@@ -81,81 +81,24 @@ export class CategoryService {
 
             const fileName = await this.filesService.uploadSingleFile(file, 'uploads/categories', false)
 
-            const category = new Types.ObjectId(payload?.categorieId)
+            const categoryId = new Types.ObjectId(payload?.categorieId)
 
-            return await this.subCategoryModel.create({fileName, name: payload.name, category  })
-            
+            return await this.subCategoryModel.create({ fileName, name: payload.name, categoryId })
+
         } catch (e) {
 
         }
     }
 
-    async createCategory({
-        category,
-        subCategory,
-        files,
-    }: {
-        category: CategoryDto;
-        subCategory: SubCategoryListDto;
-        files: Array<Express.Multer.File>;
-    }): Promise<Category> {
-        try {
-            await this.filesService.uploadFiles(files, 'uploads/categories');
-
-            const newCategory = new this.categoryModel({
-                name: category.name,
-                fileName: category.fileName,
-            });
-
-            if (subCategory && subCategory.listSubCategory.length > 0) {
-                this.createSubCategory({
-                    idCategory: newCategory._id,
-                    subCategory,
-                });
-            }
-            await newCategory.save();
-            return newCategory;
-        } catch (error) {
-            throw new Error('CategoryService createCategory' + error.message);
-        }
-    }
-
-    async addSubCategoriesToCategories({
-        idCategory,
-        subCategory,
-        files,
-    }: {
-        idCategory: string;
-        subCategory: SubCategoryListDto;
-        files: Array<Express.Multer.File>;
-    }) {
-        await this.filesService.uploadFiles(files, 'uploads/categories');
-        const idCatRef = new Types.ObjectId(idCategory);
-        await this.createSubCategory({
-            idCategory: idCatRef,
-            subCategory,
-        });
-        return;
-    }
-
-    async createSubCategory({
-        idCategory,
-        subCategory,
-    }: {
-        idCategory: Types.ObjectId;
-        subCategory: SubCategoryListDto;
-    }) {
-        const subCategoriesArr = subCategory.listSubCategory.map((it) => ({
-            name: it.name,
-            fileName: it.fileName,
-            category: idCategory,
-        }));
-        await this.subCategoryModel.create(subCategoriesArr);
-    }
-
     async getAllCategories() {
         try {
-            return await this.categoryModel.find()
+            let allCategories = await this.categoryModel.find()
+            return allCategories.map(category => ({
+                ...category.toObject(),
+                categoryId: category._id.toString(),
+            })
+            );
+
         } catch (error) {
             throw new Error('CategoryService getAllCategories' + error.message);
         }
@@ -167,9 +110,15 @@ export class CategoryService {
                 { _id: categoryId },
                 { $inc: { numberView: 1 } },
             );
-            return await this.subCategoryModel.find({
-                category: new Types.ObjectId(categoryId),
+
+            let allSubCategories = await this.subCategoryModel.find({
+                categoryId: new Types.ObjectId(categoryId),
             });
+            return allSubCategories.map(subCategory => ({
+                ...subCategory.toObject(),
+                subCategoryId: subCategory._id.toString(),
+            })
+            );
         } catch (error) {
             throw new Error('CategoryService getSubCategories' + error.message);
         }
@@ -178,22 +127,31 @@ export class CategoryService {
     async deleteCategory(catId: string): Promise<string> {
         const categoryId = new Types.ObjectId(catId);
         try {
-            const subFileNames = await this.subCategoryModel.find(
-                { category: categoryId },
-                'fileName',
+
+            const subFileNames = await this.subCategoryModel.find({ categoryId }).select('fileName')
+            const publishFileNames = await this.publishServiceModel.find({ servicesId: categoryId }).select('filesName')
+
+
+            const deletedPublishFiles = publishFileNames.map((item) => item?.filesName).flat(1);
+
+            await this.filesService.deleteFiles(
+                deletedPublishFiles,
+                'uploads/publish_services',
             );
-            const catFile = await this.categoryModel.findByIdAndDelete({
-                _id: catId,
-            });
-            const deletedFiles = subFileNames.map(
-                (item) => item?.fileName,
-            );
+
+            const catFile = await this.categoryModel.findByIdAndDelete({ _id: catId });
+
+            const deletedFiles = subFileNames.map((item) => item?.fileName);
+
             deletedFiles.push(catFile.fileName);
+
             await this.filesService.deleteFiles(
                 deletedFiles,
                 'uploads/categories',
             );
-            await this.subCategoryModel.deleteMany({ category: categoryId });
+
+            await this.subCategoryModel.deleteMany({ categoryId });
+            await this.publishServiceModel.deleteMany({ servicesId: categoryId });
             return catId;
         } catch (error) {
             throw error;
@@ -206,11 +164,44 @@ export class CategoryService {
             const subCatFile = await this.subCategoryModel.findByIdAndDelete({
                 _id: subCategoryId,
             });
-            await this.filesService.deleteFile(
-                subCatFile.fileName,
-                'uploads/categories',
-            );
+
+            const publishFileNames = await this.publishServiceModel.find({ subServicesId: subCatId }).select('filesName')
+            const deletedPublishFiles = publishFileNames.map((item) => item?.filesName).flat(1);
+
+            await this.filesService.deleteFiles(deletedPublishFiles, 'uploads/publish_services');
+
+            await this.filesService.deleteFile(subCatFile.fileName, 'uploads/categories');
+
+            await this.publishServiceModel.deleteMany({ subServicesId: subCatId });
             return subCategoryId;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deletePublishCategory(pubCategiryId: string) {
+        const publishCategiryId = new Types.ObjectId(pubCategiryId);
+        try {
+            const publishFileNames = await this.publishServiceModel.findByIdAndDelete({
+                _id: publishCategiryId,
+            });
+
+            await this.filesService.deleteFiles(
+                publishFileNames.filesName,
+                'uploads/publish_services',
+            );
+            return publishCategiryId;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async moveSubcategory({ newCategoryId, subCategiryId }: MoveSubCategoryIDDto) {
+        try {
+            const categoryId = new Types.ObjectId(newCategoryId)
+            const _id = new Types.ObjectId(subCategiryId)
+            await this.subCategoryModel.findByIdAndUpdate({ _id }, { categoryId })
+
         } catch (error) {
             throw error;
         }
@@ -250,17 +241,57 @@ export class CategoryService {
 
 
     async addPublishServices(
-        { payload, files }: { payload: { privacyPost: PRIVACY, title: string, text: string, userId: string, coordinates: { lat: number; lng: number } }, files: Array<Express.Multer.File> }
+        { payload, files }: {
+            payload: {
+                userIdentityId: string,
+                privacyPost: PRIVACY,
+                title: string,
+                text: string,
+                userId: string,
+                coordinates: { lat: number; lng: number }
+                servicesId: string,
+                subServicesId: string,
+            }, files: Array<Express.Multer.File>
+        }
     ) {
         try {
             const userId = new Types.ObjectId(payload.userId)
-            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false)
+            const userIdentityId = new Types.ObjectId(payload.userIdentityId)
+
+            const servicesId = new Types.ObjectId(payload.servicesId)
+            const subServicesId = new Types.ObjectId(payload.subServicesId)
+            const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_services', false)
             return await this.publishServiceModel.create({
-                ...payload, filesName, userId
+                ...payload, filesName, userId, userIdentityId, servicesId, subServicesId
             })
         } catch (error) {
 
         }
+    }
+
+    async getPublishServices(body: GetPublishServiceDto) {
+        const pageSize = 20
+        const allPageNumber = Math.ceil((await this.publishServiceModel.countDocuments()) / pageSize)
+        const subServicesId = new Types.ObjectId(body.subServicesId)
+
+        const skip = (body.pageNumber - 1) * pageSize;
+
+        const publishServices = await this.publishServiceModel
+            .find({ subServicesId })
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ createdPublishServiceDate: -1 })
+            .populate({
+                path: 'userId',
+                select: 'fullName',
+            })
+            .populate({
+                path: 'userIdentityId',
+                select: 'avatarFileName',
+            })
+            .exec();
+
+        return { publishServices, allPageNumber };
     }
 
 }

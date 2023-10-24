@@ -28,9 +28,11 @@ export class UserIdentityService {
 
     async getIdentityInforamation(_id: string) {
         try {
+            console.log("getIdentityInforamation--->",_id);
+            
             const userId = new Types.ObjectId(_id)
             let userIdentity = await this.userIdentity.findOne({ user: userId })
-            const userIdentityId = userIdentity._id
+            const userIdentityId = userIdentity?._id
             if (!userIdentity) {
                 return await this.userIdentity.create({ user: userId })
             }

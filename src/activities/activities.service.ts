@@ -3,7 +3,7 @@ import { FilesService } from '../files/files.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
-import { ActivitiesDto } from './activities.dto';
+import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
@@ -14,7 +14,7 @@ export class ActivitiesService {
         @InjectModel(Activities.name)
         private readonly activitiesModel: Model<Activities>,
         @InjectModel(PublishActivities.name)
-        private readonly publishActivities: Model<PublishActivities>,
+        private readonly publishActivitiesModel: Model<PublishActivities>,
         private filesService: FilesService,
     ) {}
 
@@ -96,11 +96,36 @@ export class ActivitiesService {
             const userId = new Types.ObjectId(payload.userId)
             const activitiesId = new Types.ObjectId(payload.activitiesId)
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false)
-            return await this.publishActivities.create({
+            return await this.publishActivitiesModel.create({
                 ...payload, filesName, userId, activitiesId
             })
         } catch (error) {
 
         }
+    }
+
+    async getPublishActivities(body: GetPublishActivitiesDto) {
+        const pageSize = 20
+        const allPageNumber = Math.ceil((await this.publishActivitiesModel.countDocuments()) / pageSize)
+        const activitiesId = new Types.ObjectId(body.activitiesId)
+
+        const skip = (body.pageNumber - 1) * pageSize;
+
+        const publishActivities = await this.publishActivitiesModel
+            .find({ activitiesId })
+            .skip(skip)
+            .limit(pageSize)
+            .sort({ createEventDate: -1 })
+            .populate({
+                path: 'userId',
+                select: 'fullName',
+            })
+            .populate({
+                path: 'userIdentityId',
+                select: 'avatarFileName',
+            })
+            .exec();
+
+        return { publishActivities, allPageNumber };
     }
 }

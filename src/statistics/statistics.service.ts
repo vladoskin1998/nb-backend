@@ -40,21 +40,22 @@ export class StatisticsService {
 
     async countUser() {
    
-        const today = new Date();
-        today.setUTCHours(0, 0, 0, 0);
+        const yesterday = new Date();
+        yesterday.setUTCHours(0, 0, 0, 0);
+        yesterday.setDate(yesterday.getDate() - 1);
 
         const totalUsers = await this.userModel.countDocuments()
 
         const activeUsers = await this.userIdentityModel
             .countDocuments({
-                createdUserDate: { $gte: today},
+                createdUserDate: { $gte: yesterday},
                 isGotAllProfileInfo: true,
             })
             .exec();
 
         const nonActiveUsers = await this.userIdentityModel
             .countDocuments({
-                createdUserDate: { $gte: today },
+                createdUserDate: { $gte: yesterday },
                 isGotAllProfileInfo: false,
             })
             .exec();
@@ -74,7 +75,7 @@ export class StatisticsService {
     }
 
     async saveStatistic(){
-        const getStatisticOneDay = await  this.countUser()
+        const getStatisticOneDay = await this.countUser()
         await this.statisticModel.create(getStatisticOneDay)
     }
 }

@@ -3,6 +3,7 @@ import { HydratedDocument, Types } from 'mongoose';
 import { PRIVACY } from 'src/enum/enum';
 import { User } from 'src/user/user.schema';
 import { Category, SubCategory } from './category.schema';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 
 export type PublishServiceDocument = HydratedDocument<PublishService>;
 
@@ -11,6 +12,9 @@ export class PublishService {
 
     @Prop({ type: Types.ObjectId, ref: User.name }) 
     userId: Types.ObjectId;
+
+    @Prop({ type: Types.ObjectId, ref: UserIdentity.name }) 
+    userIdentityId: Types.ObjectId;
 
     @Prop({ type: Types.ObjectId, ref: Category.name }) 
     servicesId: Types.ObjectId;
@@ -31,7 +35,13 @@ export class PublishService {
     coordinates: { lat: number | null; lng: number | null };
 
     @Prop({ default: PRIVACY.EVERYONE, enum:PRIVACY})
-    privacyPost: PRIVACY;
+    privacyPublishService: PRIVACY;
+
+    @Prop({default: new Date()})
+    createdPublishServiceDate: Date
+
+    @Prop()
+    addressLocation: string;
 }
 
 export const PublishServiceSchema = SchemaFactory.createForClass(PublishService);

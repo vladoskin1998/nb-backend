@@ -26,15 +26,15 @@
 import { FilesService } from '../files/files.service';
 import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
-import { ActivitiesDto } from './activities.dto';
+import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
 export declare class ActivitiesService {
     private readonly activitiesModel;
-    private readonly publishActivities;
+    private readonly publishActivitiesModel;
     private filesService;
-    constructor(activitiesModel: Model<Activities>, publishActivities: Model<PublishActivities>, filesService: FilesService);
+    constructor(activitiesModel: Model<Activities>, publishActivitiesModel: Model<PublishActivities>, filesService: FilesService);
     createActivitie({ activitie, files, }: {
         activitie: ActivitiesDto;
         files: Array<Express.Multer.File>;
@@ -60,5 +60,11 @@ export declare class ActivitiesService {
         files: Array<Express.Multer.File>;
     }): Promise<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
         _id: Types.ObjectId;
+    }>;
+    getPublishActivities(body: GetPublishActivitiesDto): Promise<{
+        publishActivities: Omit<Omit<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+            _id: Types.ObjectId;
+        }, never>, never>[];
+        allPageNumber: number;
     }>;
 }

@@ -25,7 +25,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Model, Types } from 'mongoose';
 import { Category, SubCategory } from './category.schema';
-import { CategoryDto, SubCategoryListDto, VisiableDto } from './category.dto';
+import { GetPublishServiceDto, MoveSubCategoryIDDto, VisiableDto } from './category.dto';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishService } from './publish-service.schema';
@@ -54,32 +54,32 @@ export declare class CategoryService {
     }): Promise<import("mongoose").Document<unknown, {}, SubCategory> & SubCategory & {
         _id: Types.ObjectId;
     }>;
-    createCategory({ category, subCategory, files, }: {
-        category: CategoryDto;
-        subCategory: SubCategoryListDto;
-        files: Array<Express.Multer.File>;
-    }): Promise<Category>;
-    addSubCategoriesToCategories({ idCategory, subCategory, files, }: {
-        idCategory: string;
-        subCategory: SubCategoryListDto;
-        files: Array<Express.Multer.File>;
-    }): Promise<void>;
-    createSubCategory({ idCategory, subCategory, }: {
-        idCategory: Types.ObjectId;
-        subCategory: SubCategoryListDto;
-    }): Promise<void>;
-    getAllCategories(): Promise<(import("mongoose").Document<unknown, {}, Category> & Category & {
+    getAllCategories(): Promise<{
+        categoryId: string;
+        name: string;
+        numberView: number;
+        isVisiable: boolean;
+        fileName: string;
         _id: Types.ObjectId;
-    })[]>;
-    getSubCategories(categoryId: string): Promise<(import("mongoose").Document<unknown, {}, SubCategory> & SubCategory & {
+    }[]>;
+    getSubCategories(categoryId: string): Promise<{
+        subCategoryId: string;
+        name: string;
+        fileName: string;
+        isVisiable: boolean;
+        numberView: number;
+        categoryId: Types.ObjectId;
         _id: Types.ObjectId;
-    })[]>;
+    }[]>;
     deleteCategory(catId: string): Promise<string>;
     deleteSubCategory(subCatId: string): Promise<Types.ObjectId>;
+    deletePublishCategory(pubCategiryId: string): Promise<Types.ObjectId>;
+    moveSubcategory({ newCategoryId, subCategiryId }: MoveSubCategoryIDDto): Promise<void>;
     visiableCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
     visiableSubCategory({ id, isVisiable, }: VisiableDto): Promise<VisiableDto>;
     addPublishServices({ payload, files }: {
         payload: {
+            userIdentityId: string;
             privacyPost: PRIVACY;
             title: string;
             text: string;
@@ -88,9 +88,17 @@ export declare class CategoryService {
                 lat: number;
                 lng: number;
             };
+            servicesId: string;
+            subServicesId: string;
         };
         files: Array<Express.Multer.File>;
     }): Promise<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
         _id: Types.ObjectId;
+    }>;
+    getPublishServices(body: GetPublishServiceDto): Promise<{
+        publishServices: Omit<Omit<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
+            _id: Types.ObjectId;
+        }, never>, never>[];
+        allPageNumber: number;
     }>;
 }

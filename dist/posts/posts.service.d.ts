@@ -40,6 +40,7 @@ export declare class PostsService {
     }>;
     addPost({ payload, files }: {
         payload: {
+            userIdentityId: string;
             privacyPost: PRIVACY;
             title: string;
             text: string;

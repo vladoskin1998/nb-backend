@@ -33,9 +33,10 @@ let UserIdentityService = class UserIdentityService {
     }
     async getIdentityInforamation(_id) {
         try {
+            console.log("getIdentityInforamation--->", _id);
             const userId = new mongoose_1.Types.ObjectId(_id);
             let userIdentity = await this.userIdentity.findOne({ user: userId });
-            const userIdentityId = userIdentity._id;
+            const userIdentityId = userIdentity === null || userIdentity === void 0 ? void 0 : userIdentity._id;
             if (!userIdentity) {
                 return await this.userIdentity.create({ user: userId });
             }

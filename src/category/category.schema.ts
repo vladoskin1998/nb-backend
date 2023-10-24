@@ -19,7 +19,7 @@ export class SubCategory {
     numberView: number;
 
     @Prop({ type: Types.ObjectId, ref: 'Category' })
-    category: Types.ObjectId;
+    categoryId: Types.ObjectId;
 }
 
 @Schema({ versionKey: false })

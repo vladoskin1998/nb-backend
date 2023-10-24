@@ -39,7 +39,7 @@ export class UserIdentity {
     @Prop({ default: new Date()  })
     createdUserDate: Date;
 
-    @Prop({ default: new Date()  })
+    @Prop({ default: null  })
     blockedUserDate: Date;
 
     @Prop({ default: null})
