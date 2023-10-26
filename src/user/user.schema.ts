@@ -22,12 +22,14 @@ export class User {
     @Prop({ default: false })
     isCheckedEmail: boolean;
 
+    @Prop({default: 0})
+    codeCheck: number;
+
     @Prop({ default: "" })
     fullName: string;
 
     @Prop({ default: "" })
     phone: string;
-
 
     @Prop({ default: METHOD_REGISTRATION.JWT })
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;

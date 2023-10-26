@@ -5,16 +5,17 @@ import { Model } from 'mongoose';
 import { AuthDto, RegistrationDto } from './auth.dto';
 import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
 import * as bcrypt from 'bcrypt';
-//import { MailService } from 'src/mailer/mail.service';
+import { MailService } from 'src/mailer/mail.service';
 import { JwtTokenService } from './jwt-auth.service';
 import { v4 as uuidv4 } from 'uuid';
+import { generateRandomFourDigitCode } from 'src/utils/utils';
 
 @Injectable()
 export class AuthService {
     constructor(
         @InjectModel(User.name) private userModel: Model<User>,
         private jwtTokenService: JwtTokenService,
-        //   private mailService: MailService,
+        private mailService: MailService,
     ) { }
 
     async messengerLogin(user: { email: string, methodRegistration: METHOD_REGISTRATION }) {
@@ -35,7 +36,7 @@ export class AuthService {
                 email,
                 password,
                 methodRegistration,
-                fullName: ''
+                fullName: 'Neighbor'
             });
         }
 
@@ -60,13 +61,19 @@ export class AuthService {
         }
 
         const hashPassword = await bcrypt.hash(password, 3);
+        const codeCheck = generateRandomFourDigitCode()
 
         const user = await this.userModel.create({
             email,
             password: hashPassword,
             methodRegistration,
-            fullName
+            fullName,
+            codeCheck,
         })
+
+        if ( methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration  ) {
+            await this.regenereteCodeByEmail({email})
+        }
 
         const { role, id } = user;
 
@@ -74,7 +81,11 @@ export class AuthService {
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
 
         const userObject = user.toObject();
+
         delete userObject.password
+        delete userObject.codeCheck
+
+     
 
         return { ...tokens, user: userObject };
     }
@@ -87,20 +98,27 @@ export class AuthService {
                 HttpStatus.BAD_REQUEST,
             );
         }
-       
-        
+
         const isPassEquals = await bcrypt.compare(password, user.password);
-        console.log(isPassEquals,methodRegistration);
+
         if (!isPassEquals && methodRegistration === METHOD_REGISTRATION.JWT) {
             throw new HttpException(`Bad password`, HttpStatus.BAD_REQUEST);
         }
-        const { role, id } = user;
+        const { role, id, isCheckedEmail } = user;
+
+        if(!isCheckedEmail){
+           await this.regenereteCodeByEmail({email})
+        }
+
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
 
         const userObject = user.toObject();
+
+        delete userObject.codeCheck
         delete userObject.password
 
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
+
         return { ...tokens, user: userObject };
     }
 
@@ -118,7 +136,7 @@ export class AuthService {
         if (!userData || !tokenFromDb) {
             throw new HttpException(`UNAUTHORIZED`, HttpStatus.UNAUTHORIZED);
         }
-        const user = await this.userModel.findById(userData.id).select('-isValidationUser -password');
+        const user = await this.userModel.findById(userData.id).select('-isValidationUser -password -codeCheckEmail');
         const { role, id, email } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
 
@@ -126,5 +144,32 @@ export class AuthService {
         return { ...tokens, user };
     }
 
+    async regenereteCodeByEmail({email}:{email:string}){
+        const user = await this.userModel.findOne({ email })
+        const codeCheck = generateRandomFourDigitCode()
+        await user.updateOne({codeCheck})
+        await this.mailService.sendMail({  
+            to: user.email,
+            subject: '',
+            text: `Your confirm code ${codeCheck}, please input code in field`
+            }
+        ) 
+        return 
+    }
 
+    async confirmCodeByEmail({ email, code }) {
+        const user = await this.userModel.findOne({ email })
+
+        if (user.codeCheck !== code) {
+            throw new HttpException(`Bad code`, HttpStatus.BAD_REQUEST);
+        }
+
+        await user.updateOne({
+            isCheckedEmail: true
+        })
+
+        return {
+            isCheckedEmail: true
+        }
+    }
 }

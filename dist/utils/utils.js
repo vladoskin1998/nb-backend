@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isValidNationality = exports.isNullOrString = exports.isDateOrString = void 0;
+exports.generateRandomFourDigitCode = exports.isValidNationality = exports.isNullOrString = exports.isDateOrString = void 0;
 function isDateOrString(value) {
     if (value instanceof Date) {
         return true;
@@ -30,4 +30,10 @@ function isValidNationality(nationality) {
     return true;
 }
 exports.isValidNationality = isValidNationality;
+const generateRandomFourDigitCode = () => {
+    const min = 1000;
+    const max = 9999;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+exports.generateRandomFourDigitCode = generateRandomFourDigitCode;
 //# sourceMappingURL=utils.js.map

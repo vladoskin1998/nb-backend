@@ -5,7 +5,6 @@ import { ConfigService } from '@nestjs/config';
 import { METHOD_REGISTRATION } from 'src/enum/enum';
 import { AuthService } from './auth.service';
 import { config } from 'dotenv';
-import path from 'path';
 
 config();
 
@@ -21,8 +20,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-     // callbackURL: 'http://localhost:5000/api/auth/google-redirect/',
-      //callbackURL: 'https://nb-nb.onrender.com/api/auth/google-redirect/',
       callbackURL:process.env.CALL_BACK_URL_GOOGLE,
       scope: ['email', 'profile'],
     });

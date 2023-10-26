@@ -18,6 +18,7 @@ const google_auth_service_1 = require("./google-auth.service");
 const fb_auth_service_1 = require("./fb-auth.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
 const user_schema_1 = require("../user/user.schema");
+const mail_module_1 = require("../mailer/mail.module");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -38,12 +39,14 @@ AuthModule = __decorate([
                     };
                 },
             }),
+            mail_module_1.MailModule
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService,
             google_auth_service_1.GoogleStrategy,
             fb_auth_service_1.FacebookStrategy,
-            jwt_auth_service_1.JwtTokenService],
+            jwt_auth_service_1.JwtTokenService,
+        ],
         exports: [
             jwt_auth_service_1.JwtTokenService
         ]

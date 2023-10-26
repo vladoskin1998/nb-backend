@@ -10,6 +10,7 @@ import { GoogleStrategy } from './google-auth.service';
 import { FacebookStrategy } from './fb-auth.service';
 import { JwtTokenService } from './jwt-auth.service';
 import { User, UserSchema } from '../user/user.schema';
+import { MailModule } from 'src/mailer/mail.module';
 
 @Module({
     imports: [
@@ -28,12 +29,15 @@ import { User, UserSchema } from '../user/user.schema';
                 };
             },
         }),
+        MailModule
     ],
     controllers: [AuthController],
     providers: [AuthService,
         GoogleStrategy,
         FacebookStrategy,
-        JwtTokenService],
+        JwtTokenService,
+        
+    ],
     exports: [
         JwtTokenService
     ]

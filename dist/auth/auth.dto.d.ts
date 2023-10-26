@@ -8,3 +8,10 @@ export declare class AuthDto {
 export declare class RegistrationDto extends AuthDto {
     fullName: string;
 }
+export declare class ConfirmCodeEmailDTO {
+    email: string;
+    code: number;
+}
+export declare class RegenerateCodeEmailDTO {
+    email: string;
+}

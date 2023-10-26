@@ -30,6 +30,7 @@ export declare class User {
     password: string;
     role: ROLES;
     isCheckedEmail: boolean;
+    codeCheck: number;
     fullName: string;
     phone: string;
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;

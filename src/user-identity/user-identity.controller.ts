@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Query, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { UserIdentityService } from './user-identity.service';
 import { QUALITYENUM } from 'src/enum/enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -17,6 +17,7 @@ export class UserIdentityController {
     }
     
     @Post('upload-avatar')
+    
     @UseInterceptors(FileInterceptor('file'))
     async profileUploadAvatar(
         @Body() body,

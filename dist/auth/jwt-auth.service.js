@@ -24,8 +24,8 @@ let JwtTokenService = class JwtTokenService {
         this.jwtService = jwtService;
     }
     generateTokens(payload) {
-        const accessToken = this.jwtService.sign(payload, { expiresIn: '1500s' });
-        const refreshToken = this.jwtService.sign(payload, { expiresIn: '300000s' });
+        const accessToken = this.jwtService.sign(payload, { expiresIn: '10s' });
+        const refreshToken = this.jwtService.sign(payload, { expiresIn: '3000000s' });
         return {
             accessToken,
             refreshToken,

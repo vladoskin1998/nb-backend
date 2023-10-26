@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsOptional, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
 import { METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
 
 export class AuthDto {
@@ -21,7 +21,22 @@ export class AuthDto {
   methodRegistration?: METHOD_REGISTRATION = METHOD_REGISTRATION.JWT;
 }
 
-export class RegistrationDto extends AuthDto{
+export class RegistrationDto extends AuthDto {
   @IsString()
   fullName: string
+}
+
+
+export class ConfirmCodeEmailDTO {
+  @IsEmail()
+  email: string;
+
+  @IsNumber()
+  code: number
+}
+
+
+export class RegenerateCodeEmailDTO {
+  @IsEmail()
+  email: string;
 }

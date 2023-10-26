@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegistrationDto = exports.AuthDto = void 0;
+exports.RegenerateCodeEmailDTO = exports.ConfirmCodeEmailDTO = exports.RegistrationDto = exports.AuthDto = void 0;
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
 class AuthDto {
@@ -46,4 +46,22 @@ __decorate([
     __metadata("design:type", String)
 ], RegistrationDto.prototype, "fullName", void 0);
 exports.RegistrationDto = RegistrationDto;
+class ConfirmCodeEmailDTO {
+}
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], ConfirmCodeEmailDTO.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], ConfirmCodeEmailDTO.prototype, "code", void 0);
+exports.ConfirmCodeEmailDTO = ConfirmCodeEmailDTO;
+class RegenerateCodeEmailDTO {
+}
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], RegenerateCodeEmailDTO.prototype, "email", void 0);
+exports.RegenerateCodeEmailDTO = RegenerateCodeEmailDTO;
 //# sourceMappingURL=auth.dto.js.map

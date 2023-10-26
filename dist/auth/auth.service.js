@@ -19,12 +19,15 @@ const user_schema_1 = require("../user/user.schema");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const bcrypt = require("bcrypt");
+const mail_service_1 = require("../mailer/mail.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
 const uuid_1 = require("uuid");
+const utils_1 = require("../utils/utils");
 let AuthService = class AuthService {
-    constructor(userModel, jwtTokenService) {
+    constructor(userModel, jwtTokenService, mailService) {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
+        this.mailService = mailService;
     }
     async messengerLogin(user) {
         const { email, methodRegistration } = user;
@@ -40,7 +43,7 @@ let AuthService = class AuthService {
                 email,
                 password,
                 methodRegistration,
-                fullName: ''
+                fullName: 'Neighbor'
             });
         }
         return await this.login({ email, password: candidate === null || candidate === void 0 ? void 0 : candidate.password, methodRegistration });
@@ -51,17 +54,23 @@ let AuthService = class AuthService {
             throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(password, 3);
+        const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
         const user = await this.userModel.create({
             email,
             password: hashPassword,
             methodRegistration,
-            fullName
+            fullName,
+            codeCheck,
         });
+        if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
+            await this.regenereteCodeByEmail({ email });
+        }
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         const userObject = user.toObject();
         delete userObject.password;
+        delete userObject.codeCheck;
         return Object.assign(Object.assign({}, tokens), { user: userObject });
     }
     async login({ email, password, methodRegistration = enum_1.METHOD_REGISTRATION.JWT }) {
@@ -70,13 +79,16 @@ let AuthService = class AuthService {
             throw new common_1.HttpException(`User ${email} not found`, common_1.HttpStatus.BAD_REQUEST);
         }
         const isPassEquals = await bcrypt.compare(password, user.password);
-        console.log(isPassEquals, methodRegistration);
         if (!isPassEquals && methodRegistration === enum_1.METHOD_REGISTRATION.JWT) {
             throw new common_1.HttpException(`Bad password`, common_1.HttpStatus.BAD_REQUEST);
         }
-        const { role, id } = user;
+        const { role, id, isCheckedEmail } = user;
+        if (!isCheckedEmail) {
+            await this.regenereteCodeByEmail({ email });
+        }
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         const userObject = user.toObject();
+        delete userObject.codeCheck;
         delete userObject.password;
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         return Object.assign(Object.assign({}, tokens), { user: userObject });
@@ -94,18 +106,42 @@ let AuthService = class AuthService {
         if (!userData || !tokenFromDb) {
             throw new common_1.HttpException(`UNAUTHORIZED`, common_1.HttpStatus.UNAUTHORIZED);
         }
-        const user = await this.userModel.findById(userData.id).select('-isValidationUser -password');
+        const user = await this.userModel.findById(userData.id).select('-isValidationUser -password -codeCheckEmail');
         const { role, id, email } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         return Object.assign(Object.assign({}, tokens), { user });
+    }
+    async regenereteCodeByEmail({ email }) {
+        const user = await this.userModel.findOne({ email });
+        const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
+        await user.updateOne({ codeCheck });
+        await this.mailService.sendMail({
+            to: user.email,
+            subject: '',
+            text: `Your confirm code ${codeCheck}, please input code in field`
+        });
+        return;
+    }
+    async confirmCodeByEmail({ email, code }) {
+        const user = await this.userModel.findOne({ email });
+        if (user.codeCheck !== code) {
+            throw new common_1.HttpException(`Bad code`, common_1.HttpStatus.BAD_REQUEST);
+        }
+        await user.updateOne({
+            isCheckedEmail: true
+        });
+        return {
+            isCheckedEmail: true
+        };
     }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
-        jwt_auth_service_1.JwtTokenService])
+        jwt_auth_service_1.JwtTokenService,
+        mail_service_1.MailService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

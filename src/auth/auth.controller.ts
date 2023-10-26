@@ -2,6 +2,7 @@ import {
     Body,
     Controller,
     Get,
+    HttpCode,
     Post,
     Redirect,
     Req,
@@ -11,7 +12,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GoogleOAuthGuard } from './google-auth.guard';
-import { AuthDto, RegistrationDto } from './auth.dto';
+import { AuthDto, ConfirmCodeEmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
@@ -29,14 +30,12 @@ export class AuthController {
     @UseGuards(GoogleOAuthGuard)
     async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
         const payload = await this.authService.messengerLogin(req.user as any);
-        // console.log('refreshToken', payload.refreshToken);
+   
 
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
-
-        // return res.redirect('http://localhost:3000');
         return res.redirect(this.configService.get('CALL_BACK_URL_WEB_APP'));
     }
 
@@ -51,14 +50,12 @@ export class AuthController {
         @Res() res: Response,
     ): Promise<any> {
         const payload = await this.authService.messengerLogin(req.user as any);
-        // console.log('refreshToken', payload.refreshToken);
-
+    
         res.cookie('refreshToken', payload.refreshToken, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         });
 
-        //return res.redirect('https://nb-nb.onrender.com');
         return res.redirect(this.configService.get('CALL_BACK_URL_WEB_APP'));
     }
 
@@ -113,5 +110,19 @@ export class AuthController {
         await this.authService.logout(refreshToken);
         res.clearCookie('refreshToken');
         return 'LOGOUT';
+    }
+
+    @Post('regenerete-code-email')
+    async regenereteCodeByEmail(
+        @Body() body: RegenerateCodeEmailDTO
+    ){
+        return await this.authService.regenereteCodeByEmail(body)
+    }
+
+    @Post('confirm-code-email')
+    async confirmCodeByEmail(
+        @Body() body: ConfirmCodeEmailDTO
+    ){
+        return await this.authService.confirmCodeByEmail(body)
     }
 }

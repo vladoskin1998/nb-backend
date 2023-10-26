@@ -14,6 +14,7 @@ import { UserIdentityModule } from './user-identity/user-identity.module';
 import { MessengerModule } from './messenger/messenger.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { PostsModule } from './posts/posts.module';
+import { MailModule } from './mailer/mail.module';
 
 
 @Module({
@@ -49,7 +50,7 @@ import { PostsModule } from './posts/posts.module';
     MessengerModule,
     StatisticsModule,
     PostsModule,
-
+    MailModule
     
   ],
 })

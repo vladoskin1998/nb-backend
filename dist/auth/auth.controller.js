@@ -73,6 +73,12 @@ let AuthController = class AuthController {
         res.clearCookie('refreshToken');
         return 'LOGOUT';
     }
+    async regenereteCodeByEmail(body) {
+        return await this.authService.regenereteCodeByEmail(body);
+    }
+    async confirmCodeByEmail(body) {
+        return await this.authService.confirmCodeByEmail(body);
+    }
 };
 __decorate([
     (0, common_1.Get)('google'),
@@ -138,6 +144,20 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Post)('regenerete-code-email'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.RegenerateCodeEmailDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "regenereteCodeByEmail", null);
+__decorate([
+    (0, common_1.Post)('confirm-code-email'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.ConfirmCodeEmailDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "confirmCodeByEmail", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

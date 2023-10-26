@@ -31,6 +31,10 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isCheckedEmail", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], User.prototype, "codeCheck", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ default: "" }),
     __metadata("design:type", String)
 ], User.prototype, "fullName", void 0);
