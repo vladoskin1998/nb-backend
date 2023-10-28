@@ -1,10 +1,10 @@
 import { IsNumber, IsString } from "class-validator";
 
 
-export class GetPostsDto{
+export class LikesUpdateDTO{
 
-    @IsNumber()
-    pageNumber: number
+    @IsString()
+    likeId: number
 
     @IsString()
     userId: string

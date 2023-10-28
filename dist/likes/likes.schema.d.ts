@@ -1,4 +1,3 @@
-/// <reference types="multer" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -22,18 +21,14 @@
 /// <reference types="mongoose/types/utility" />
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
-/// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
-import { PostsService } from './posts.service';
-import { GetPostsDto } from './posts.dto';
-export declare class PostsController {
-    private readonly postsService;
-    constructor(postsService: PostsService);
-    getPosts(body: GetPostsDto): Promise<{
-        posts: any;
-        allPageNumber: number;
-    }>;
-    addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-posts.schema").PublishPosts> & import("./publish-posts.schema").PublishPosts & {
-        _id: import("mongoose").Types.ObjectId;
-    }>;
+import { HydratedDocument, Types } from 'mongoose';
+export type LikesDocument = HydratedDocument<Likes>;
+export declare class Likes {
+    usersId: Array<String>;
 }
+export declare const LikesSchema: import("mongoose").Schema<Likes, import("mongoose").Model<Likes, any, any, any, import("mongoose").Document<unknown, any, Likes> & Likes & {
+    _id: Types.ObjectId;
+}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, Likes, import("mongoose").Document<unknown, {}, Likes> & Likes & {
+    _id: Types.ObjectId;
+}>;

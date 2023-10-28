@@ -35,7 +35,8 @@ export class UserIdentityController {
         @UploadedFiles() files:Array<Express.Multer.File>,
     ) {
         const userId = JSON.parse(body.payload)?._id
-        return await this.userIdentityService.profileUploadCertificates(files, userId)
+        const uploadedCertificates = JSON.parse(body.payload)?.uploadedCertificates
+        return await this.userIdentityService.profileUploadCertificates(files, userId, uploadedCertificates)
 
     }
 

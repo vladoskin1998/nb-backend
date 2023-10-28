@@ -28,14 +28,14 @@ import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
 import { GetPostsDto } from './posts.dto';
+import { Likes } from 'src/likes/likes.schema';
 export declare class PostsService {
     private readonly publishPostsModel;
+    private readonly likesModel;
     private filesService;
-    constructor(publishPostsModel: Model<PublishPosts>, filesService: FilesService);
+    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, filesService: FilesService);
     getPosts(body: GetPostsDto): Promise<{
-        posts: Omit<Omit<import("mongoose").Document<unknown, {}, PublishPosts> & PublishPosts & {
-            _id: Types.ObjectId;
-        }, never>, never>[];
+        posts: any;
         allPageNumber: number;
     }>;
     addPost({ payload, files }: {

@@ -28,6 +28,7 @@ export type PublishPostsDocument = HydratedDocument<PublishPosts>;
 export declare class PublishPosts {
     userId: Types.ObjectId;
     userIdentityId: Types.ObjectId;
+    likes: Types.ObjectId;
     title: string;
     text: string;
     filesName: string[];

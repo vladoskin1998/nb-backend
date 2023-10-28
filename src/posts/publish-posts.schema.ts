@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { PRIVACY } from 'src/enum/enum';
+import { Likes } from 'src/likes/likes.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { User } from 'src/user/user.schema';
 
@@ -14,6 +15,9 @@ export class PublishPosts {
 
     @Prop({ type: Types.ObjectId, ref: UserIdentity.name }) 
     userIdentityId: Types.ObjectId;
+
+    @Prop({ type: Types.ObjectId, ref: Likes.name }) 
+    likes: Types.ObjectId;
 
     @Prop()
     title: string;
@@ -36,7 +40,6 @@ export class PublishPosts {
     @Prop()
     addressLocation: string;
     
-
 }
 
 export const PublishPostsSchema = SchemaFactory.createForClass(PublishPosts);

@@ -22,6 +22,7 @@ const messenger_module_1 = require("./messenger/messenger.module");
 const statistics_module_1 = require("./statistics/statistics.module");
 const posts_module_1 = require("./posts/posts.module");
 const mail_module_1 = require("./mailer/mail.module");
+const likes_module_1 = require("./likes/likes.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -57,7 +58,8 @@ AppModule = __decorate([
             messenger_module_1.MessengerModule,
             statistics_module_1.StatisticsModule,
             posts_module_1.PostsModule,
-            mail_module_1.MailModule
+            mail_module_1.MailModule,
+            likes_module_1.LikesModule
         ],
     })
 ], AppModule);

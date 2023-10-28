@@ -86,11 +86,14 @@ let UserIdentityService = class UserIdentityService {
             throw error;
         }
     }
-    async profileUploadCertificates(files, _id) {
+    async profileUploadCertificates(files, _id, uploadedCertificates) {
         const userId = new mongoose_1.Types.ObjectId(_id);
         try {
             let user = await this.userIdentity.findOne({ user: userId });
-            const certificatesFileName = await this.filesService.uploadFiles(files, 'uploads/certificates', false);
+            const missingFiles = user.certificatesFileName.filter((fileName) => !uploadedCertificates.includes(fileName));
+            await this.filesService.deleteFiles(missingFiles, 'uploads/certificates');
+            const uploadedFiles = await this.filesService.uploadFiles(files, 'uploads/certificates', false);
+            const certificatesFileName = [...uploadedCertificates, ...uploadedFiles];
             await user.updateOne({ certificatesFileName });
             return { certificatesFileName };
         }

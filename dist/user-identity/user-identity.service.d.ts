@@ -88,7 +88,7 @@ export declare class UserIdentityService {
     profileUploadAvatar(file: Express.Multer.File, _id: string): Promise<{
         avatarFileName: string;
     }>;
-    profileUploadCertificates(files: Array<Express.Multer.File>, _id: string): Promise<{
+    profileUploadCertificates(files: Array<Express.Multer.File>, _id: string, uploadedCertificates: string[]): Promise<{
         certificatesFileName: string[];
     }>;
     profileTextInfo(body: ProfileTextInfoDTO): Promise<{

@@ -18,14 +18,17 @@ const publish_posts_schema_1 = require("./publish-posts.schema");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const files_service_1 = require("../files/files.service");
+const likes_schema_1 = require("../likes/likes.schema");
 let PostsService = class PostsService {
-    constructor(publishPostsModel, filesService) {
+    constructor(publishPostsModel, likesModel, filesService) {
         this.publishPostsModel = publishPostsModel;
+        this.likesModel = likesModel;
         this.filesService = filesService;
     }
     async getPosts(body) {
         const pageSize = 50;
         const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments()) / pageSize);
+        const userId = body.userId;
         const skip = (body.pageNumber - 1) * pageSize;
         const posts = await this.publishPostsModel
             .find()
@@ -40,15 +43,23 @@ let PostsService = class PostsService {
             path: 'userIdentityId',
             select: 'avatarFileName',
         })
+            .populate({
+            path: 'likes',
+        })
             .exec();
-        return { posts, allPageNumber };
+        const postWithLikes = posts.map((post) => {
+            var _a, _b, _c;
+            return (Object.assign(Object.assign({}, post.toObject()), { likeId: ((_a = post.toObject().likes) === null || _a === void 0 ? void 0 : _a._id) || '', likes: post.likes ? (_b = post.likes) === null || _b === void 0 ? void 0 : _b.usersId.length : 0, isLiked: (_c = post.likes) === null || _c === void 0 ? void 0 : _c.usersId.includes(userId) }));
+        });
+        return { posts: postWithLikes, allPageNumber };
     }
     async addPost({ payload, files }) {
         try {
             const userId = new mongoose_2.Types.ObjectId(payload.userId);
             const userIdentityId = new mongoose_2.Types.ObjectId(payload.userIdentityId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false);
-            return await this.publishPostsModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId }));
+            const likesId = (await this.likesModel.create({}))._id;
+            return await this.publishPostsModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId, likes: likesId }));
         }
         catch (error) {
         }
@@ -57,7 +68,9 @@ let PostsService = class PostsService {
 PostsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(publish_posts_schema_1.PublishPosts.name)),
+    __param(1, (0, mongoose_1.InjectModel)(likes_schema_1.Likes.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         files_service_1.FilesService])
 ], PostsService);
 exports.PostsService = PostsService;

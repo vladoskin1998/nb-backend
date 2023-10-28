@@ -15,7 +15,7 @@ import { MessengerModule } from './messenger/messenger.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { PostsModule } from './posts/posts.module';
 import { MailModule } from './mailer/mail.module';
-
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -50,7 +50,8 @@ import { MailModule } from './mailer/mail.module';
     MessengerModule,
     StatisticsModule,
     PostsModule,
-    MailModule
+    MailModule,
+    LikesModule
     
   ],
 })

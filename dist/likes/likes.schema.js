@@ -9,17 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetPostsDto = void 0;
-const class_validator_1 = require("class-validator");
-class GetPostsDto {
-}
+exports.LikesSchema = exports.Likes = void 0;
+const mongoose_1 = require("@nestjs/mongoose");
+let Likes = class Likes {
+};
 __decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], GetPostsDto.prototype, "pageNumber", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], GetPostsDto.prototype, "userId", void 0);
-exports.GetPostsDto = GetPostsDto;
-//# sourceMappingURL=posts.dto.js.map
+    (0, mongoose_1.Prop)({ type: (Array), default: [] }),
+    __metadata("design:type", Array)
+], Likes.prototype, "usersId", void 0);
+Likes = __decorate([
+    (0, mongoose_1.Schema)({ versionKey: false })
+], Likes);
+exports.Likes = Likes;
+exports.LikesSchema = mongoose_1.SchemaFactory.createForClass(Likes);
+//# sourceMappingURL=likes.schema.js.map

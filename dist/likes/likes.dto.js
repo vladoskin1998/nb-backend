@@ -9,17 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetPostsDto = void 0;
+exports.LikesUpdateDTO = void 0;
 const class_validator_1 = require("class-validator");
-class GetPostsDto {
+class LikesUpdateDTO {
 }
 __decorate([
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", Number)
-], GetPostsDto.prototype, "pageNumber", void 0);
+], LikesUpdateDTO.prototype, "likeId", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], GetPostsDto.prototype, "userId", void 0);
-exports.GetPostsDto = GetPostsDto;
-//# sourceMappingURL=posts.dto.js.map
+], LikesUpdateDTO.prototype, "userId", void 0);
+exports.LikesUpdateDTO = LikesUpdateDTO;
+//# sourceMappingURL=likes.dto.js.map

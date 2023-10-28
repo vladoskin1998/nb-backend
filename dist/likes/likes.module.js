@@ -6,30 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostsModule = void 0;
+exports.LikesModule = void 0;
 const common_1 = require("@nestjs/common");
-const posts_service_1 = require("./posts.service");
-const posts_controller_1 = require("./posts.controller");
-const files_module_1 = require("../files/files.module");
+const likes_service_1 = require("./likes.service");
+const likes_controller_1 = require("./likes.controller");
 const mongoose_1 = require("@nestjs/mongoose");
-const platform_express_1 = require("@nestjs/platform-express");
-const publish_posts_schema_1 = require("./publish-posts.schema");
-const likes_schema_1 = require("../likes/likes.schema");
-let PostsModule = class PostsModule {
+const likes_schema_1 = require("./likes.schema");
+let LikesModule = class LikesModule {
 };
-PostsModule = __decorate([
+LikesModule = __decorate([
     (0, common_1.Module)({
         imports: [
             mongoose_1.MongooseModule.forFeature([
-                { name: publish_posts_schema_1.PublishPosts.name, schema: publish_posts_schema_1.PublishPostsSchema },
                 { name: likes_schema_1.Likes.name, schema: likes_schema_1.LikesSchema },
             ]),
-            platform_express_1.MulterModule.register({}),
-            files_module_1.FilesModule,
         ],
-        controllers: [posts_controller_1.PostsController],
-        providers: [posts_service_1.PostsService]
+        controllers: [likes_controller_1.LikesController],
+        providers: [likes_service_1.LikesService]
     })
-], PostsModule);
-exports.PostsModule = PostsModule;
-//# sourceMappingURL=posts.module.js.map
+], LikesModule);
+exports.LikesModule = LikesModule;
+//# sourceMappingURL=likes.module.js.map

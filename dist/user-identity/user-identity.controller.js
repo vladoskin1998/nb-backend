@@ -33,9 +33,10 @@ let UserIdentityController = class UserIdentityController {
         return await this.userIdentityService.profileUploadAvatar(file, userId);
     }
     async profileUploadCertificates(body, files) {
-        var _a;
+        var _a, _b;
         const userId = (_a = JSON.parse(body.payload)) === null || _a === void 0 ? void 0 : _a._id;
-        return await this.userIdentityService.profileUploadCertificates(files, userId);
+        const uploadedCertificates = (_b = JSON.parse(body.payload)) === null || _b === void 0 ? void 0 : _b.uploadedCertificates;
+        return await this.userIdentityService.profileUploadCertificates(files, userId, uploadedCertificates);
     }
     async profileTextInfo(body) {
         return await this.userIdentityService.profileTextInfo(body);

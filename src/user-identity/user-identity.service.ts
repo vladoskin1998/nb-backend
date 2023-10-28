@@ -89,11 +89,20 @@ export class UserIdentityService {
         }
     }
 
-    async profileUploadCertificates(files: Array<Express.Multer.File>, _id: string) {
+    async profileUploadCertificates(files: Array<Express.Multer.File>, _id: string, uploadedCertificates: string[]) {
         const userId = new Types.ObjectId(_id)
         try {
             let user = await this.userIdentity.findOne({ user: userId })
-            const certificatesFileName = await this.filesService.uploadFiles(files, 'uploads/certificates', false)
+
+            const missingFiles = user.certificatesFileName.filter(
+                (fileName) => !uploadedCertificates.includes(fileName)
+            );
+            await this.filesService.deleteFiles(missingFiles, 'uploads/certificates')
+
+            const uploadedFiles = await this.filesService.uploadFiles(files, 'uploads/certificates', false)
+
+            const certificatesFileName = [...uploadedCertificates, ...uploadedFiles]
+
             await user.updateOne({ certificatesFileName })
             return { certificatesFileName }
         } catch (error) {
