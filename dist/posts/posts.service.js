@@ -19,39 +19,103 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const files_service_1 = require("../files/files.service");
 const likes_schema_1 = require("../likes/likes.schema");
+const publish_comments_schema_1 = require("./publish-comments.schema");
 let PostsService = class PostsService {
-    constructor(publishPostsModel, likesModel, filesService) {
+    constructor(publishPostsModel, likesModel, publishCommentsModel, filesService) {
         this.publishPostsModel = publishPostsModel;
         this.likesModel = likesModel;
+        this.publishCommentsModel = publishCommentsModel;
         this.filesService = filesService;
     }
     async getPosts(body) {
-        const pageSize = 50;
-        const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments()) / pageSize);
-        const userId = body.userId;
-        const skip = (body.pageNumber - 1) * pageSize;
-        const posts = await this.publishPostsModel
-            .find()
-            .skip(skip)
-            .limit(pageSize)
-            .sort({ createdPostDate: -1 })
-            .populate({
-            path: 'userId',
-            select: 'fullName',
-        })
-            .populate({
-            path: 'userIdentityId',
-            select: 'avatarFileName',
-        })
-            .populate({
-            path: 'likes',
-        })
-            .exec();
-        const postWithLikes = posts.map((post) => {
-            var _a, _b, _c;
-            return (Object.assign(Object.assign({}, post.toObject()), { likeId: ((_a = post.toObject().likes) === null || _a === void 0 ? void 0 : _a._id) || '', likes: post.likes ? (_b = post.likes) === null || _b === void 0 ? void 0 : _b.usersId.length : 0, isLiked: (_c = post.likes) === null || _c === void 0 ? void 0 : _c.usersId.includes(userId) }));
-        });
-        return { posts: postWithLikes, allPageNumber };
+        try {
+            const pageSize = 50;
+            const allPageNumber = Math.ceil((await this.publishPostsModel.countDocuments()) / pageSize);
+            const userId = body.userId;
+            const skip = (body.pageNumber - 1) * pageSize;
+            const posts = await this.publishPostsModel
+                .find()
+                .skip(skip)
+                .limit(pageSize)
+                .sort({ createdPostDate: -1 })
+                .populate({
+                path: 'userId',
+                select: 'fullName',
+            })
+                .populate({
+                path: 'userIdentityId',
+                select: 'avatarFileName',
+            })
+                .populate({
+                path: 'likes',
+            })
+                .exec();
+            const postWithLikes = await Promise.all(posts.map(async (post) => {
+                var _a, _b, _c;
+                const countComments = await this.publishCommentsModel.find({ postId: post._id }).countDocuments();
+                return Object.assign(Object.assign({}, post.toObject()), { likeId: ((_a = post.toObject().likes) === null || _a === void 0 ? void 0 : _a._id) || '', likes: post.likes ? (_b = post.likes) === null || _b === void 0 ? void 0 : _b.usersId.length : 0, isLiked: (_c = post.likes) === null || _c === void 0 ? void 0 : _c.usersId.includes(userId), countComments });
+            }));
+            return { posts: postWithLikes, allPageNumber };
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    async getPost(body) {
+        var _a, _b, _c;
+        try {
+            const postId = new mongoose_2.Types.ObjectId(body.postId);
+            let post = await this.publishPostsModel
+                .findOne({ _id: postId })
+                .populate({
+                path: 'userId',
+                select: 'fullName',
+            })
+                .populate({
+                path: 'userIdentityId',
+                select: 'avatarFileName',
+            })
+                .populate({
+                path: 'likes',
+            })
+                .exec();
+            await post.updateOne({ viewPost: post.viewPost + 1 });
+            const postWithLike = Object.assign(Object.assign({}, post.toObject()), { likeId: ((_a = post.toObject().likes) === null || _a === void 0 ? void 0 : _a._id) || '', likes: post.likes ? (_b = post.likes) === null || _b === void 0 ? void 0 : _b.usersId.length : 0, isLiked: (_c = post.likes) === null || _c === void 0 ? void 0 : _c.usersId.includes(body.userId) });
+            return {
+                post: postWithLike,
+            };
+        }
+        catch (error) {
+        }
+    }
+    async getComments(body) {
+        try {
+            const postId = new mongoose_2.Types.ObjectId(body.postId);
+            const countComments = await this.publishCommentsModel.find({ postId }).countDocuments();
+            const comments = await this.publishCommentsModel
+                .find({ postId })
+                .sort({ createdDateComment: -1 })
+                .limit(10)
+                .populate({
+                path: 'userId',
+                select: 'fullName',
+            })
+                .populate({
+                path: 'userIdentityId',
+                select: 'avatarFileName',
+            })
+                .populate({
+                path: 'likes',
+            })
+                .exec();
+            const commentWithLikes = comments.map((comment) => {
+                var _a, _b, _c;
+                return (Object.assign(Object.assign({}, comment.toObject()), { likeId: ((_a = comment.toObject().likes) === null || _a === void 0 ? void 0 : _a._id) || '', likes: comment.likes ? (_b = comment.likes) === null || _b === void 0 ? void 0 : _b.usersId.length : 0, isLiked: (_c = comment.likes) === null || _c === void 0 ? void 0 : _c.usersId.includes(body.userId) }));
+            });
+            return { comments: commentWithLikes, countComments };
+        }
+        catch (error) {
+        }
     }
     async addPost({ payload, files }) {
         try {
@@ -64,12 +128,31 @@ let PostsService = class PostsService {
         catch (error) {
         }
     }
+    async addComment(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body.userId);
+            const userIdentityId = new mongoose_2.Types.ObjectId(body.userIdentityId);
+            const likes = (await this.likesModel.create({}))._id;
+            const postId = new mongoose_2.Types.ObjectId(body.postId);
+            return await this.publishCommentsModel.create({
+                userId,
+                userIdentityId,
+                likes,
+                postId,
+                text: body.text
+            });
+        }
+        catch (error) {
+        }
+    }
 };
 PostsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(publish_posts_schema_1.PublishPosts.name)),
     __param(1, (0, mongoose_1.InjectModel)(likes_schema_1.Likes.name)),
+    __param(2, (0, mongoose_1.InjectModel)(publish_comments_schema_1.PublishComments.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model,
         files_service_1.FilesService])
 ], PostsService);

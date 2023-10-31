@@ -40,6 +40,8 @@ export class PublishPosts {
     @Prop()
     addressLocation: string;
     
+    @Prop({default: 0})
+    viewPost: number;
 }
 
 export const PublishPostsSchema = SchemaFactory.createForClass(PublishPosts);

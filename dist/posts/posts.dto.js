@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetPostsDto = void 0;
+exports.AddCommentDto = exports.GetPostDto = exports.GetPostsDto = void 0;
 const class_validator_1 = require("class-validator");
 class GetPostsDto {
 }
@@ -22,4 +22,26 @@ __decorate([
     __metadata("design:type", String)
 ], GetPostsDto.prototype, "userId", void 0);
 exports.GetPostsDto = GetPostsDto;
+class GetPostDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetPostDto.prototype, "postId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetPostDto.prototype, "userId", void 0);
+exports.GetPostDto = GetPostDto;
+class AddCommentDto extends GetPostDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddCommentDto.prototype, "userIdentityId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddCommentDto.prototype, "text", void 0);
+exports.AddCommentDto = AddCommentDto;
 //# sourceMappingURL=posts.dto.js.map

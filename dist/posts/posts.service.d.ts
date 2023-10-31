@@ -27,16 +27,25 @@ import { PublishPosts } from './publish-posts.schema';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
-import { GetPostsDto } from './posts.dto';
+import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
+import { PublishComments } from './publish-comments.schema';
 export declare class PostsService {
     private readonly publishPostsModel;
     private readonly likesModel;
+    private readonly publishCommentsModel;
     private filesService;
-    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, filesService: FilesService);
+    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, filesService: FilesService);
     getPosts(body: GetPostsDto): Promise<{
-        posts: any;
+        posts: any[];
         allPageNumber: number;
+    }>;
+    getPost(body: GetPostDto): Promise<{
+        post: any;
+    }>;
+    getComments(body: GetPostDto): Promise<{
+        comments: any;
+        countComments: number;
     }>;
     addPost({ payload, files }: {
         payload: {
@@ -52,6 +61,9 @@ export declare class PostsService {
         };
         files: Array<Express.Multer.File>;
     }): Promise<import("mongoose").Document<unknown, {}, PublishPosts> & PublishPosts & {
+        _id: Types.ObjectId;
+    }>;
+    addComment(body: AddCommentDto): Promise<import("mongoose").Document<unknown, {}, PublishComments> & PublishComments & {
         _id: Types.ObjectId;
     }>;
 }

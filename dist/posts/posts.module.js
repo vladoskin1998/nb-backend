@@ -15,6 +15,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const platform_express_1 = require("@nestjs/platform-express");
 const publish_posts_schema_1 = require("./publish-posts.schema");
 const likes_schema_1 = require("../likes/likes.schema");
+const publish_comments_schema_1 = require("./publish-comments.schema");
 let PostsModule = class PostsModule {
 };
 PostsModule = __decorate([
@@ -22,6 +23,7 @@ PostsModule = __decorate([
         imports: [
             mongoose_1.MongooseModule.forFeature([
                 { name: publish_posts_schema_1.PublishPosts.name, schema: publish_posts_schema_1.PublishPostsSchema },
+                { name: publish_comments_schema_1.PublishComments.name, schema: publish_comments_schema_1.PublishCommentsSchema },
                 { name: likes_schema_1.Likes.name, schema: likes_schema_1.LikesSchema },
             ]),
             platform_express_1.MulterModule.register({}),

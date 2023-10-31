@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UploadedFiles, UseInterceptors, } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { GetPostsDto } from './posts.dto';
+import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -12,6 +12,16 @@ export class PostsController {
         return await this.postsService.getPosts(body)
     }
 
+    @Post('get-post')
+    async getPost(@Body() body: GetPostDto) {
+        return await this.postsService.getPost(body)
+    }
+    
+    @Post('get-comments')
+    async getComments(@Body() body: GetPostDto) {
+        return await this.postsService.getComments(body)
+    }
+
     @Post('add-post')
     @UseInterceptors(FilesInterceptor('files'))
     async addPost(
@@ -20,6 +30,11 @@ export class PostsController {
     ) {
        const payload = JSON.parse(body.payload);
        return await this.postsService.addPost({files, payload})
+    }
+
+    @Post('add-comment')
+    async addComment(@Body() body: AddCommentDto) {
+        return await this.postsService.addComment(body)
     }
 
 }

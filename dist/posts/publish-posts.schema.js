@@ -58,6 +58,10 @@ __decorate([
     (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
 ], PublishPosts.prototype, "addressLocation", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: 0 }),
+    __metadata("design:type", Number)
+], PublishPosts.prototype, "viewPost", void 0);
 PublishPosts = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], PublishPosts);

@@ -23,26 +23,17 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { HydratedDocument, Types } from 'mongoose';
-import { PRIVACY } from 'src/enum/enum';
-export type PublishPostsDocument = HydratedDocument<PublishPosts>;
-export declare class PublishPosts {
+export type PublishCommentsDocument = HydratedDocument<PublishComments>;
+export declare class PublishComments {
     userId: Types.ObjectId;
     userIdentityId: Types.ObjectId;
+    postId: Types.ObjectId;
     likes: Types.ObjectId;
-    title: string;
     text: string;
-    filesName: string[];
-    coordinates: {
-        lat: number | null;
-        lng: number | null;
-    };
-    privacyPost: PRIVACY;
-    createdPostDate: Date;
-    addressLocation: string;
-    viewPost: number;
+    createdDateComment: Date;
 }
-export declare const PublishPostsSchema: import("mongoose").Schema<PublishPosts, import("mongoose").Model<PublishPosts, any, any, any, import("mongoose").Document<unknown, any, PublishPosts> & PublishPosts & {
+export declare const PublishCommentsSchema: import("mongoose").Schema<PublishComments, import("mongoose").Model<PublishComments, any, any, any, import("mongoose").Document<unknown, any, PublishComments> & PublishComments & {
     _id: Types.ObjectId;
-}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, PublishPosts, import("mongoose").Document<unknown, {}, PublishPosts> & PublishPosts & {
+}, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, PublishComments, import("mongoose").Document<unknown, {}, PublishComments> & PublishComments & {
     _id: Types.ObjectId;
 }>;

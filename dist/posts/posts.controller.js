@@ -24,9 +24,18 @@ let PostsController = class PostsController {
     async getPosts(body) {
         return await this.postsService.getPosts(body);
     }
+    async getPost(body) {
+        return await this.postsService.getPost(body);
+    }
+    async getComments(body) {
+        return await this.postsService.getComments(body);
+    }
     async addPost(body, files) {
         const payload = JSON.parse(body.payload);
         return await this.postsService.addPost({ files, payload });
+    }
+    async addComment(body) {
+        return await this.postsService.addComment(body);
     }
 };
 __decorate([
@@ -37,6 +46,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "getPosts", null);
 __decorate([
+    (0, common_1.Post)('get-post'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.GetPostDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "getPost", null);
+__decorate([
+    (0, common_1.Post)('get-comments'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.GetPostDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "getComments", null);
+__decorate([
     (0, common_1.Post)('add-post'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
     __param(0, (0, common_1.Body)()),
@@ -45,6 +68,13 @@ __decorate([
     __metadata("design:paramtypes", [Object, Array]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "addPost", null);
+__decorate([
+    (0, common_1.Post)('add-comment'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.AddCommentDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "addComment", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService])

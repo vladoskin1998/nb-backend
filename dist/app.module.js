@@ -59,7 +59,7 @@ AppModule = __decorate([
             statistics_module_1.StatisticsModule,
             posts_module_1.PostsModule,
             mail_module_1.MailModule,
-            likes_module_1.LikesModule
+            likes_module_1.LikesModule,
         ],
     })
 ], AppModule);

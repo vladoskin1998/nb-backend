@@ -11,3 +11,20 @@ export class GetPostsDto{
 
 }
 
+export class GetPostDto{
+    
+    @IsString()
+    postId: string
+
+    @IsString()
+    userId: string
+
+}
+
+export class AddCommentDto extends GetPostDto{
+    @IsString()
+    userIdentityId: string
+
+    @IsString()
+    text: string;
+}

@@ -25,15 +25,25 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { PostsService } from './posts.service';
-import { GetPostsDto } from './posts.dto';
+import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
     getPosts(body: GetPostsDto): Promise<{
-        posts: any;
+        posts: any[];
         allPageNumber: number;
     }>;
+    getPost(body: GetPostDto): Promise<{
+        post: any;
+    }>;
+    getComments(body: GetPostDto): Promise<{
+        comments: any;
+        countComments: number;
+    }>;
     addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-posts.schema").PublishPosts> & import("./publish-posts.schema").PublishPosts & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
+    addComment(body: AddCommentDto): Promise<import("mongoose").Document<unknown, {}, import("./publish-comments.schema").PublishComments> & import("./publish-comments.schema").PublishComments & {
         _id: import("mongoose").Types.ObjectId;
     }>;
 }

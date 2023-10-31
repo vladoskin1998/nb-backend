@@ -51,8 +51,7 @@ import { LikesModule } from './likes/likes.module';
     StatisticsModule,
     PostsModule,
     MailModule,
-    LikesModule
-    
+    LikesModule,
   ],
 })
 export class AppModule {}
