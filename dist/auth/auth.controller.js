@@ -79,6 +79,9 @@ let AuthController = class AuthController {
     async confirmCodeByEmail(body) {
         return await this.authService.confirmCodeByEmail(body);
     }
+    async getPhoneNumber(body) {
+        return await this.authService.getPhoneNumber(body);
+    }
 };
 __decorate([
     (0, common_1.Get)('google'),
@@ -158,6 +161,13 @@ __decorate([
     __metadata("design:paramtypes", [auth_dto_1.ConfirmCodeEmailDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "confirmCodeByEmail", null);
+__decorate([
+    (0, common_1.Post)('get-phone-number'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.RegenerateCodeEmailDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getPhoneNumber", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

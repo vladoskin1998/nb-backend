@@ -2,7 +2,7 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
-import { AuthDto, RegistrationDto } from './auth.dto';
+import { AuthDto, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
 import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mailer/mail.service';
@@ -171,5 +171,13 @@ export class AuthService {
         return {
             isCheckedEmail: true
         }
+    }
+
+    async getPhoneNumber( body:RegenerateCodeEmailDTO){
+        const user = await this.userModel.findOne({email: body.email})
+        if(!user){
+            throw new HttpException(`Bad Email`, HttpStatus.BAD_REQUEST);
+        }
+        return {email: user.email, phone: user.phone }
     }
 }

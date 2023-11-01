@@ -135,6 +135,13 @@ let AuthService = class AuthService {
             isCheckedEmail: true
         };
     }
+    async getPhoneNumber(body) {
+        const user = await this.userModel.findOne({ email: body.email });
+        if (!user) {
+            throw new common_1.HttpException(`Bad Email`, common_1.HttpStatus.BAD_REQUEST);
+        }
+        return { email: user.email, phone: user.phone };
+    }
 };
 AuthService = __decorate([
     (0, common_1.Injectable)(),

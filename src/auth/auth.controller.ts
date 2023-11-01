@@ -125,4 +125,9 @@ export class AuthController {
     ){
         return await this.authService.confirmCodeByEmail(body)
     }
+
+    @Post('get-phone-number')
+    async getPhoneNumber(@Body() body:RegenerateCodeEmailDTO){
+        return await this.authService.getPhoneNumber(body)
+    }
 }
