@@ -12,7 +12,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { GoogleOAuthGuard } from './google-auth.guard';
-import { AuthDto, ConfirmCodeEmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
+import { AuthDto, ChangePAsswordDTO, ConfirmCodeEmailDTO, EmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
@@ -119,15 +119,31 @@ export class AuthController {
         return await this.authService.regenereteCodeByEmail(body)
     }
 
-    @Post('confirm-code-email')
-    async confirmCodeByEmail(
+    @Post('confirm-account')
+    async confirmAccount(
         @Body() body: ConfirmCodeEmailDTO
     ){
-        return await this.authService.confirmCodeByEmail(body)
+        return await this.authService.confirmAccount(body)
     }
 
     @Post('get-phone-number')
-    async getPhoneNumber(@Body() body:RegenerateCodeEmailDTO){
+    async getPhoneNumber(@Body() body:EmailDTO){
         return await this.authService.getPhoneNumber(body)
     }
+
+    @Post('forget-password') 
+     async forgetPassword(
+       @Body() body: ConfirmCodeEmailDTO
+    ){
+        return await this.authService.forgetPassword(body)
+    }
+
+    @Post('change-password') 
+     async changePassword(
+       @Body() body: ChangePAsswordDTO
+    ){
+        return await this.authService.changePassword(body)
+    }
+    
+
 }

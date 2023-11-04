@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { ChangePasswordDTO, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
@@ -13,6 +13,5 @@ export declare class UserController {
         role?: import("../enum/enum").ROLES;
         phone?: string;
     }>;
-    userChangePassword(body: ChangePasswordDTO): Promise<string>;
     getClosestUserByRole(body: ClosestUserDto): Promise<any>;
 }

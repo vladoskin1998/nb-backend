@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
+exports.METHOD_FORGET_PASSWORD = exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
 var ERROR_MESSAGE;
 (function (ERROR_MESSAGE) {
     ERROR_MESSAGE["ERROR_ACCESS_DIR"] = "ERROR ACCESS DIR";
@@ -89,4 +89,9 @@ var SOCKET_MESSENDER_EVENT;
     SOCKET_MESSENDER_EVENT["UPDATE_LIST_CHAT"] = "update_list_chat";
     SOCKET_MESSENDER_EVENT["AUTH_SOCKET"] = "auth_socket";
 })(SOCKET_MESSENDER_EVENT = exports.SOCKET_MESSENDER_EVENT || (exports.SOCKET_MESSENDER_EVENT = {}));
+var METHOD_FORGET_PASSWORD;
+(function (METHOD_FORGET_PASSWORD) {
+    METHOD_FORGET_PASSWORD["PHONE"] = "phone";
+    METHOD_FORGET_PASSWORD["EMAIL"] = "email";
+})(METHOD_FORGET_PASSWORD = exports.METHOD_FORGET_PASSWORD || (exports.METHOD_FORGET_PASSWORD = {}));
 //# sourceMappingURL=enum.js.map

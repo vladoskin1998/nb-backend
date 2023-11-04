@@ -1,14 +1,16 @@
 import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
-import { AuthDto, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
-import { METHOD_REGISTRATION } from 'src/enum/enum';
+import { AuthDto, ConfirmCodeEmailDTO, EmailDTO, RegistrationDto } from './auth.dto';
+import { METHOD_REGISTRATION, METHOD_FORGET_PASSWORD } from 'src/enum/enum';
 import { MailService } from 'src/mailer/mail.service';
 import { JwtTokenService } from './jwt-auth.service';
+import { SmsService } from 'src/sms/sms.service';
 export declare class AuthService {
     private userModel;
     private jwtTokenService;
     private mailService;
-    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService, mailService: MailService);
+    private smsService;
+    constructor(userModel: Model<User>, jwtTokenService: JwtTokenService, mailService: MailService, smsService: SmsService);
     messengerLogin(user: {
         email: string;
         methodRegistration: METHOD_REGISTRATION;
@@ -47,17 +49,32 @@ export declare class AuthService {
         accessToken: string;
         refreshToken: string;
     }>;
-    regenereteCodeByEmail({ email }: {
+    regenereteCodeByEmail({ email, sendMethod }: {
         email: string;
+        sendMethod: METHOD_FORGET_PASSWORD;
     }): Promise<void>;
-    confirmCodeByEmail({ email, code }: {
-        email: any;
-        code: any;
-    }): Promise<{
+    sendCodeEmailMessage({ email, codeCheck }: {
+        email: string;
+        codeCheck: number;
+    }): Promise<void>;
+    sendCodePhoneMessage({ phone, codeCheck }: {
+        phone: string;
+        codeCheck: number;
+    }): Promise<void>;
+    confirmAccount({ email, code }: ConfirmCodeEmailDTO): Promise<{
         isCheckedEmail: boolean;
     }>;
-    getPhoneNumber(body: RegenerateCodeEmailDTO): Promise<{
+    getPhoneNumber(body: EmailDTO): Promise<{
         email: string;
         phone: string;
     }>;
+    forgetPassword({ email, code }: ConfirmCodeEmailDTO): Promise<{
+        hashPassword: string;
+    }>;
+    changePassword({ email, oldPassword, hashPassword, newPassword }: {
+        email: string;
+        oldPassword?: string;
+        hashPassword?: string;
+        newPassword: string;
+    }): Promise<void>;
 }

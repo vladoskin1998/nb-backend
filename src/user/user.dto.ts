@@ -39,29 +39,8 @@ export class UserTextInfoDTO {
     role?: ROLES;
 
     @IsOptional()
-    @IsEmpty()
     @IsString()
     phone?: string
-}
-
-
-
-
-export class ChangePasswordDTO {
-    @IsNotEmpty()
-    @IsString()
-    readonly _id: string;
-
-    @IsString()
-    password: string;
-
-    @IsString()
-    newPassword1: string;
-
-    @IsOptional()
-    @IsString()
-    newPassword2: string;
-
 }
 
 export class ClosestUserDto{

@@ -2,13 +2,14 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
 import { Model } from 'mongoose';
-import { AuthDto, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
-import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION } from 'src/enum/enum';
+import { AuthDto, ConfirmCodeEmailDTO, EmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
+import { HTTP_MESSAGE, ROLES, METHOD_REGISTRATION, METHOD_FORGET_PASSWORD } from 'src/enum/enum';
 import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mailer/mail.service';
 import { JwtTokenService } from './jwt-auth.service';
 import { v4 as uuidv4 } from 'uuid';
 import { generateRandomFourDigitCode } from 'src/utils/utils';
+import { SmsService } from 'src/sms/sms.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
         @InjectModel(User.name) private userModel: Model<User>,
         private jwtTokenService: JwtTokenService,
         private mailService: MailService,
+        private smsService: SmsService
     ) { }
 
     async messengerLogin(user: { email: string, methodRegistration: METHOD_REGISTRATION }) {
@@ -71,8 +73,8 @@ export class AuthService {
             codeCheck,
         })
 
-        if ( methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration  ) {
-            await this.regenereteCodeByEmail({email})
+        if (methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration) {
+            await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
         }
 
         const { role, id } = user;
@@ -85,7 +87,7 @@ export class AuthService {
         delete userObject.password
         delete userObject.codeCheck
 
-     
+
 
         return { ...tokens, user: userObject };
     }
@@ -106,8 +108,8 @@ export class AuthService {
         }
         const { role, id, isCheckedEmail } = user;
 
-        if(!isCheckedEmail){
-           await this.regenereteCodeByEmail({email})
+        if (!isCheckedEmail) {
+            await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
         }
 
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
@@ -144,40 +146,111 @@ export class AuthService {
         return { ...tokens, user };
     }
 
-    async regenereteCodeByEmail({email}:{email:string}){
+    async regenereteCodeByEmail({ email, sendMethod }: { email: string, sendMethod: METHOD_FORGET_PASSWORD }) {
         const user = await this.userModel.findOne({ email })
         const codeCheck = generateRandomFourDigitCode()
-        await user.updateOne({codeCheck})
-        await this.mailService.sendMail({  
-            to: user.email,
-            subject: '',
-            text: `Your confirm code ${codeCheck}, please input code in field`
-            }
-        ) 
-        return 
+        await user.updateOne({ codeCheck })
+
+        if (sendMethod === METHOD_FORGET_PASSWORD.PHONE) {
+            this.sendCodePhoneMessage({ phone: user.phone, codeCheck })
+            return
+        }
+
+        this.sendCodeEmailMessage({ email, codeCheck })
+        return
     }
 
-    async confirmCodeByEmail({ email, code }) {
+    async sendCodeEmailMessage({ email, codeCheck }: { email: string, codeCheck: number }) {
+        await this.mailService.sendMail({
+            to: email,
+            subject: 'Change pasword code',
+            text: `Your code ${codeCheck}, please input code in field`
+        }
+        )
+    }
+
+    async sendCodePhoneMessage({ phone, codeCheck }: { phone: string, codeCheck: number }) {
+        await this.smsService.sendSms({phone, body:  `Your code ${codeCheck}, please input code in field`})
+
+    }
+
+    async confirmAccount({ email, code }: ConfirmCodeEmailDTO) {
+        try {
+            const user = await this.userModel.findOne({ email })
+
+            if (user.codeCheck !== code) {
+                throw new HttpException(`Bad code`, HttpStatus.BAD_REQUEST);
+            }
+
+            await user.updateOne({
+                isCheckedEmail: true
+            })
+
+            return {
+                isCheckedEmail: true
+            }
+        } catch (error) {
+            throw new Error(error)
+        }
+
+    }
+
+    async getPhoneNumber(body: EmailDTO) {
+        try {
+            const user = await this.userModel.findOne({ email: body.email })
+            if (!user) {
+                throw new HttpException(`Bad Email`, HttpStatus.BAD_REQUEST);
+            }
+            return { email: user.email, phone: user.phone }
+        } catch (error) {
+            throw new Error(error)
+        }
+
+    }
+
+    async forgetPassword({ email, code }: ConfirmCodeEmailDTO) {
+        try {
+            const user = await this.userModel.findOne({ email })
+
+            if (user.codeCheck !== code) {
+                throw new HttpException(`Bad code`, HttpStatus.BAD_REQUEST);
+            }
+
+            return { hashPassword: user.password }
+        } catch (error) {
+            throw new Error(error)
+        }
+
+
+    }
+
+    async changePassword({ email, oldPassword, hashPassword, newPassword }: { email: string, oldPassword?: string, hashPassword?: string, newPassword: string }) {
         const user = await this.userModel.findOne({ email })
 
-        if (user.codeCheck !== code) {
-            throw new HttpException(`Bad code`, HttpStatus.BAD_REQUEST);
+        if (!user) {
+            throw new HttpException(
+                `User not found`,
+                HttpStatus.BAD_REQUEST,
+            );
         }
 
-        await user.updateOne({
-            isCheckedEmail: true
-        })
+        const password =  await bcrypt.hash(newPassword, 3);
 
-        return {
-            isCheckedEmail: true
+        if(hashPassword && hashPassword === user.password ){
+            await user.updateOne({password})
+            return 
         }
+
+        const isPassEquals = await bcrypt.compare(oldPassword, user.password);
+
+        if(!isPassEquals){
+          throw new HttpException('Bad password', HttpStatus.BAD_REQUEST)
+        }
+
+        await user.updateOne({password})
+        return 
+
     }
 
-    async getPhoneNumber( body:RegenerateCodeEmailDTO){
-        const user = await this.userModel.findOne({email: body.email})
-        if(!user){
-            throw new HttpException(`Bad Email`, HttpStatus.BAD_REQUEST);
-        }
-        return {email: user.email, phone: user.phone }
-    }
+
 }

@@ -19,6 +19,7 @@ const fb_auth_service_1 = require("./fb-auth.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
 const user_schema_1 = require("../user/user.schema");
 const mail_module_1 = require("../mailer/mail.module");
+const sms_module_1 = require("../sms/sms.module");
 let AuthModule = class AuthModule {
 };
 AuthModule = __decorate([
@@ -39,7 +40,8 @@ AuthModule = __decorate([
                     };
                 },
             }),
-            mail_module_1.MailModule
+            mail_module_1.MailModule,
+            sms_module_1.SmsModule
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService,

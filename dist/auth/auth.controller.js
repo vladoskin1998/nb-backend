@@ -76,11 +76,17 @@ let AuthController = class AuthController {
     async regenereteCodeByEmail(body) {
         return await this.authService.regenereteCodeByEmail(body);
     }
-    async confirmCodeByEmail(body) {
-        return await this.authService.confirmCodeByEmail(body);
+    async confirmAccount(body) {
+        return await this.authService.confirmAccount(body);
     }
     async getPhoneNumber(body) {
         return await this.authService.getPhoneNumber(body);
+    }
+    async forgetPassword(body) {
+        return await this.authService.forgetPassword(body);
+    }
+    async changePassword(body) {
+        return await this.authService.changePassword(body);
     }
 };
 __decorate([
@@ -155,19 +161,33 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "regenereteCodeByEmail", null);
 __decorate([
-    (0, common_1.Post)('confirm-code-email'),
+    (0, common_1.Post)('confirm-account'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [auth_dto_1.ConfirmCodeEmailDTO]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "confirmCodeByEmail", null);
+], AuthController.prototype, "confirmAccount", null);
 __decorate([
     (0, common_1.Post)('get-phone-number'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.RegenerateCodeEmailDTO]),
+    __metadata("design:paramtypes", [auth_dto_1.EmailDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getPhoneNumber", null);
+__decorate([
+    (0, common_1.Post)('forget-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.ConfirmCodeEmailDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "forgetPassword", null);
+__decorate([
+    (0, common_1.Post)('change-password'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [auth_dto_1.ChangePAsswordDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "changePassword", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService,

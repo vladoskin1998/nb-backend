@@ -13,12 +13,6 @@ export declare class UserTextInfoDTO {
     role?: ROLES;
     phone?: string;
 }
-export declare class ChangePasswordDTO {
-    readonly _id: string;
-    password: string;
-    newPassword1: string;
-    newPassword2: string;
-}
 export declare class ClosestUserDto {
     role: ROLES;
     myLat: number;

@@ -1,5 +1,5 @@
 import { AuthService } from './auth.service';
-import { AuthDto, ConfirmCodeEmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
+import { AuthDto, ChangePAsswordDTO, ConfirmCodeEmailDTO, EmailDTO, RegenerateCodeEmailDTO, RegistrationDto } from './auth.dto';
 import { Response, Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 export declare class AuthController {
@@ -37,11 +37,15 @@ export declare class AuthController {
     }>;
     logout(req: Request, res: Response): Promise<string>;
     regenereteCodeByEmail(body: RegenerateCodeEmailDTO): Promise<void>;
-    confirmCodeByEmail(body: ConfirmCodeEmailDTO): Promise<{
+    confirmAccount(body: ConfirmCodeEmailDTO): Promise<{
         isCheckedEmail: boolean;
     }>;
-    getPhoneNumber(body: RegenerateCodeEmailDTO): Promise<{
+    getPhoneNumber(body: EmailDTO): Promise<{
         email: string;
         phone: string;
     }>;
+    forgetPassword(body: ConfirmCodeEmailDTO): Promise<{
+        hashPassword: string;
+    }>;
+    changePassword(body: ChangePAsswordDTO): Promise<void>;
 }

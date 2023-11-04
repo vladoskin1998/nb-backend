@@ -9,20 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegenerateCodeEmailDTO = exports.ConfirmCodeEmailDTO = exports.RegistrationDto = exports.AuthDto = void 0;
+exports.ChangePAsswordDTO = exports.RegenerateCodeEmailDTO = exports.ConfirmCodeEmailDTO = exports.RegistrationDto = exports.AuthDto = exports.EmailDTO = void 0;
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
-class AuthDto {
+class EmailDTO {
+}
+__decorate([
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], EmailDTO.prototype, "email", void 0);
+exports.EmailDTO = EmailDTO;
+class AuthDto extends EmailDTO {
     constructor() {
+        super(...arguments);
         this.role = enum_1.ROLES.USER;
         this.methodRegistration = enum_1.METHOD_REGISTRATION.JWT;
     }
 }
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
-], AuthDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
@@ -46,22 +49,35 @@ __decorate([
     __metadata("design:type", String)
 ], RegistrationDto.prototype, "fullName", void 0);
 exports.RegistrationDto = RegistrationDto;
-class ConfirmCodeEmailDTO {
+class ConfirmCodeEmailDTO extends EmailDTO {
 }
-__decorate([
-    (0, class_validator_1.IsEmail)(),
-    __metadata("design:type", String)
-], ConfirmCodeEmailDTO.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], ConfirmCodeEmailDTO.prototype, "code", void 0);
 exports.ConfirmCodeEmailDTO = ConfirmCodeEmailDTO;
-class RegenerateCodeEmailDTO {
+class RegenerateCodeEmailDTO extends EmailDTO {
 }
 __decorate([
-    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsEnum)(enum_1.METHOD_FORGET_PASSWORD),
     __metadata("design:type", String)
-], RegenerateCodeEmailDTO.prototype, "email", void 0);
+], RegenerateCodeEmailDTO.prototype, "sendMethod", void 0);
 exports.RegenerateCodeEmailDTO = RegenerateCodeEmailDTO;
+class ChangePAsswordDTO extends EmailDTO {
+}
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ChangePAsswordDTO.prototype, "oldPassword", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ChangePAsswordDTO.prototype, "hashPassword", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ChangePAsswordDTO.prototype, "newPassword", void 0);
+exports.ChangePAsswordDTO = ChangePAsswordDTO;
 //# sourceMappingURL=auth.dto.js.map

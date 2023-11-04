@@ -19,7 +19,6 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const jwt_auth_service_1 = require("../auth/jwt-auth.service");
-const bcrypt = require("bcrypt");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 let UserService = class UserService {
     constructor(userModel, userIdentityModel, jwtTokenService) {
@@ -78,28 +77,6 @@ let UserService = class UserService {
         }
         catch (error) {
             throw error;
-        }
-    }
-    async userChangePassword(body) {
-        try {
-            const { password, newPassword1, newPassword2 } = body;
-            const userId = new mongoose_2.Types.ObjectId(body._id);
-            const user = await this.userModel.findById({ _id: userId }).select('-isValidationUser');
-            if (!user) {
-                throw new common_1.HttpException(`User not found`, common_1.HttpStatus.BAD_REQUEST);
-            }
-            const isPassEquals = await bcrypt.compare(password, user.password);
-            if (!isPassEquals) {
-                throw new common_1.HttpException(`Bad password`, common_1.HttpStatus.BAD_REQUEST);
-            }
-            if (newPassword1 !== newPassword2) {
-                throw new common_1.HttpException("New passwords have not arrived", common_1.HttpStatus.BAD_REQUEST);
-            }
-            const hashPassword = await bcrypt.hash(newPassword1, 3);
-            await user.updateOne({ password: hashPassword });
-            return "Password successful changed";
-        }
-        catch (error) {
         }
     }
     async checkUsersExist(userIds) {

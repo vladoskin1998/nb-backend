@@ -75,3 +75,7 @@ export declare enum SOCKET_MESSENDER_EVENT {
     UPDATE_LIST_CHAT = "update_list_chat",
     AUTH_SOCKET = "auth_socket"
 }
+export declare enum METHOD_FORGET_PASSWORD {
+    PHONE = "phone",
+    EMAIL = "email"
+}

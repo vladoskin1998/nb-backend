@@ -1,11 +1,13 @@
 import { IsString, IsEmail, IsOptional, IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
-import { METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
+import { METHOD_FORGET_PASSWORD, METHOD_REGISTRATION, ROLES } from 'src/enum/enum';
 
-export class AuthDto {
-
-  @IsNotEmpty()
+export class EmailDTO {
   @IsEmail()
   email: string;
+}
+
+
+export class AuthDto extends EmailDTO {
 
   @IsNotEmpty()
   @IsString()
@@ -27,16 +29,30 @@ export class RegistrationDto extends AuthDto {
 }
 
 
-export class ConfirmCodeEmailDTO {
-  @IsEmail()
-  email: string;
+export class ConfirmCodeEmailDTO extends EmailDTO {
 
   @IsNumber()
   code: number
 }
 
 
-export class RegenerateCodeEmailDTO {
-  @IsEmail()
-  email: string;
+export class RegenerateCodeEmailDTO extends EmailDTO {
+
+
+  @IsEnum(METHOD_FORGET_PASSWORD)
+  sendMethod: METHOD_FORGET_PASSWORD
+}
+
+
+export class ChangePAsswordDTO extends EmailDTO {
+  @IsOptional()
+  @IsString()
+  oldPassword?: string
+
+  @IsOptional()
+  @IsString()
+  hashPassword?: string
+
+  @IsString()
+  newPassword: string
 }

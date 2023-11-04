@@ -23,11 +23,13 @@ const mail_service_1 = require("../mailer/mail.service");
 const jwt_auth_service_1 = require("./jwt-auth.service");
 const uuid_1 = require("uuid");
 const utils_1 = require("../utils/utils");
+const sms_service_1 = require("../sms/sms.service");
 let AuthService = class AuthService {
-    constructor(userModel, jwtTokenService, mailService) {
+    constructor(userModel, jwtTokenService, mailService, smsService) {
         this.userModel = userModel;
         this.jwtTokenService = jwtTokenService;
         this.mailService = mailService;
+        this.smsService = smsService;
     }
     async messengerLogin(user) {
         const { email, methodRegistration } = user;
@@ -63,7 +65,7 @@ let AuthService = class AuthService {
             codeCheck,
         });
         if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
-            await this.regenereteCodeByEmail({ email });
+            await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
         }
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
@@ -84,7 +86,7 @@ let AuthService = class AuthService {
         }
         const { role, id, isCheckedEmail } = user;
         if (!isCheckedEmail) {
-            await this.regenereteCodeByEmail({ email });
+            await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
         }
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         const userObject = user.toObject();
@@ -112,35 +114,84 @@ let AuthService = class AuthService {
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
         return Object.assign(Object.assign({}, tokens), { user });
     }
-    async regenereteCodeByEmail({ email }) {
+    async regenereteCodeByEmail({ email, sendMethod }) {
         const user = await this.userModel.findOne({ email });
         const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
         await user.updateOne({ codeCheck });
-        await this.mailService.sendMail({
-            to: user.email,
-            subject: '',
-            text: `Your confirm code ${codeCheck}, please input code in field`
-        });
+        if (sendMethod === enum_1.METHOD_FORGET_PASSWORD.PHONE) {
+            this.sendCodePhoneMessage({ phone: user.phone, codeCheck });
+            return;
+        }
+        this.sendCodeEmailMessage({ email, codeCheck });
         return;
     }
-    async confirmCodeByEmail({ email, code }) {
-        const user = await this.userModel.findOne({ email });
-        if (user.codeCheck !== code) {
-            throw new common_1.HttpException(`Bad code`, common_1.HttpStatus.BAD_REQUEST);
-        }
-        await user.updateOne({
-            isCheckedEmail: true
+    async sendCodeEmailMessage({ email, codeCheck }) {
+        await this.mailService.sendMail({
+            to: email,
+            subject: 'Change pasword code',
+            text: `Your code ${codeCheck}, please input code in field`
         });
-        return {
-            isCheckedEmail: true
-        };
+    }
+    async sendCodePhoneMessage({ phone, codeCheck }) {
+        await this.smsService.sendSms({ phone, body: `Your code ${codeCheck}, please input code in field` });
+    }
+    async confirmAccount({ email, code }) {
+        try {
+            const user = await this.userModel.findOne({ email });
+            if (user.codeCheck !== code) {
+                throw new common_1.HttpException(`Bad code`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            await user.updateOne({
+                isCheckedEmail: true
+            });
+            return {
+                isCheckedEmail: true
+            };
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
     async getPhoneNumber(body) {
-        const user = await this.userModel.findOne({ email: body.email });
-        if (!user) {
-            throw new common_1.HttpException(`Bad Email`, common_1.HttpStatus.BAD_REQUEST);
+        try {
+            const user = await this.userModel.findOne({ email: body.email });
+            if (!user) {
+                throw new common_1.HttpException(`Bad Email`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            return { email: user.email, phone: user.phone };
         }
-        return { email: user.email, phone: user.phone };
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    async forgetPassword({ email, code }) {
+        try {
+            const user = await this.userModel.findOne({ email });
+            if (user.codeCheck !== code) {
+                throw new common_1.HttpException(`Bad code`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            return { hashPassword: user.password };
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    async changePassword({ email, oldPassword, hashPassword, newPassword }) {
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new common_1.HttpException(`User not found`, common_1.HttpStatus.BAD_REQUEST);
+        }
+        const password = await bcrypt.hash(newPassword, 3);
+        if (hashPassword && hashPassword === user.password) {
+            await user.updateOne({ password });
+            return;
+        }
+        const isPassEquals = await bcrypt.compare(oldPassword, user.password);
+        if (!isPassEquals) {
+            throw new common_1.HttpException('Bad password', common_1.HttpStatus.BAD_REQUEST);
+        }
+        await user.updateOne({ password });
+        return;
     }
 };
 AuthService = __decorate([
@@ -148,7 +199,8 @@ AuthService = __decorate([
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         jwt_auth_service_1.JwtTokenService,
-        mail_service_1.MailService])
+        mail_service_1.MailService,
+        sms_service_1.SmsService])
 ], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

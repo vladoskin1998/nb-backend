@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ClosestUserDto = exports.ChangePasswordDTO = exports.UserTextInfoDTO = exports.GetUsers = exports.IDUserDto = void 0;
+exports.ClosestUserDto = exports.UserTextInfoDTO = exports.GetUsers = exports.IDUserDto = void 0;
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
 class IDUserDto {
@@ -59,32 +59,10 @@ __decorate([
 ], UserTextInfoDTO.prototype, "role", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserTextInfoDTO.prototype, "phone", void 0);
 exports.UserTextInfoDTO = UserTextInfoDTO;
-class ChangePasswordDTO {
-}
-__decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ChangePasswordDTO.prototype, "_id", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ChangePasswordDTO.prototype, "password", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ChangePasswordDTO.prototype, "newPassword1", void 0);
-__decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ChangePasswordDTO.prototype, "newPassword2", void 0);
-exports.ChangePasswordDTO = ChangePasswordDTO;
 class ClosestUserDto {
 }
 __decorate([

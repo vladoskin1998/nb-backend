@@ -11,6 +11,7 @@ import { FacebookStrategy } from './fb-auth.service';
 import { JwtTokenService } from './jwt-auth.service';
 import { User, UserSchema } from '../user/user.schema';
 import { MailModule } from 'src/mailer/mail.module';
+import { SmsModule } from 'src/sms/sms.module';
 
 @Module({
     imports: [
@@ -29,7 +30,8 @@ import { MailModule } from 'src/mailer/mail.module';
                 };
             },
         }),
-        MailModule
+        MailModule,
+        SmsModule
     ],
     controllers: [AuthController],
     providers: [AuthService,

@@ -1,6 +1,6 @@
 import { User } from './user.schema';
 import { Model, Types } from 'mongoose';
-import { ChangePasswordDTO, ClosestUserDto, UserTextInfoDTO } from './user.dto';
+import { ClosestUserDto, UserTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
@@ -23,7 +23,6 @@ export declare class UserService {
         role?: ROLES;
         phone?: string;
     }>;
-    userChangePassword(body: ChangePasswordDTO): Promise<string>;
     checkUsersExist(userIds: string[]): Promise<{
         _id: Types.ObjectId;
     }[]>;

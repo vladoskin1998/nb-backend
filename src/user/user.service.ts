@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { ChangePasswordDTO, ClosestUserDto, UserTextInfoDTO } from './user.dto';
+import {  ClosestUserDto, UserTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
 import * as bcrypt from 'bcrypt';
@@ -81,37 +81,7 @@ export class UserService {
         }
     }
 
-    async userChangePassword(body: ChangePasswordDTO) {
-        try {
-            const { password, newPassword1, newPassword2 } = body
-            const userId = new Types.ObjectId(body._id)
 
-            const user = await this.userModel.findById({ _id: userId }).select('-isValidationUser');
-            if (!user) {
-                throw new HttpException(
-                    `User not found`,
-                    HttpStatus.BAD_REQUEST,
-                );
-            }
-
-            const isPassEquals = await bcrypt.compare(password, user.password);
-            if (!isPassEquals) {
-                throw new HttpException(`Bad password`, HttpStatus.BAD_REQUEST);
-            }
-
-            if (newPassword1 !== newPassword2) {
-                throw new HttpException("New passwords have not arrived", HttpStatus.BAD_REQUEST)
-            }
-
-            const hashPassword = await bcrypt.hash(newPassword1, 3);
-
-            await user.updateOne({ password: hashPassword })
-
-            return "Password successful changed"
-        } catch (error) {
-
-        }
-    }
 
     async checkUsersExist(userIds: string[]): Promise<{
         _id: Types.ObjectId;

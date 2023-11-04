@@ -1,16 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ChangePasswordDTO, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import {  ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
-
-
-    // @Post('profile-location')
-    // async logout(@Body() body: LocationDto) {
-    //     return await this.userService.changeLocation(body)
-    // }
 
     @Post('get-users')
     async getUsersByRole(@Body() body: GetUsers) {
@@ -35,14 +29,6 @@ export class UserController {
         @Body() body: UserTextInfoDTO
     ){
         return await this.userService.userTextInfo(body)
-    }
-
-
-    @Post('user-change-password')
-    async userChangePassword(
-        @Body() body: ChangePasswordDTO
-    ){
-        return await this.userService.userChangePassword(body)
     }
 
     

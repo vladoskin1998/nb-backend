@@ -91,3 +91,8 @@ export enum SOCKET_MESSENDER_EVENT{
 
   AUTH_SOCKET='auth_socket',
 }
+
+export enum METHOD_FORGET_PASSWORD{
+  PHONE='phone',
+  EMAIL='email'
+}

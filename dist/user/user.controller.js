@@ -33,9 +33,6 @@ let UserController = class UserController {
     async userTextInfo(body) {
         return await this.userService.userTextInfo(body);
     }
-    async userChangePassword(body) {
-        return await this.userService.userChangePassword(body);
-    }
     async getClosestUserByRole(body) {
         return await this.userService.getClosestUserByRole(body);
     }
@@ -68,13 +65,6 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.UserTextInfoDTO]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "userTextInfo", null);
-__decorate([
-    (0, common_1.Post)('user-change-password'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_dto_1.ChangePasswordDTO]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "userChangePassword", null);
 __decorate([
     (0, common_1.Post)('get-closest-user'),
     __param(0, (0, common_1.Body)()),
