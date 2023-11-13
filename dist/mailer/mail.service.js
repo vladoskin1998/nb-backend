@@ -22,7 +22,7 @@ let MailService = class MailService {
     constructor() {
         this.oauth2Client = new googleapis_1.google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID_MAIL, process.env.GOOGLE_CLIENT_SECRET_MAIL, process.env.GOOGLE_REFRESH_REDIRECT_MAIL_URL);
         this.oauth2Client.setCredentials({
-            refresh_token: process.env.GOOGLE_REFRESH_TOKEN_MAIL
+            refresh_token: process.env.GOOGLE_REFRESH_TOKEN_MAIL,
         });
         this.transporter = nodemailer.createTransport({
             service: 'Gmail',

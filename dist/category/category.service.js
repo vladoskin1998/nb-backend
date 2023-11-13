@@ -18,13 +18,16 @@ const mongoose_1 = require("mongoose");
 const mongoose_2 = require("@nestjs/mongoose");
 const category_schema_1 = require("./category.schema");
 const files_service_1 = require("../files/files.service");
+const enum_1 = require("../enum/enum");
 const publish_service_schema_1 = require("./publish-service.schema");
+const notification_service_1 = require("../notification/notification.service");
 let CategoryService = class CategoryService {
-    constructor(categoryModel, subCategoryModel, publishServiceModel, filesService) {
+    constructor(categoryModel, subCategoryModel, publishServiceModel, filesService, notificationService) {
         this.categoryModel = categoryModel;
         this.subCategoryModel = subCategoryModel;
         this.publishServiceModel = publishServiceModel;
         this.filesService = filesService;
+        this.notificationService = notificationService;
     }
     async createOrUpdateCategorie({ payload, file }) {
         try {
@@ -176,6 +179,13 @@ let CategoryService = class CategoryService {
             const servicesId = new mongoose_1.Types.ObjectId(payload.servicesId);
             const subServicesId = new mongoose_1.Types.ObjectId(payload.subServicesId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_services', false);
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                name: payload.title,
+                fileName: filesName[0],
+                event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_SERVICE
+            });
             return await this.publishServiceModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId, servicesId, subServicesId }));
         }
         catch (error) {
@@ -211,7 +221,8 @@ CategoryService = __decorate([
     __metadata("design:paramtypes", [mongoose_1.Model,
         mongoose_1.Model,
         mongoose_1.Model,
-        files_service_1.FilesService])
+        files_service_1.FilesService,
+        notification_service_1.NotificationService])
 ], CategoryService);
 exports.CategoryService = CategoryService;
 //# sourceMappingURL=category.service.js.map

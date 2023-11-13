@@ -70,10 +70,24 @@ export declare enum SOCKET_MESSENDER_EVENT {
     LEAVE_ROOM = "leave_room",
     SEND_PRIVATE_MESSAGE = "send_private_message",
     GET_PRIVATE_MESSAGE = "get_private_message",
-    NOTIFICATION = "notification",
     NEW_CREATE_CHAT = "new_create_chat",
     UPDATE_LIST_CHAT = "update_list_chat",
     AUTH_SOCKET = "auth_socket"
+}
+export declare enum SOCKET_NOTIFICATION_EVENT {
+    JOIN_ROOM_NOTIFICATION = "join_room_notification",
+    LEAVE_ROOM_NOTIFICATION = "leave_room_notification",
+    NOTIFICATION = "notification"
+}
+export declare enum NOTIFICATION_EVENT {
+    NOTIFICATION_SERVICE = "service",
+    NOTIFICATION_ACTIVITIES = "activities",
+    NOTIFICATION_MESSAGE = "message",
+    NOTIFICATION_NEWS = "news"
+}
+export declare enum NOTIFICATION_MAILING {
+    NOTIFICATION_ROOMS = "rooms",
+    NOTIFICATION_BROADCAST = "broadcast"
 }
 export declare enum METHOD_FORGET_PASSWORD {
     PHONE = "phone",

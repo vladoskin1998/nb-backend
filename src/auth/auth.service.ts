@@ -53,6 +53,8 @@ export class AuthService {
 
     async registration({ email, password, methodRegistration, fullName }: RegistrationDto) {
 
+        console.log("methodRegistration",methodRegistration);
+        
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
 
         if (candidate) {
@@ -65,17 +67,21 @@ export class AuthService {
         const hashPassword = await bcrypt.hash(password, 3);
         const codeCheck = generateRandomFourDigitCode()
 
+        let isCheckedEmail = true
+
+        if (methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration) {
+            await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
+            isCheckedEmail = false
+        }
+        
         const user = await this.userModel.create({
             email,
             password: hashPassword,
             methodRegistration,
             fullName,
             codeCheck,
+            isCheckedEmail,
         })
-
-        if (methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration) {
-            await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
-        }
 
         const { role, id } = user;
 
@@ -163,7 +169,7 @@ export class AuthService {
     async sendCodeEmailMessage({ email, codeCheck }: { email: string, codeCheck: number }) {
         await this.mailService.sendMail({
             to: email,
-            subject: 'Change pasword code',
+            subject: 'Your verification code to Neigharbor',
             text: `Your code ${codeCheck}, please input code in field`
         }
         )

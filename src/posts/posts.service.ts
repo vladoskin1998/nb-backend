@@ -3,10 +3,13 @@ import { PublishPosts } from './publish-posts.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
-import { PRIVACY } from 'src/enum/enum';
+import { NOTIFICATION_EVENT, PRIVACY } from 'src/enum/enum';
 import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
 import { PublishComments } from './publish-comments.schema';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
+import { haversine } from 'src/utils/utils';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class PostsService {
@@ -18,7 +21,10 @@ export class PostsService {
         private readonly likesModel: Model<Likes>,
         @InjectModel(PublishComments.name)
         private readonly publishCommentsModel: Model<PublishComments>,
-        private filesService: FilesService
+        @InjectModel(UserIdentity.name)
+        private readonly userIdentity: Model<UserIdentity>,
+        private filesService: FilesService,
+        private notificationService: NotificationService
     ) { }
 
     async getPosts(body: GetPostsDto) {
@@ -48,7 +54,7 @@ export class PostsService {
 
             const postWithLikes = await Promise.all(
                 posts.map(async (post: any) => {
-                    const countComments = await this.publishCommentsModel.find({ postId:post._id }).countDocuments()
+                    const countComments = await this.publishCommentsModel.find({ postId: post._id }).countDocuments()
                     return {
                         ...post.toObject(),
                         likeId: post.toObject().likes?._id || '',
@@ -70,7 +76,7 @@ export class PostsService {
     async getPost(body: GetPostDto) {
         try {
             const postId = new Types.ObjectId(body.postId)
-            let post:any = await this.publishPostsModel
+            let post: any = await this.publishPostsModel
                 .findOne({ _id: postId })
                 .populate({
                     path: 'userId',
@@ -85,7 +91,7 @@ export class PostsService {
                 })
                 .exec();
 
-            await post.updateOne({viewPost: post.viewPost+1})
+            await post.updateOne({ viewPost: post.viewPost + 1 })
 
             const postWithLike = {
                 ...post.toObject(),
@@ -146,10 +152,37 @@ export class PostsService {
             const userIdentityId = new Types.ObjectId(payload.userIdentityId)
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false)
             const likesId = (await this.likesModel.create({}))._id
+
+            // const data = await this.userIdentity.aggregate([
+            //     {
+            //       $match: {
+            //         $expr: {
+            //           $function: {
+            //             body: function(lat, lng, targetLat, targetLng, step) {
+            //               const distance = haversine(lat, lng, targetLat, targetLng);
+            //               return distance < step;
+            //             },
+            //             args: ['$coordinates.lat', '$coordinates.lng', payload.coordinates.lat, payload.coordinates.lng, '$step'],
+            //             lang: 'js',
+            //           },
+            //         },
+            //       },
+            //     },
+            //   ]);
+
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                fileName: filesName[0],
+                name: payload.title,
+                event: NOTIFICATION_EVENT.NOTIFICATION_NEWS
+            })
+
             return await this.publishPostsModel.create({
                 ...payload, filesName, userId, userIdentityId, likes: likesId
             })
         } catch (error) {
+            console.log(error);
 
         }
     }

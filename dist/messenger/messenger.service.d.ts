@@ -30,13 +30,15 @@ import { Message } from './message.schema';
 import { User } from 'src/user/user.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { FilesService } from 'src/files/files.service';
+import { NotificationService } from 'src/notification/notification.service';
 export declare class MessengerService {
     private userIdentityModel;
     private userModel;
     private chatsModel;
     private messageModel;
     private filesService;
-    constructor(userIdentityModel: Model<UserIdentity>, userModel: Model<User>, chatsModel: Model<Chats>, messageModel: Model<Message>, filesService: FilesService);
+    private notificationService;
+    constructor(userIdentityModel: Model<UserIdentity>, userModel: Model<User>, chatsModel: Model<Chats>, messageModel: Model<Message>, filesService: FilesService, notificationService: NotificationService);
     openChat(dto: NewChatDto): Promise<{
         participants: {
             userId: string;

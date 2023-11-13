@@ -18,12 +18,15 @@ const files_service_1 = require("../files/files.service");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const activities_schema_1 = require("./activities.schema");
+const enum_1 = require("../enum/enum");
 const publish_activities_schema_1 = require("./publish-activities.schema");
+const notification_service_1 = require("../notification/notification.service");
 let ActivitiesService = class ActivitiesService {
-    constructor(activitiesModel, publishActivitiesModel, filesService) {
+    constructor(activitiesModel, publishActivitiesModel, filesService, notificationService) {
         this.activitiesModel = activitiesModel;
         this.publishActivitiesModel = publishActivitiesModel;
         this.filesService = filesService;
+        this.notificationService = notificationService;
     }
     async createActivitie({ activitie, files, }) {
         try {
@@ -72,6 +75,13 @@ let ActivitiesService = class ActivitiesService {
             const userId = new mongoose_2.Types.ObjectId(payload.userId);
             const activitiesId = new mongoose_2.Types.ObjectId(payload.activitiesId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false);
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                name: payload.title,
+                fileName: filesName[0],
+                event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_ACTIVITIES
+            });
             return await this.publishActivitiesModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, activitiesId }));
         }
         catch (error) {
@@ -105,7 +115,8 @@ ActivitiesService = __decorate([
     __param(1, (0, mongoose_1.InjectModel)(publish_activities_schema_1.PublishActivities.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model,
-        files_service_1.FilesService])
+        files_service_1.FilesService,
+        notification_service_1.NotificationService])
 ], ActivitiesService);
 exports.ActivitiesService = ActivitiesService;
 //# sourceMappingURL=activities.service.js.map

@@ -30,12 +30,16 @@ import { PRIVACY } from 'src/enum/enum';
 import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
 import { PublishComments } from './publish-comments.schema';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
+import { NotificationService } from 'src/notification/notification.service';
 export declare class PostsService {
     private readonly publishPostsModel;
     private readonly likesModel;
     private readonly publishCommentsModel;
+    private readonly userIdentity;
     private filesService;
-    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, filesService: FilesService);
+    private notificationService;
+    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, userIdentity: Model<UserIdentity>, filesService: FilesService, notificationService: NotificationService);
     getPosts(body: GetPostsDto): Promise<{
         posts: any[];
         allPageNumber: number;

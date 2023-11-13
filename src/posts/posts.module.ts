@@ -7,6 +7,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { PublishPosts, PublishPostsSchema } from './publish-posts.schema';
 import { Likes, LikesSchema } from 'src/likes/likes.schema';
 import { PublishComments, PublishCommentsSchema } from './publish-comments.schema';
+import { UserIdentity, UserIdentitySchema } from 'src/user-identity/user-identity.schema';
+import { NotificationModule } from 'src/notification/notification.module';
 
 
 @Module({
@@ -15,9 +17,11 @@ import { PublishComments, PublishCommentsSchema } from './publish-comments.schem
         { name: PublishPosts.name, schema: PublishPostsSchema },
         { name: PublishComments.name, schema: PublishCommentsSchema },
         { name: Likes.name, schema: LikesSchema },
+        { name: UserIdentity.name, schema: UserIdentitySchema },
     ]),
     MulterModule.register({}),
     FilesModule,
+    NotificationModule,
 ],
   controllers: [PostsController],
   providers: [PostsService]

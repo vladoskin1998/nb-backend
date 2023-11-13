@@ -21,13 +21,16 @@ const message_schema_1 = require("./message.schema");
 const user_schema_1 = require("../user/user.schema");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const files_service_1 = require("../files/files.service");
+const notification_service_1 = require("../notification/notification.service");
+const enum_1 = require("../enum/enum");
 let MessengerService = class MessengerService {
-    constructor(userIdentityModel, userModel, chatsModel, messageModel, filesService) {
+    constructor(userIdentityModel, userModel, chatsModel, messageModel, filesService, notificationService) {
         this.userIdentityModel = userIdentityModel;
         this.userModel = userModel;
         this.chatsModel = chatsModel;
         this.messageModel = messageModel;
         this.filesService = filesService;
+        this.notificationService = notificationService;
     }
     async openChat(dto) {
         try {
@@ -69,7 +72,7 @@ let MessengerService = class MessengerService {
                     isSupport: item.isSupport
                 };
             }));
-            return chatsWithLastMessage;
+            return chatsWithLastMessage.reverse();
         }
         catch (error) {
             throw new Error('SERVER ERROR');
@@ -90,6 +93,18 @@ let MessengerService = class MessengerService {
             const chatId = new mongoose_2.Types.ObjectId(payload.chatId);
             const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
             await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId }));
+            const { participants } = (await this.chatsModel.findOne({ _id: chatId }));
+            const rooms = participants.map(item => item.userId);
+            const { avatarFileName, fullName } = participants.find(item => item.userId === payload.senderId);
+            await this.notificationService.sendNotification({
+                ownerId: payload.senderId,
+                rooms,
+                fileName: avatarFileName,
+                title: payload.content,
+                name: fullName,
+                event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
+            });
+            await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date() }));
         }
         catch (error) {
             throw new Error('SERVER ERROR');
@@ -114,7 +129,8 @@ MessengerService = __decorate([
         mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
-        files_service_1.FilesService])
+        files_service_1.FilesService,
+        notification_service_1.NotificationService])
 ], MessengerService);
 exports.MessengerService = MessengerService;
 //# sourceMappingURL=messenger.service.js.map

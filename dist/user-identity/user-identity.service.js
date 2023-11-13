@@ -143,7 +143,7 @@ let UserIdentityService = class UserIdentityService {
     }
     async getCountriesList(country) {
         if (!country) {
-            return countries_1.LOCAL_COUNTRIES;
+            return countries_1.COUNTRIES;
         }
         const regex = new RegExp(`^${country}`, 'i');
         const filteredCountries = countries_1.COUNTRIES.filter(country => {
@@ -152,7 +152,7 @@ let UserIdentityService = class UserIdentityService {
         return filteredCountries.slice(0, 15);
     }
     async getPopularCountriesList() {
-        return countries_1.LOCAL_COUNTRIES;
+        return countries_1.COUNTRIES;
     }
     getModelByQuality(quality) {
         switch (quality) {
@@ -172,8 +172,7 @@ let UserIdentityService = class UserIdentityService {
             return await this.getPopularSkillProfInterest(quality);
         }
         let filteredList = await model.find({
-            title: searchValues,
-            fullName: { $regex: searchValues, $options: 'i' }
+            title: { $regex: searchValues, $options: 'i' }
         }).limit(10);
         if (!filteredList.length) {
             filteredList = [{ _id: "", title: searchValues }];
@@ -182,7 +181,7 @@ let UserIdentityService = class UserIdentityService {
     }
     async getPopularSkillProfInterest(quality) {
         let model = this.getModelByQuality(quality);
-        return await model.find().limit(10);
+        return await model.find();
     }
     async checkCreateSkillProfInterest(body) {
         let model = this.getModelByQuality(body.quality);

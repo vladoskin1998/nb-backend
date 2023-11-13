@@ -15,6 +15,7 @@ const category_schema_1 = require("./category.schema");
 const files_module_1 = require("../files/files.module");
 const platform_express_1 = require("@nestjs/platform-express");
 const publish_service_schema_1 = require("./publish-service.schema");
+const notification_module_1 = require("../notification/notification.module");
 let CategoryModule = class CategoryModule {
 };
 CategoryModule = __decorate([
@@ -27,6 +28,7 @@ CategoryModule = __decorate([
             ]),
             platform_express_1.MulterModule.register({}),
             files_module_1.FilesModule,
+            notification_module_1.NotificationModule,
         ],
         controllers: [category_controller_1.CategoryController],
         providers: [category_service_1.CategoryService],

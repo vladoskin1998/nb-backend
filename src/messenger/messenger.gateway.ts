@@ -25,7 +25,7 @@ import { MessageType } from '../types'
             "https://environs.life",
             ],
             credentials: true,
-        },
+        }
     })
 export class MessengerGateway {
     @WebSocketServer()
@@ -44,11 +44,10 @@ export class MessengerGateway {
     ) {
 
         const room = String(chatId);
-        console.log(room);
 
         socket.join(room);
 
-        console.log("join room", this.server.sockets.adapter.rooms);
+        console.log("join room----->", this.server.sockets.adapter.rooms);
     }
 
     @SubscribeMessage(SOCKET_MESSENDER_EVENT.LEAVE_ROOM)

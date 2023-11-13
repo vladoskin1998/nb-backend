@@ -51,22 +51,26 @@ let AuthService = class AuthService {
         return await this.login({ email, password: candidate === null || candidate === void 0 ? void 0 : candidate.password, methodRegistration });
     }
     async registration({ email, password, methodRegistration, fullName }) {
+        console.log("methodRegistration", methodRegistration);
         const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
         if (candidate) {
             throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
         }
         const hashPassword = await bcrypt.hash(password, 3);
         const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
+        let isCheckedEmail = true;
+        if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
+            await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
+            isCheckedEmail = false;
+        }
         const user = await this.userModel.create({
             email,
             password: hashPassword,
             methodRegistration,
             fullName,
             codeCheck,
+            isCheckedEmail,
         });
-        if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
-            await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
-        }
         const { role, id } = user;
         const tokens = this.jwtTokenService.generateTokens({ email, role, id });
         await this.jwtTokenService.saveToken(id, tokens.refreshToken);
@@ -128,7 +132,7 @@ let AuthService = class AuthService {
     async sendCodeEmailMessage({ email, codeCheck }) {
         await this.mailService.sendMail({
             to: email,
-            subject: 'Change pasword code',
+            subject: 'Your verification code to Neigharbor',
             text: `Your code ${codeCheck}, please input code in field`
         });
     }

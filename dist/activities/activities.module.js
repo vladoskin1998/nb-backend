@@ -15,6 +15,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const platform_express_1 = require("@nestjs/platform-express");
 const files_module_1 = require("../files/files.module");
 const publish_activities_schema_1 = require("./publish-activities.schema");
+const notification_module_1 = require("../notification/notification.module");
 let ActivitiesModule = class ActivitiesModule {
 };
 ActivitiesModule = __decorate([
@@ -26,6 +27,7 @@ ActivitiesModule = __decorate([
             ]),
             platform_express_1.MulterModule.register({}),
             files_module_1.FilesModule,
+            notification_module_1.NotificationModule,
         ],
         controllers: [activities_controller_1.ActivitiesController],
         providers: [activities_service_1.ActivitiesService],

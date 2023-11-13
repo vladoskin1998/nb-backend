@@ -18,6 +18,7 @@ const message_schema_1 = require("./message.schema");
 const user_schema_1 = require("../user/user.schema");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const files_module_1 = require("../files/files.module");
+const notification_module_1 = require("../notification/notification.module");
 let MessengerModule = class MessengerModule {
 };
 MessengerModule = __decorate([
@@ -31,6 +32,7 @@ MessengerModule = __decorate([
             ]),
             user_module_1.UserModule,
             files_module_1.FilesModule,
+            notification_module_1.NotificationModule,
         ],
         controllers: [messenger_controller_1.MessengerController],
         providers: [messenger_service_1.MessengerService, messenger_gateway_1.MessengerGateway]

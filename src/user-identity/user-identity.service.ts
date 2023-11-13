@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QUALITYENUM } from 'src/enum/enum';
-import { COUNTRIES, LOCAL_COUNTRIES } from 'src/utils/countries';
+import { COUNTRIES } from 'src/utils/countries';
 import { UserProfession } from './user-profession.schema';
 import { Model, ObjectId, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -156,7 +156,7 @@ export class UserIdentityService {
 
     async getCountriesList(country: string) {
         if (!country) {
-            return LOCAL_COUNTRIES
+            return COUNTRIES
         }
         const regex = new RegExp(`^${country}`, 'i');
 
@@ -168,7 +168,7 @@ export class UserIdentityService {
     }
 
     async getPopularCountriesList() {
-        return LOCAL_COUNTRIES
+        return COUNTRIES
     }
 
     private getModelByQuality(quality: QUALITYENUM): Model<UserProfession> {
@@ -194,8 +194,7 @@ export class UserIdentityService {
 
         let filteredList: any = await model.find(
             {
-                title: searchValues,
-                fullName: { $regex: searchValues, $options: 'i' }
+                title: { $regex: searchValues, $options: 'i' }
             }
         ).limit(10)
 
@@ -211,7 +210,7 @@ export class UserIdentityService {
 
         let model: Model<UserProfession> = this.getModelByQuality(quality)
 
-        return await model.find().limit(10)
+        return await model.find()
     }
 
     async checkCreateSkillProfInterest(body: ProfileSelectDTO): Promise<{ title: string, _id: string }[]> {

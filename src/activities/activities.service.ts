@@ -5,8 +5,9 @@ import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
 import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
-import { PRIVACY } from 'src/enum/enum';
+import { NOTIFICATION_EVENT, PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class ActivitiesService {
@@ -16,6 +17,7 @@ export class ActivitiesService {
         @InjectModel(PublishActivities.name)
         private readonly publishActivitiesModel: Model<PublishActivities>,
         private filesService: FilesService,
+        private notificationService: NotificationService,
     ) {}
 
     async createActivitie({
@@ -96,6 +98,15 @@ export class ActivitiesService {
             const userId = new Types.ObjectId(payload.userId)
             const activitiesId = new Types.ObjectId(payload.activitiesId)
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false)
+
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                name: payload.title,
+                fileName: filesName[0],
+                event: NOTIFICATION_EVENT.NOTIFICATION_ACTIVITIES
+            })
+
             return await this.publishActivitiesModel.create({
                 ...payload, filesName, userId, activitiesId
             })

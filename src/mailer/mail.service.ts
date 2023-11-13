@@ -21,10 +21,11 @@ export class MailService {
             process.env.GOOGLE_REFRESH_REDIRECT_MAIL_URL
         );
         this.oauth2Client.setCredentials({
-            refresh_token: process.env.GOOGLE_REFRESH_TOKEN_MAIL
+            refresh_token: process.env.GOOGLE_REFRESH_TOKEN_MAIL,
+    
         });
 
-
+        // this.oauth2Client.refresh_token(process.env.GOOGLE_REFRESH_TOKEN_MAIL)
 
         this.transporter = nodemailer.createTransport({
             service: 'Gmail',

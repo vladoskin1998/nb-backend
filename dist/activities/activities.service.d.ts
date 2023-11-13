@@ -30,11 +30,13 @@ import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
+import { NotificationService } from 'src/notification/notification.service';
 export declare class ActivitiesService {
     private readonly activitiesModel;
     private readonly publishActivitiesModel;
     private filesService;
-    constructor(activitiesModel: Model<Activities>, publishActivitiesModel: Model<PublishActivities>, filesService: FilesService);
+    private notificationService;
+    constructor(activitiesModel: Model<Activities>, publishActivitiesModel: Model<PublishActivities>, filesService: FilesService, notificationService: NotificationService);
     createActivitie({ activitie, files, }: {
         activitie: ActivitiesDto;
         files: Array<Express.Multer.File>;

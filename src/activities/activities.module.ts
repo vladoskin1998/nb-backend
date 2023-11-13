@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { FilesModule } from 'src/files/files.module';
 import { PublishActivities, PublishActivitiesSchema } from './publish-activities.schema';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { PublishActivities, PublishActivitiesSchema } from './publish-activities
         ]),
         MulterModule.register({}),
         FilesModule,
+        NotificationModule,
     ],
     controllers: [ActivitiesController],
     providers: [ActivitiesService],

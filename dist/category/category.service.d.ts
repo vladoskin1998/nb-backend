@@ -29,12 +29,14 @@ import { GetPublishServiceDto, MoveSubCategoryIDDto, VisiableDto } from './categ
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishService } from './publish-service.schema';
+import { NotificationService } from 'src/notification/notification.service';
 export declare class CategoryService {
     private readonly categoryModel;
     private readonly subCategoryModel;
     private readonly publishServiceModel;
     private filesService;
-    constructor(categoryModel: Model<Category>, subCategoryModel: Model<SubCategory>, publishServiceModel: Model<PublishService>, filesService: FilesService);
+    private notificationService;
+    constructor(categoryModel: Model<Category>, subCategoryModel: Model<SubCategory>, publishServiceModel: Model<PublishService>, filesService: FilesService, notificationService: NotificationService);
     createOrUpdateCategorie({ payload, file }: {
         payload: {
             name?: string;

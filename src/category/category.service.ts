@@ -11,8 +11,9 @@ import {
     VisiableDto,
 } from './category.dto'; // Импортируем DTO
 import { FilesService } from 'src/files/files.service';
-import { PRIVACY } from 'src/enum/enum';
+import { NOTIFICATION_EVENT, PRIVACY } from 'src/enum/enum';
 import { PublishService } from './publish-service.schema';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class CategoryService {
@@ -25,6 +26,7 @@ export class CategoryService {
         @InjectModel(PublishService.name)
         private readonly publishServiceModel: Model<PublishService>,
         private filesService: FilesService,
+        private notificationService: NotificationService
     ) { }
 
     async createOrUpdateCategorie({ payload, file }: { payload: { name?: string, categorieId?: string }, file?: Express.Multer.File | null }) {
@@ -261,6 +263,15 @@ export class CategoryService {
             const servicesId = new Types.ObjectId(payload.servicesId)
             const subServicesId = new Types.ObjectId(payload.subServicesId)
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_services', false)
+
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                name: payload.title,
+                fileName: filesName[0],
+                event: NOTIFICATION_EVENT.NOTIFICATION_SERVICE
+            })
+
             return await this.publishServiceModel.create({
                 ...payload, filesName, userId, userIdentityId, servicesId, subServicesId
             })

@@ -10,6 +10,8 @@ import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { MessageType } from '../types'
 import { IDUserDto } from 'src/user/user.dto';
 import { FilesService } from 'src/files/files.service';
+import { NotificationService } from 'src/notification/notification.service';
+import { NOTIFICATION_EVENT } from 'src/enum/enum';
 @Injectable()
 export class MessengerService {
 
@@ -18,7 +20,8 @@ export class MessengerService {
         @InjectModel(User.name) private userModel: Model<User>,
         @InjectModel(Chats.name) private chatsModel: Model<Chats>,
         @InjectModel(Message.name) private messageModel: Model<Message>,
-        private filesService: FilesService
+        private filesService: FilesService,
+        private notificationService: NotificationService
     ) { }
 
     async openChat(dto: NewChatDto)
@@ -72,14 +75,14 @@ export class MessengerService {
                     const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
                     return {
                         participants: item.toObject().participants,
-                        chatId: item._id, 
+                        chatId: item._id,
                         lastMessage: message ? message.toObject() : null,
                         isSupport: item.isSupport
                     };
                 })
             );
 
-            return chatsWithLastMessage;
+            return chatsWithLastMessage.reverse();
         } catch (error) {
             throw new Error('SERVER ERROR');
         }
@@ -102,6 +105,22 @@ export class MessengerService {
             const chatId = new Types.ObjectId(payload.chatId)
             const senderId = new Types.ObjectId(payload.senderId)
             await this.messageModel.create({ ...payload, chatId, senderId })
+
+            const { participants } = (await this.chatsModel.findOne({ _id: chatId }))
+            const rooms = participants.map(item => item.userId)
+
+            const { avatarFileName, fullName } = participants.find(item => item.userId === payload.senderId)
+
+            await this.notificationService.sendNotification({
+                ownerId: payload.senderId,
+                rooms,
+                fileName: avatarFileName,
+                title: payload.content,
+                name: fullName,
+                event: NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
+            })
+
+            await this.messageModel.create({ ...payload, chatId, senderId, timestamp: new Date() })
         } catch (error) {
             throw new Error('SERVER ERROR')
         }

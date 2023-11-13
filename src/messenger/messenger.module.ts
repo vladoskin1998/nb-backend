@@ -9,6 +9,7 @@ import { Message, MessageSchema } from './message.schema';
 import { User, UserSchema } from 'src/user/user.schema';
 import { UserIdentity, UserIdentitySchema } from 'src/user-identity/user-identity.schema';
 import { FilesModule } from 'src/files/files.module';
+import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { FilesModule } from 'src/files/files.module';
         ]),
         UserModule,
         FilesModule,
+        NotificationModule,
     ],
     controllers: [MessengerController],
     providers: [MessengerService, MessengerGateway]

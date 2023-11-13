@@ -11,6 +11,7 @@ import {
 import { FilesModule } from '../files/files.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { PublishService, PublishServiceSchema } from './publish-service.schema';
+import { NotificationModule } from 'src/notification/notification.module';
 @Module({
     imports: [
         MongooseModule.forFeature([
@@ -20,6 +21,7 @@ import { PublishService, PublishServiceSchema } from './publish-service.schema';
         ]),
         MulterModule.register({}),
         FilesModule,
+        NotificationModule,
     ],
     controllers: [CategoryController],
     providers: [CategoryService],

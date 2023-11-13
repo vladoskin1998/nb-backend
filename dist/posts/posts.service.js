@@ -18,14 +18,19 @@ const publish_posts_schema_1 = require("./publish-posts.schema");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const files_service_1 = require("../files/files.service");
+const enum_1 = require("../enum/enum");
 const likes_schema_1 = require("../likes/likes.schema");
 const publish_comments_schema_1 = require("./publish-comments.schema");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
+const notification_service_1 = require("../notification/notification.service");
 let PostsService = class PostsService {
-    constructor(publishPostsModel, likesModel, publishCommentsModel, filesService) {
+    constructor(publishPostsModel, likesModel, publishCommentsModel, userIdentity, filesService, notificationService) {
         this.publishPostsModel = publishPostsModel;
         this.likesModel = likesModel;
         this.publishCommentsModel = publishCommentsModel;
+        this.userIdentity = userIdentity;
         this.filesService = filesService;
+        this.notificationService = notificationService;
     }
     async getPosts(body) {
         try {
@@ -123,9 +128,17 @@ let PostsService = class PostsService {
             const userIdentityId = new mongoose_2.Types.ObjectId(payload.userIdentityId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_post', false);
             const likesId = (await this.likesModel.create({}))._id;
+            await this.notificationService.sendNotificationBroadcast({
+                ownerId: payload.userId,
+                title: payload.text,
+                fileName: filesName[0],
+                name: payload.title,
+                event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_NEWS
+            });
             return await this.publishPostsModel.create(Object.assign(Object.assign({}, payload), { filesName, userId, userIdentityId, likes: likesId }));
         }
         catch (error) {
+            console.log(error);
         }
     }
     async addComment(body) {
@@ -151,10 +164,13 @@ PostsService = __decorate([
     __param(0, (0, mongoose_1.InjectModel)(publish_posts_schema_1.PublishPosts.name)),
     __param(1, (0, mongoose_1.InjectModel)(likes_schema_1.Likes.name)),
     __param(2, (0, mongoose_1.InjectModel)(publish_comments_schema_1.PublishComments.name)),
+    __param(3, (0, mongoose_1.InjectModel)(user_identity_schema_1.UserIdentity.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
-        files_service_1.FilesService])
+        mongoose_2.Model,
+        files_service_1.FilesService,
+        notification_service_1.NotificationService])
 ], PostsService);
 exports.PostsService = PostsService;
 //# sourceMappingURL=posts.service.js.map

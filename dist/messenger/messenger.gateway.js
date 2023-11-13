@@ -24,9 +24,8 @@ let MessengerGateway = class MessengerGateway {
     }
     async joinRoom(socket, chatId) {
         const room = String(chatId);
-        console.log(room);
         socket.join(room);
-        console.log("join room", this.server.sockets.adapter.rooms);
+        console.log("join room----->", this.server.sockets.adapter.rooms);
     }
     async leaveRoom(socket, chatIDDto) {
         const { chatId } = chatIDDto;
@@ -90,7 +89,7 @@ MessengerGateway = __decorate([
                 "https://environs.life",
             ],
             credentials: true,
-        },
+        }
     }),
     __metadata("design:paramtypes", [messenger_service_1.MessengerService])
 ], MessengerGateway);

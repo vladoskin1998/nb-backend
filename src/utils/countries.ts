@@ -1,19 +1,3 @@
-export const LOCAL_COUNTRIES = [
-    { _id: '380', title: `Ukrainian` },
-    { _id: '48', title: `Polish` },
-    { _id: '370', title: `Lithuanian` },
-    { _id: '420', title: `Czech` },
-    { _id: '421', title: `Slovak` },
-    { _id: '371', title: `Latvian` },
-    { _id: '40', title: `Romanian` },
-    { _id: '1284', title: `British Virgin Islander` },
-    { _id: '34', title: `Spanish` },
-    { _id: '372', title: `Estonian` },
-    { _id: '39', title: `Italian` },
-    { _id: '373', title: `Moldovan` },
-    { _id: '33', title: `French` },
-    { _id: '351', title: `Portuguese` },
-];
 export const COUNTRIES = [
     { _id: '93', title: 'Afghan' },
     { _id: '358', title: 'Åland Islander' },
