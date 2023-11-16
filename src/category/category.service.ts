@@ -266,6 +266,7 @@ export class CategoryService {
 
             await this.notificationService.sendNotificationBroadcast({
                 ownerId: payload.userId,
+                ownerIdentityId: payload.userIdentityId,
                 title: payload.text,
                 name: payload.title,
                 fileName: filesName[0],

@@ -45,6 +45,7 @@ export class UserService {
             const userId = new Types.ObjectId(_id)
             await this.jwtTokenService.deleteToken(userId)
             await this.userModel.deleteOne({ _id: userId })
+            //добавить все модели где юзер айди равно удаленному юзеру что бы удалить все связаное
         } catch (error) {
             throw error
         }

@@ -51,33 +51,37 @@ let AuthService = class AuthService {
         return await this.login({ email, password: candidate === null || candidate === void 0 ? void 0 : candidate.password, methodRegistration });
     }
     async registration({ email, password, methodRegistration, fullName }) {
-        console.log("methodRegistration", methodRegistration);
-        const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
-        if (candidate) {
-            throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
+        try {
+            const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
+            if (candidate) {
+                throw new common_1.HttpException(`User ${email} already created`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            const hashPassword = await bcrypt.hash(password, 3);
+            const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
+            const user = await this.userModel.create({
+                email,
+                password: hashPassword,
+                methodRegistration,
+                fullName,
+                codeCheck,
+            });
+            if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
+                await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
+            }
+            else {
+                await user.updateOne({ isCheckedEmail: true });
+            }
+            const { role, id } = user;
+            const tokens = this.jwtTokenService.generateTokens({ email, role, id });
+            await this.jwtTokenService.saveToken(id, tokens.refreshToken);
+            const userObject = user.toObject();
+            delete userObject.password;
+            delete userObject.codeCheck;
+            return Object.assign(Object.assign({}, tokens), { user: userObject });
         }
-        const hashPassword = await bcrypt.hash(password, 3);
-        const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
-        let isCheckedEmail = true;
-        if (methodRegistration === enum_1.METHOD_REGISTRATION.JWT || !methodRegistration) {
-            await this.regenereteCodeByEmail({ email, sendMethod: enum_1.METHOD_FORGET_PASSWORD.EMAIL });
-            isCheckedEmail = false;
+        catch (error) {
+            throw new error;
         }
-        const user = await this.userModel.create({
-            email,
-            password: hashPassword,
-            methodRegistration,
-            fullName,
-            codeCheck,
-            isCheckedEmail,
-        });
-        const { role, id } = user;
-        const tokens = this.jwtTokenService.generateTokens({ email, role, id });
-        await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-        const userObject = user.toObject();
-        delete userObject.password;
-        delete userObject.codeCheck;
-        return Object.assign(Object.assign({}, tokens), { user: userObject });
     }
     async login({ email, password, methodRegistration = enum_1.METHOD_REGISTRATION.JWT }) {
         const user = await this.userModel.findOne({ email }).select('-isValidationUser');
@@ -119,15 +123,20 @@ let AuthService = class AuthService {
         return Object.assign(Object.assign({}, tokens), { user });
     }
     async regenereteCodeByEmail({ email, sendMethod }) {
-        const user = await this.userModel.findOne({ email });
-        const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
-        await user.updateOne({ codeCheck });
-        if (sendMethod === enum_1.METHOD_FORGET_PASSWORD.PHONE) {
-            this.sendCodePhoneMessage({ phone: user.phone, codeCheck });
+        try {
+            const user = await this.userModel.findOne({ email });
+            const codeCheck = (0, utils_1.generateRandomFourDigitCode)();
+            await user.updateOne({ codeCheck });
+            if (sendMethod === enum_1.METHOD_FORGET_PASSWORD.PHONE) {
+                this.sendCodePhoneMessage({ phone: user.phone, codeCheck });
+                return;
+            }
+            this.sendCodeEmailMessage({ email, codeCheck });
             return;
         }
-        this.sendCodeEmailMessage({ email, codeCheck });
-        return;
+        catch (error) {
+            throw new error;
+        }
     }
     async sendCodeEmailMessage({ email, codeCheck }) {
         await this.mailService.sendMail({

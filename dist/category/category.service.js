@@ -181,6 +181,7 @@ let CategoryService = class CategoryService {
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_services', false);
             await this.notificationService.sendNotificationBroadcast({
                 ownerId: payload.userId,
+                ownerIdentityId: payload.userIdentityId,
                 title: payload.text,
                 name: payload.title,
                 fileName: filesName[0],

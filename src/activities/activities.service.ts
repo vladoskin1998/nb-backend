@@ -90,6 +90,7 @@ export class ActivitiesService {
             activitiesId: string
             coordinates: { lat: number; lng: number } 
             startDate: Date 
+            userIdentityId: string
         }, files: Array<Express.Multer.File> }
     ) {
         try {
@@ -101,6 +102,7 @@ export class ActivitiesService {
 
             await this.notificationService.sendNotificationBroadcast({
                 ownerId: payload.userId,
+                ownerIdentityId: payload.userIdentityId,
                 title: payload.text,
                 name: payload.title,
                 fileName: filesName[0],

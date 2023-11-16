@@ -49,12 +49,13 @@ export declare class NotificationService {
     }): Promise<void>;
     sendNotificationBroadcast(props: {
         ownerId: string;
+        ownerIdentityId: string;
         title: string;
         fileName: string;
         name: string;
         event: NOTIFICATION_EVENT;
     }): Promise<void>;
-    getUserNotification(body: UserIdDTO): Promise<(import("mongoose").Document<unknown, {}, Notification> & Notification & {
+    getUserNotification(body: UserIdDTO): Promise<Omit<Omit<import("mongoose").Document<unknown, {}, Notification> & Notification & {
         _id: import("mongoose").Types.ObjectId;
-    })[]>;
+    }, never>, never>[]>;
 }

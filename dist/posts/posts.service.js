@@ -130,6 +130,7 @@ let PostsService = class PostsService {
             const likesId = (await this.likesModel.create({}))._id;
             await this.notificationService.sendNotificationBroadcast({
                 ownerId: payload.userId,
+                ownerIdentityId: payload.userIdentityId,
                 title: payload.text,
                 fileName: filesName[0],
                 name: payload.title,

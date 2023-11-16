@@ -72,6 +72,8 @@ export declare class UserIdentityController {
             _id: string | number;
             title: string;
         }[];
+        isSeenServices: boolean;
+        isSeenActvities: boolean;
         _id: import("mongoose").Types.ObjectId;
     }>;
     profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{

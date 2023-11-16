@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { NOTIFICATION_EVENT, NOTIFICATION_MAILING } from 'src/enum/enum';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { User } from 'src/user/user.schema';
 
 export type AuthenticationDocument = HydratedDocument<Notification>;
@@ -11,6 +12,9 @@ export class Notification {
     @Prop({ type: Types.ObjectId, ref: User.name })
     ownerId: Types.ObjectId;
 
+    @Prop({ type: Types.ObjectId, ref: UserIdentity.name })
+    ownerIdentityId: Types.ObjectId;
+    
     @Prop({ type: Types.ObjectId, ref: User.name })
     userId: Types.ObjectId;
 

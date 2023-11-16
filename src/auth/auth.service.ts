@@ -53,49 +53,52 @@ export class AuthService {
 
     async registration({ email, password, methodRegistration, fullName }: RegistrationDto) {
 
-        console.log("methodRegistration",methodRegistration);
-        
-        const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
+        try {
 
-        if (candidate) {
-            throw new HttpException(
-                `User ${email} already created`,
-                HttpStatus.BAD_REQUEST,
-            );
+            const candidate = await this.userModel.findOne({ email }).select('-isValidationUser -password');
+
+            if (candidate) {
+                throw new HttpException(
+                    `User ${email} already created`,
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+
+            const hashPassword = await bcrypt.hash(password, 3);
+            const codeCheck = generateRandomFourDigitCode()
+
+            const user = await this.userModel.create({
+                email,
+                password: hashPassword,
+                methodRegistration,
+                fullName,
+                codeCheck,
+            })
+
+            if (methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration) {
+                await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
+            }
+            else {
+                await user.updateOne({ isCheckedEmail: true })
+            }
+
+            const { role, id } = user;
+
+            const tokens = this.jwtTokenService.generateTokens({ email, role, id });
+            await this.jwtTokenService.saveToken(id, tokens.refreshToken);
+
+            const userObject = user.toObject();
+
+            delete userObject.password
+            delete userObject.codeCheck
+
+
+
+            return { ...tokens, user: userObject };
+        } catch (error) {
+            throw new error
         }
 
-        const hashPassword = await bcrypt.hash(password, 3);
-        const codeCheck = generateRandomFourDigitCode()
-
-        let isCheckedEmail = true
-
-        if (methodRegistration === METHOD_REGISTRATION.JWT || !methodRegistration) {
-            await this.regenereteCodeByEmail({ email, sendMethod: METHOD_FORGET_PASSWORD.EMAIL })
-            isCheckedEmail = false
-        }
-        
-        const user = await this.userModel.create({
-            email,
-            password: hashPassword,
-            methodRegistration,
-            fullName,
-            codeCheck,
-            isCheckedEmail,
-        })
-
-        const { role, id } = user;
-
-        const tokens = this.jwtTokenService.generateTokens({ email, role, id });
-        await this.jwtTokenService.saveToken(id, tokens.refreshToken);
-
-        const userObject = user.toObject();
-
-        delete userObject.password
-        delete userObject.codeCheck
-
-
-
-        return { ...tokens, user: userObject };
     }
 
     async login({ email, password, methodRegistration = METHOD_REGISTRATION.JWT }: AuthDto) {
@@ -153,17 +156,22 @@ export class AuthService {
     }
 
     async regenereteCodeByEmail({ email, sendMethod }: { email: string, sendMethod: METHOD_FORGET_PASSWORD }) {
-        const user = await this.userModel.findOne({ email })
-        const codeCheck = generateRandomFourDigitCode()
-        await user.updateOne({ codeCheck })
+        try {
+            const user = await this.userModel.findOne({ email })
+            const codeCheck = generateRandomFourDigitCode()
+            await user.updateOne({ codeCheck })
 
-        if (sendMethod === METHOD_FORGET_PASSWORD.PHONE) {
-            this.sendCodePhoneMessage({ phone: user.phone, codeCheck })
+            if (sendMethod === METHOD_FORGET_PASSWORD.PHONE) {
+                this.sendCodePhoneMessage({ phone: user.phone, codeCheck })
+                return
+            }
+
+            this.sendCodeEmailMessage({ email, codeCheck })
             return
+        } catch (error) {
+            throw new error
         }
 
-        this.sendCodeEmailMessage({ email, codeCheck })
-        return
     }
 
     async sendCodeEmailMessage({ email, codeCheck }: { email: string, codeCheck: number }) {
@@ -171,13 +179,11 @@ export class AuthService {
             to: email,
             subject: 'Your verification code to Neigharbor',
             text: `Your code ${codeCheck}, please input code in field`
-        }
-        )
+        })
     }
 
     async sendCodePhoneMessage({ phone, codeCheck }: { phone: string, codeCheck: number }) {
-        await this.smsService.sendSms({phone, body:  `Your code ${codeCheck}, please input code in field`})
-
+        await this.smsService.sendSms({ phone, body: `Your code ${codeCheck}, please input code in field` })
     }
 
     async confirmAccount({ email, code }: ConfirmCodeEmailDTO) {
@@ -240,21 +246,21 @@ export class AuthService {
             );
         }
 
-        const password =  await bcrypt.hash(newPassword, 3);
+        const password = await bcrypt.hash(newPassword, 3);
 
-        if(hashPassword && hashPassword === user.password ){
-            await user.updateOne({password})
-            return 
+        if (hashPassword && hashPassword === user.password) {
+            await user.updateOne({ password })
+            return
         }
 
         const isPassEquals = await bcrypt.compare(oldPassword, user.password);
 
-        if(!isPassEquals){
-          throw new HttpException('Bad password', HttpStatus.BAD_REQUEST)
+        if (!isPassEquals) {
+            throw new HttpException('Bad password', HttpStatus.BAD_REQUEST)
         }
 
-        await user.updateOne({password})
-        return 
+        await user.updateOne({ password })
+        return
 
     }
 

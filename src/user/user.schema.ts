@@ -4,6 +4,7 @@ import { HydratedDocument, Types } from 'mongoose';
 import { UserProfession } from 'src/user-identity/user-profession.schema';
 import { UserInterests } from 'src/user-identity/user-interests.schema';
 import { UserSkills } from 'src/user-identity/user-skills.schema';
+import { UserIdentity } from 'src/user-identity/user-identity.schema';
 
 
 export type UserDocument = HydratedDocument<User>;
@@ -33,6 +34,8 @@ export class User {
 
     @Prop({ default: METHOD_REGISTRATION.JWT })
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;
+
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

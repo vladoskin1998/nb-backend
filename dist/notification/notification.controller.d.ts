@@ -28,7 +28,7 @@ import { NotificationService } from "./notification.service";
 export declare class NotificationController {
     private notificationService;
     constructor(notificationService: NotificationService);
-    getNotification(body: UserIdDTO): Promise<(import("mongoose").Document<unknown, {}, import("./notification.schema").Notification> & import("./notification.schema").Notification & {
+    getNotification(body: UserIdDTO): Promise<Omit<Omit<import("mongoose").Document<unknown, {}, import("./notification.schema").Notification> & import("./notification.schema").Notification & {
         _id: import("mongoose").Types.ObjectId;
-    })[]>;
+    }, never>, never>[]>;
 }

@@ -58,6 +58,8 @@ export declare class UserIdentity {
     profession: Types.ObjectId[] | null;
     interests: Types.ObjectId[] | null;
     skills: Types.ObjectId[] | null;
+    isSeenServices: boolean;
+    isSeenActvities: boolean;
 }
 export declare const UserIdentitySchema: import("mongoose").Schema<UserIdentity, import("mongoose").Model<UserIdentity, any, any, any, import("mongoose").Document<unknown, any, UserIdentity> & UserIdentity & {
     _id: Types.ObjectId;

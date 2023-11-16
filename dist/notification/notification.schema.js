@@ -13,6 +13,7 @@ exports.NotificationSchema = exports.Notification = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
+const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const user_schema_1 = require("../user/user.schema");
 let Notification = class Notification {
 };
@@ -20,6 +21,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Notification.prototype, "ownerId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_identity_schema_1.UserIdentity.name }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Notification.prototype, "ownerIdentityId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name }),
     __metadata("design:type", mongoose_2.Types.ObjectId)

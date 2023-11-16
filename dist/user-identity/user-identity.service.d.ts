@@ -80,6 +80,8 @@ export declare class UserIdentityService {
             _id: string | number;
             title: string;
         }[];
+        isSeenServices: boolean;
+        isSeenActvities: boolean;
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{

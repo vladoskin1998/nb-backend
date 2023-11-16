@@ -55,9 +55,10 @@ let NotificationService = class NotificationService {
     }
     async sendNotificationBroadcast(props) {
         try {
-            const { ownerId, title, fileName, name, event } = props;
+            const { ownerId, ownerIdentityId, title, fileName, name, event } = props;
             await this.notificationModel.create({
                 ownerId,
+                ownerIdentityId,
                 title,
                 fileName,
                 name,
@@ -77,6 +78,14 @@ let NotificationService = class NotificationService {
                     { userId: body.userId },
                     { mailing: enum_1.NOTIFICATION_MAILING.NOTIFICATION_BROADCAST },
                 ],
+            })
+                .populate({
+                path: 'ownerId',
+                select: 'fullName'
+            })
+                .populate({
+                path: 'ownerIdentityId',
+                select: 'avatarFileName'
             });
             await this.notificationModel.deleteMany({ userId: body.userId });
             return notification.reverse();

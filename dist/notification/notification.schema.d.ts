@@ -27,6 +27,7 @@ import { NOTIFICATION_EVENT, NOTIFICATION_MAILING } from 'src/enum/enum';
 export type AuthenticationDocument = HydratedDocument<Notification>;
 export declare class Notification {
     ownerId: Types.ObjectId;
+    ownerIdentityId: Types.ObjectId;
     userId: Types.ObjectId;
     title: string;
     fileName: string;

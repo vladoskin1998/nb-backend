@@ -89,6 +89,13 @@ export class UserIdentity {
 
     @Prop({ type: [{ type: Types.ObjectId, ref: UserSkills.name }], default: null })
     skills: Types.ObjectId[] | null;
+
+    @Prop({default: false })
+    isSeenServices: boolean;
+    
+    @Prop({default: false })
+    isSeenActvities: boolean;
+    
 }
 
 export const UserIdentitySchema = SchemaFactory.createForClass(UserIdentity);

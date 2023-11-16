@@ -58,6 +58,7 @@ export declare class ActivitiesService {
                 lng: number;
             };
             startDate: Date;
+            userIdentityId: string;
         };
         files: Array<Express.Multer.File>;
     }): Promise<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {

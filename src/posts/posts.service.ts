@@ -172,6 +172,7 @@ export class PostsService {
 
             await this.notificationService.sendNotificationBroadcast({
                 ownerId: payload.userId,
+                ownerIdentityId: payload.userIdentityId,
                 title: payload.text,
                 fileName: filesName[0],
                 name: payload.title,

@@ -123,6 +123,14 @@ __decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.Types.ObjectId, ref: user_skills_schema_1.UserSkills.name }], default: null }),
     __metadata("design:type", Array)
 ], UserIdentity.prototype, "skills", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserIdentity.prototype, "isSeenServices", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserIdentity.prototype, "isSeenActvities", void 0);
 UserIdentity = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], UserIdentity);
