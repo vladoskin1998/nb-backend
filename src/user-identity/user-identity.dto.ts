@@ -131,5 +131,9 @@ export class ProfileTextInfoDTO {
     @IsOptional()
     @IsArray()
     readonly certificatesFileName?: string[] | null;
+
+    @IsOptional()
+    @IsString()
+    readonly lastStepChangeProfile?: string;
 }
 

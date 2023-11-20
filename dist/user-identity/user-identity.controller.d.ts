@@ -74,6 +74,7 @@ export declare class UserIdentityController {
         }[];
         isSeenServices: boolean;
         isSeenActvities: boolean;
+        lastStepChangeProfile: string;
         _id: import("mongoose").Types.ObjectId;
     }>;
     profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{
@@ -102,6 +103,7 @@ export declare class UserIdentityController {
         interests?: string[];
         skills?: string[];
         certificatesFileName?: string[];
+        lastStepChangeProfile?: string;
     }>;
     profileIdentity(body: ProfileSelectDTO): Promise<{
         [x: string]: import("./user-identity.dto").ProfessionDto[];

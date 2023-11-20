@@ -82,6 +82,7 @@ export declare class UserIdentityService {
         }[];
         isSeenServices: boolean;
         isSeenActvities: boolean;
+        lastStepChangeProfile: string;
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{
@@ -113,6 +114,7 @@ export declare class UserIdentityService {
         interests?: string[];
         skills?: string[];
         certificatesFileName?: string[];
+        lastStepChangeProfile?: string;
     }>;
     profileIdentity(body: ProfileSelectDTO): Promise<{
         [x: string]: import("./user-identity.dto").ProfessionDto[];

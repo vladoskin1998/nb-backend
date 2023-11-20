@@ -131,6 +131,10 @@ __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], UserIdentity.prototype, "isSeenActvities", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: '/profile' }),
+    __metadata("design:type", String)
+], UserIdentity.prototype, "lastStepChangeProfile", void 0);
 UserIdentity = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], UserIdentity);

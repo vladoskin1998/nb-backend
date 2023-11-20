@@ -57,7 +57,9 @@ export declare enum FAMILYSTATUS {
     MARRIED = "Married",
     CIVILMARIEGE = "In a civil marriage",
     COMPLICATED = "It\u2019s Complicated",
-    SEPARATETHREADING = "Separate threading"
+    SEPARATETHREADING = "Separate threading",
+    DIVORCED = "Divorced",
+    WIDOW = "Widower/Widow"
 }
 export declare enum QUALITYENUM {
     INTERESTS = "Interests",

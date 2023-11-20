@@ -70,6 +70,8 @@ var FAMILYSTATUS;
     FAMILYSTATUS["CIVILMARIEGE"] = "In a civil marriage";
     FAMILYSTATUS["COMPLICATED"] = "It\u2019s Complicated";
     FAMILYSTATUS["SEPARATETHREADING"] = "Separate threading";
+    FAMILYSTATUS["DIVORCED"] = "Divorced";
+    FAMILYSTATUS["WIDOW"] = "Widower/Widow";
 })(FAMILYSTATUS = exports.FAMILYSTATUS || (exports.FAMILYSTATUS = {}));
 var QUALITYENUM;
 (function (QUALITYENUM) {

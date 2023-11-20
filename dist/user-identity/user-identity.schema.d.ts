@@ -60,6 +60,7 @@ export declare class UserIdentity {
     skills: Types.ObjectId[] | null;
     isSeenServices: boolean;
     isSeenActvities: boolean;
+    lastStepChangeProfile: string;
 }
 export declare const UserIdentitySchema: import("mongoose").Schema<UserIdentity, import("mongoose").Model<UserIdentity, any, any, any, import("mongoose").Document<unknown, any, UserIdentity> & UserIdentity & {
     _id: Types.ObjectId;

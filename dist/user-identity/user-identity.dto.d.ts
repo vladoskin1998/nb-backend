@@ -40,5 +40,6 @@ export declare class ProfileTextInfoDTO {
     readonly interests?: string[] | null;
     readonly skills?: string[] | null;
     readonly certificatesFileName?: string[] | null;
+    readonly lastStepChangeProfile?: string;
 }
 export {};

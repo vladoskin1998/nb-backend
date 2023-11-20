@@ -95,6 +95,9 @@ export class UserIdentity {
     
     @Prop({default: false })
     isSeenActvities: boolean;
+
+    @Prop({default: '/profile' })
+    lastStepChangeProfile: string;
     
 }
 
