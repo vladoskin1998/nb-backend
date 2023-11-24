@@ -20,10 +20,13 @@ const mongoose_2 = require("mongoose");
 const enum_1 = require("../enum/enum");
 const jwt_auth_service_1 = require("../auth/jwt-auth.service");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
+const utils_1 = require("../utils/utils");
+const friends_schema_1 = require("./friends.schema");
 let UserService = class UserService {
-    constructor(userModel, userIdentityModel, jwtTokenService) {
+    constructor(userModel, userIdentityModel, friendsModel, jwtTokenService) {
         this.userModel = userModel;
         this.userIdentityModel = userIdentityModel;
+        this.friendsModel = friendsModel;
         this.jwtTokenService = jwtTokenService;
     }
     async getUsers({ _id, role, searchName }) {
@@ -99,7 +102,7 @@ let UserService = class UserService {
         let closestUser = null;
         let minDistance = Infinity;
         for (const user of userWithCoord) {
-            const distance = this.getDistance({
+            const distance = (0, utils_1.getDistance)({
                 myLat,
                 myLng,
                 lat: user.coordinates.lat,
@@ -112,26 +115,78 @@ let UserService = class UserService {
         }
         return Object.assign(Object.assign({}, closestUser), { userId: closestUser._id });
     }
-    getDistance({ myLat, myLng, lat, lng }) {
-        const toRad = (value) => (value * Math.PI) / 180;
-        const R = 6371;
-        const dLat = toRad(lat - myLat);
-        const dLon = toRad(lng - myLng);
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(myLat)) *
-                Math.cos(toRad(lat)) *
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-        return distance;
+    async getMyFriends(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const friends = await this.friendsModel.find({ userId }).populate({
+                path: 'friendId',
+                select: 'fullName email phone role',
+                options: { sort: { fullName: 1 } }
+            });
+            return friends;
+        }
+        catch (error) {
+        }
+    }
+    async checkToMyFriend(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const friendId = new mongoose_2.Types.ObjectId(body.friendId);
+            const isAlredyExistFriend = await this.friendsModel.findOne({
+                $and: [
+                    { userId },
+                    { friendId },
+                ],
+            });
+            console.log(isAlredyExistFriend);
+            return Boolean(isAlredyExistFriend);
+        }
+        catch (error) {
+            throw new error;
+        }
+    }
+    async addToMyFriend(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const friendId = new mongoose_2.Types.ObjectId(body.friendId);
+            const isAlredyExistFriend = await this.checkToMyFriend(body);
+            if (isAlredyExistFriend) {
+                throw new common_1.HttpException(`Friend already added`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            const friend = await this.friendsModel.create({ userId, friendId });
+            return await friend.populate({
+                path: 'friendId',
+                select: 'fullName email phone role'
+            });
+        }
+        catch (error) {
+            throw new error;
+        }
+    }
+    async deleteMyFriend(body) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(body._id);
+            const friendId = new mongoose_2.Types.ObjectId(body.friendId);
+            const friend = await this.friendsModel.findOneAndRemove({
+                $and: [
+                    { userId },
+                    { friendId },
+                ],
+            });
+            return friend;
+        }
+        catch (error) {
+            throw new error;
+        }
     }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
     __param(1, (0, mongoose_1.InjectModel)(user_identity_schema_1.UserIdentity.name)),
+    __param(2, (0, mongoose_1.InjectModel)(friends_schema_1.Friends.name)),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model,
         jwt_auth_service_1.JwtTokenService])
 ], UserService);

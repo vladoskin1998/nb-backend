@@ -9,6 +9,7 @@ import { UserSkills } from './user-skills.schema';
 import { LocationDto, ProfileSelectDTO, ProfileTextInfoDTO } from './user-identity.dto';
 import { UserIdentity } from './user-identity.schema';
 import { FilesService } from 'src/files/files.service';
+import { USERIDENTITYFILTER } from 'src/utils/constants';
 
 @Injectable()
 export class UserIdentityService {
@@ -26,11 +27,20 @@ export class UserIdentityService {
     ) { }
 
 
-    async getIdentityInforamation(_id: string) {
+    async getIdentityInforamation(_id: string, options?: typeof USERIDENTITYFILTER) {
         try {
             console.log("getIdentityInforamation--->",_id);
             
             const userId = new Types.ObjectId(_id)
+
+            if(options && options?.length){
+                const selectOptions = options.reduce((p,s) => `${p} ${s}`,'').trim()
+                console.log('selectoption', selectOptions);
+                
+                return await this.userIdentity.findOne({ user: userId }).select(selectOptions)
+            }
+
+
             let userIdentity = await this.userIdentity.findOne({ user: userId })
             const userIdentityId = userIdentity?._id
             if (!userIdentity) {

@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import {  ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { AddFriendDto, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -27,15 +27,44 @@ export class UserController {
     @Post('user-text-info')
     async userTextInfo(
         @Body() body: UserTextInfoDTO
-    ){
+    ) {
         return await this.userService.userTextInfo(body)
     }
 
-    
+
     @Post('get-closest-user')
     async getClosestUserByRole(
         @Body() body: ClosestUserDto
-    ){
+    ) {
         return await this.userService.getClosestUserByRole(body)
+    }
+
+
+    @Post('get-friends')
+    async getMyFriends(
+        @Body() body: IDUserDto
+    ) {
+        return await this.userService.getMyFriends(body)
+    }
+    
+    @Post('check-my-friend')
+    async checkToMyFriend(
+        @Body() body: AddFriendDto
+    ) {
+        return await this.userService.checkToMyFriend(body)
+    }
+    
+    @Post('add-my-friend')
+    async addToMyFriend(
+        @Body() body: AddFriendDto
+    ) {
+        return await this.userService.addToMyFriend(body)
+    }
+
+    @Post('delete-to-friend')
+    async deleteMyFriend(
+        @Body() body: AddFriendDto
+    ) {
+        return await this.userService.deleteMyFriend(body)
     }
 }

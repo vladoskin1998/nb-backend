@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.haversine = exports.generateRandomFourDigitCode = exports.isValidNationality = exports.isNullOrString = exports.isDateOrString = void 0;
+exports.getDistance = exports.generateRandomFourDigitCode = exports.isValidNationality = exports.isNullOrString = exports.isDateOrString = void 0;
 function isDateOrString(value) {
     if (value instanceof Date) {
         return true;
@@ -36,16 +36,19 @@ const generateRandomFourDigitCode = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 exports.generateRandomFourDigitCode = generateRandomFourDigitCode;
-const haversine = (lat1, lon1, lat2, lon2) => {
+const getDistance = ({ myLat, myLng, lat, lng }) => {
+    const toRad = (value) => (value * Math.PI) / 180;
     const R = 6371;
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const dLat = toRad(lat - myLat);
+    const dLon = toRad(lng - myLng);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        Math.cos(toRad(myLat)) *
+            Math.cos(toRad(lat)) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c;
     return distance;
 };
-exports.haversine = haversine;
+exports.getDistance = getDistance;
 //# sourceMappingURL=utils.js.map

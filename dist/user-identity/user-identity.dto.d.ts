@@ -1,8 +1,12 @@
-import { EDUCATION, FAMILYSTATUS, ORIENTATION, PRIVACY, QUALITYENUM, SEX } from "src/enum/enum";
+import { EDUCATION, FAMILYSTATUS, ONLINEOFFLINE, ORIENTATION, PRIVACY, QUALITYENUM, SEX } from "src/enum/enum";
 import { IDUserDto } from "src/user/user.dto";
+import { USERIDENTITYFILTER } from "src/utils/constants";
 export declare class ProfessionDto {
     _id: string;
     title: string;
+}
+export declare class GetUserIdentityDto extends IDUserDto {
+    options?: typeof USERIDENTITYFILTER;
 }
 export declare class ProfileSelectDTO extends IDUserDto {
     readonly value: ProfessionDto[];
@@ -40,6 +44,10 @@ export declare class ProfileTextInfoDTO {
     readonly interests?: string[] | null;
     readonly skills?: string[] | null;
     readonly certificatesFileName?: string[] | null;
+    readonly isAddedServices?: boolean;
+    readonly isAddedPost?: boolean;
+    readonly isExploreDone?: boolean;
     readonly lastStepChangeProfile?: string;
+    readonly online?: ONLINEOFFLINE;
 }
 export {};

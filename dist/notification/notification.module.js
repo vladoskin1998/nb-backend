@@ -13,6 +13,7 @@ const notification_gateway_1 = require("./notification.gateway");
 const notification_schema_1 = require("./notification.schema");
 const mongoose_1 = require("@nestjs/mongoose");
 const notification_controller_1 = require("./notification.controller");
+const user_identity_module_1 = require("../user-identity/user-identity.module");
 let NotificationModule = class NotificationModule {
 };
 NotificationModule = __decorate([
@@ -21,6 +22,7 @@ NotificationModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: notification_schema_1.Notification.name, schema: notification_schema_1.NotificationSchema },
             ]),
+            user_identity_module_1.UserIdentityModule
         ],
         controllers: [notification_controller_1.NotificationController],
         providers: [notification_gateway_1.NotificationGateway, notification_service_1.NotificationService],

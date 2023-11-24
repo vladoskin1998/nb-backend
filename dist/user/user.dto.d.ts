@@ -2,6 +2,9 @@ import { ROLES } from 'src/enum/enum';
 export declare class IDUserDto {
     readonly _id: string;
 }
+export declare class AddFriendDto extends IDUserDto {
+    readonly friendId: string;
+}
 export declare class GetUsers extends IDUserDto {
     role: ROLES;
     searchName: string;

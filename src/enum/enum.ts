@@ -116,3 +116,8 @@ export enum METHOD_FORGET_PASSWORD {
     PHONE = 'phone',
     EMAIL = 'email'
 }
+
+export enum ONLINEOFFLINE{
+    ONLINE = 'online',
+    OFFLINE = 'offline'
+}

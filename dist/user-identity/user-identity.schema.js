@@ -126,15 +126,23 @@ __decorate([
 __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
-], UserIdentity.prototype, "isSeenServices", void 0);
+], UserIdentity.prototype, "isAddedServices", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
-], UserIdentity.prototype, "isSeenActvities", void 0);
+], UserIdentity.prototype, "isAddedPost", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserIdentity.prototype, "isExploreDone", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ default: '/profile' }),
     __metadata("design:type", String)
 ], UserIdentity.prototype, "lastStepChangeProfile", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: enum_1.ONLINEOFFLINE.OFFLINE, enum: enum_1.ONLINEOFFLINE }),
+    __metadata("design:type", String)
+], UserIdentity.prototype, "online", void 0);
 UserIdentity = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false })
 ], UserIdentity);

@@ -17,23 +17,24 @@ const websockets_1 = require("@nestjs/websockets");
 const notification_service_1 = require("./notification.service");
 const socket_io_1 = require("socket.io");
 const enum_1 = require("../enum/enum");
-const messenger_dto_1 = require("../messenger/messenger.dto");
 const common_1 = require("@nestjs/common");
+const user_identity_service_1 = require("../user-identity/user-identity.service");
 let NotificationGateway = class NotificationGateway {
-    constructor(notificationService) {
+    constructor(notificationService, userIdentityService) {
         this.notificationService = notificationService;
+        this.userIdentityService = userIdentityService;
     }
     async joinNotificationRoom(socket, userId) {
-        console.log("userID--------------->", String(userId));
         const room = String(userId);
+        await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.ONLINE });
         if (room) {
             socket.join(room);
         }
-        console.log("notification room----->", this.server.sockets.adapter.rooms);
     }
-    async leaveNotificationRoom(socket, chatIDDto) {
-        const { chatId } = chatIDDto;
-        socket.leave(String(chatId));
+    async leaveNotificationRoom(socket, userId) {
+        const room = String(userId);
+        await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.OFFLINE });
+        socket.leave(String(room));
     }
     async sendNotificationToRooms(props) {
         const { rooms, ownerId, title, event, fileName, name } = props;
@@ -72,8 +73,7 @@ __decorate([
     __param(0, (0, websockets_1.ConnectedSocket)()),
     __param(1, (0, websockets_1.MessageBody)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket,
-        messenger_dto_1.ChatIDDto]),
+    __metadata("design:paramtypes", [socket_io_1.Socket, String]),
     __metadata("design:returntype", Promise)
 ], NotificationGateway.prototype, "leaveNotificationRoom", null);
 NotificationGateway = __decorate([
@@ -90,7 +90,8 @@ NotificationGateway = __decorate([
         }
     }),
     __param(0, (0, common_1.Inject)((0, common_1.forwardRef)(() => notification_service_1.NotificationService))),
-    __metadata("design:paramtypes", [notification_service_1.NotificationService])
+    __metadata("design:paramtypes", [notification_service_1.NotificationService,
+        user_identity_service_1.UserIdentityService])
 ], NotificationGateway);
 exports.NotificationGateway = NotificationGateway;
 //# sourceMappingURL=notification.gateway.js.map

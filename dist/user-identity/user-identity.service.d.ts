@@ -31,6 +31,7 @@ import { UserSkills } from './user-skills.schema';
 import { LocationDto, ProfileSelectDTO, ProfileTextInfoDTO } from './user-identity.dto';
 import { UserIdentity } from './user-identity.schema';
 import { FilesService } from 'src/files/files.service';
+import { USERIDENTITYFILTER } from 'src/utils/constants';
 export declare class UserIdentityService {
     private readonly userIdentity;
     private readonly userProfession;
@@ -38,7 +39,7 @@ export declare class UserIdentityService {
     private readonly userSkills;
     private readonly filesService;
     constructor(userIdentity: Model<UserIdentity>, userProfession: Model<UserProfession>, userInterests: Model<UserInterests>, userSkills: Model<UserSkills>, filesService: FilesService);
-    getIdentityInforamation(_id: string): Promise<(import("mongoose").Document<unknown, {}, UserIdentity> & UserIdentity & {
+    getIdentityInforamation(_id: string, options?: typeof USERIDENTITYFILTER): Promise<(import("mongoose").Document<unknown, {}, UserIdentity> & UserIdentity & {
         _id: Types.ObjectId;
     }) | {
         profession: (import("mongoose").Document<unknown, {}, UserProfession> & UserProfession & {
@@ -76,13 +77,15 @@ export declare class UserIdentityService {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: [] | {
+        nationality: {
             _id: string | number;
             title: string;
-        }[];
-        isSeenServices: boolean;
-        isSeenActvities: boolean;
+        }[] | [];
+        isAddedServices: boolean;
+        isAddedPost: boolean;
+        isExploreDone: boolean;
         lastStepChangeProfile: string;
+        online: import("src/enum/enum").ONLINEOFFLINE;
         _id: Types.ObjectId;
     }>;
     changeLocation(body: LocationDto): Promise<{
@@ -114,7 +117,11 @@ export declare class UserIdentityService {
         interests?: string[];
         skills?: string[];
         certificatesFileName?: string[];
+        isAddedServices?: boolean;
+        isAddedPost?: boolean;
+        isExploreDone?: boolean;
         lastStepChangeProfile?: string;
+        online?: import("src/enum/enum").ONLINEOFFLINE;
     }>;
     profileIdentity(body: ProfileSelectDTO): Promise<{
         [x: string]: import("./user-identity.dto").ProfessionDto[];

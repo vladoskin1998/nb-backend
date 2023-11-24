@@ -8,7 +8,6 @@ import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
 import { PublishComments } from './publish-comments.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
-import { haversine } from 'src/utils/utils';
 import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()

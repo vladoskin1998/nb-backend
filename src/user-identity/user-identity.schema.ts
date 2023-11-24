@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { METHOD_REGISTRATION, ROLES, PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS } from 'src/enum/enum';
+import { METHOD_REGISTRATION, ROLES, PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS, ONLINEOFFLINE } from 'src/enum/enum';
 import { HydratedDocument, Types } from 'mongoose';
 import { UserProfession } from 'src/user-identity/user-profession.schema';
 import { UserInterests } from 'src/user-identity/user-interests.schema';
@@ -91,14 +91,19 @@ export class UserIdentity {
     skills: Types.ObjectId[] | null;
 
     @Prop({default: false })
-    isSeenServices: boolean;
-    
+    isAddedServices: boolean;
+ 
     @Prop({default: false })
-    isSeenActvities: boolean;
+    isAddedPost: boolean;
+
+    @Prop({default: false })
+    isExploreDone: boolean;
 
     @Prop({default: '/profile' })
     lastStepChangeProfile: string;
     
+    @Prop({default: ONLINEOFFLINE.OFFLINE, enum: ONLINEOFFLINE})
+    online: ONLINEOFFLINE;
 }
 
 export const UserIdentitySchema = SchemaFactory.createForClass(UserIdentity);

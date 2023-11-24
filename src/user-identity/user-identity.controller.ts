@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Post, Query, UploadedFile, UploadedFil
 import { UserIdentityService } from './user-identity.service';
 import { QUALITYENUM } from 'src/enum/enum';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { LocationDto, ProfileSelectDTO, ProfileTextInfoDTO } from './user-identity.dto';
+import { GetUserIdentityDto, LocationDto, ProfileSelectDTO, ProfileTextInfoDTO } from './user-identity.dto';
 import { IDUserDto } from 'src/user/user.dto';
 
 @Controller('identity')
@@ -10,10 +10,10 @@ export class UserIdentityController {
     constructor(private readonly userIdentityService: UserIdentityService) { }
     
     @Post('get-user-identity')
-    async getIdentityInforamation(@Body() body: IDUserDto){
+    async getIdentityInforamation(@Body() body: GetUserIdentityDto){
         console.log("---->",body);
         
-        return await this.userIdentityService.getIdentityInforamation(body?._id)
+        return await this.userIdentityService.getIdentityInforamation(body?._id, body.options)
     }
     
     @Post('upload-avatar')

@@ -22,7 +22,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS } from 'src/enum/enum';
+import { PRIVACY, SEX, ORIENTATION, EDUCATION, FAMILYSTATUS, ONLINEOFFLINE } from 'src/enum/enum';
 import { HydratedDocument, Types } from 'mongoose';
 export type UserIdentityDocument = HydratedDocument<UserIdentity>;
 export declare class UserIdentity {
@@ -58,9 +58,11 @@ export declare class UserIdentity {
     profession: Types.ObjectId[] | null;
     interests: Types.ObjectId[] | null;
     skills: Types.ObjectId[] | null;
-    isSeenServices: boolean;
-    isSeenActvities: boolean;
+    isAddedServices: boolean;
+    isAddedPost: boolean;
+    isExploreDone: boolean;
     lastStepChangeProfile: string;
+    online: ONLINEOFFLINE;
 }
 export declare const UserIdentitySchema: import("mongoose").Schema<UserIdentity, import("mongoose").Model<UserIdentity, any, any, any, import("mongoose").Document<unknown, any, UserIdentity> & UserIdentity & {
     _id: Types.ObjectId;

@@ -2,11 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import {  ClosestUserDto, UserTextInfoDTO } from './user.dto';
+import { AddFriendDto, ClosestUserDto, IDUserDto, UserTextInfoDTO } from './user.dto';
 import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
 import * as bcrypt from 'bcrypt';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
+import { getDistance } from 'src/utils/utils';
+import { Friends } from './friends.schema';
 
 @Injectable()
 export class UserService {
@@ -14,8 +16,13 @@ export class UserService {
     constructor(
         @InjectModel(User.name)
         private readonly userModel: Model<User>,
+
         @InjectModel(UserIdentity.name)
         private userIdentityModel: Model<UserIdentity>,
+
+        @InjectModel(Friends.name)
+        private friendsModel: Model<Friends>,
+
         private readonly jwtTokenService: JwtTokenService,
 
     ) { }
@@ -23,8 +30,6 @@ export class UserService {
     async getUsers({ _id, role, searchName }: { _id: string; role: ROLES; searchName: string }): Promise<User[]> {
         try {
             let query: any = { fullName: { $regex: searchName, $options: 'i' } };
-
-
 
             if (role !== ROLES.ALLUSERS) {
                 query.role = role;
@@ -120,20 +125,20 @@ export class UserService {
         let minDistance = Infinity;
 
         for (const user of userWithCoord) {
-            const distance = this.getDistance({
-                  myLat,
-            myLng,
-            lat:  user.coordinates.lat,
-            lng: user.coordinates.lng
+            const distance = getDistance({
+                myLat,
+                myLng,
+                lat: user.coordinates.lat,
+                lng: user.coordinates.lng
             }
-           
+
             );
-          
+
             if (distance < minDistance) {
-              minDistance = distance;
-              closestUser = user;
+                minDistance = distance;
+                closestUser = user;
             }
-          }
+        }
 
         return {
             ...closestUser, userId: closestUser._id
@@ -141,25 +146,90 @@ export class UserService {
     }
 
 
-    getDistance({ myLat, myLng, lat, lng }: {
-        myLat: number;
-        myLng: number;
-        lat: number;
-        lng: number;
-    }):number {
 
-        const toRad = (value) => (value * Math.PI) / 180;
-        const R = 6371; 
-        const dLat = toRad(lat - myLat);
-        const dLon = toRad(lng - myLng);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(myLat)) *
-            Math.cos(toRad(lat)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-        return distance;
+    async getMyFriends(
+        body: IDUserDto
+    ) {
+        try {
+            const userId = new Types.ObjectId(body._id)
+            const friends = await this.friendsModel.find({ userId }).populate({
+                path: 'friendId',
+                select: 'fullName email phone role',
+                options: { sort: { fullName: 1 } }
+            })
+            return friends
+        } catch (error) {
+
+        }
     }
+
+    async checkToMyFriend(body: AddFriendDto) {
+        try {
+            const userId = new Types.ObjectId(body._id)
+            const friendId = new Types.ObjectId(body.friendId)
+            const isAlredyExistFriend = await this.friendsModel.findOne({
+                $and: [
+                    { userId },
+                    { friendId },
+                ],
+            })
+            console.log( isAlredyExistFriend);
+            
+            return Boolean(isAlredyExistFriend)
+        } catch (error) {
+            throw new error
+        }
+       
+    }
+
+
+    async addToMyFriend(
+        body: AddFriendDto
+    ) {
+        try {
+            const userId = new Types.ObjectId(body._id)
+            const friendId = new Types.ObjectId(body.friendId)
+            const isAlredyExistFriend = await this.checkToMyFriend(body)
+            
+            if (isAlredyExistFriend) {
+                throw new HttpException(
+                    `Friend already added`,
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+
+            const friend = await this.friendsModel.create({ userId, friendId })
+
+            return await friend.populate({
+                path: 'friendId',
+                select: 'fullName email phone role'
+            })
+
+        } catch (error) {
+            throw new error
+        }
+    }
+
+
+    async deleteMyFriend(
+        body: AddFriendDto
+    ) {
+        try {
+            const userId = new Types.ObjectId(body._id)
+            const friendId = new Types.ObjectId(body.friendId)
+            const friend = await this.friendsModel.findOneAndRemove({
+                $and: [
+                    { userId },
+                    { friendId },
+                ],
+            })
+
+            return friend
+        } catch (error) {
+            throw new error
+        }
+    }
+
+
+
 }

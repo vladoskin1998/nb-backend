@@ -9,11 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfileTextInfoDTO = exports.LocationDto = exports.ProfileSelectDTO = exports.ProfessionDto = void 0;
+exports.ProfileTextInfoDTO = exports.LocationDto = exports.ProfileSelectDTO = exports.GetUserIdentityDto = exports.ProfessionDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const enum_1 = require("../enum/enum");
 const user_dto_1 = require("../user/user.dto");
+const constants_1 = require("../utils/constants");
 const utils_1 = require("../utils/utils");
 class ProfessionDto {
 }
@@ -26,6 +27,14 @@ __decorate([
     __metadata("design:type", String)
 ], ProfessionDto.prototype, "title", void 0);
 exports.ProfessionDto = ProfessionDto;
+class GetUserIdentityDto extends user_dto_1.IDUserDto {
+}
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsIn)(constants_1.USERIDENTITYFILTER, { each: true }),
+    __metadata("design:type", Object)
+], GetUserIdentityDto.prototype, "options", void 0);
+exports.GetUserIdentityDto = GetUserIdentityDto;
 class ProfileSelectDTO extends user_dto_1.IDUserDto {
 }
 __decorate([
@@ -171,8 +180,28 @@ __decorate([
 ], ProfileTextInfoDTO.prototype, "certificatesFileName", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], ProfileTextInfoDTO.prototype, "isAddedServices", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], ProfileTextInfoDTO.prototype, "isAddedPost", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], ProfileTextInfoDTO.prototype, "isExploreDone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ProfileTextInfoDTO.prototype, "lastStepChangeProfile", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(enum_1.ONLINEOFFLINE),
+    __metadata("design:type", String)
+], ProfileTextInfoDTO.prototype, "online", void 0);
 exports.ProfileTextInfoDTO = ProfileTextInfoDTO;
 //# sourceMappingURL=user-identity.dto.js.map

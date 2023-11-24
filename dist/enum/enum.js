@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.METHOD_FORGET_PASSWORD = exports.NOTIFICATION_MAILING = exports.NOTIFICATION_EVENT = exports.SOCKET_NOTIFICATION_EVENT = exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
+exports.ONLINEOFFLINE = exports.METHOD_FORGET_PASSWORD = exports.NOTIFICATION_MAILING = exports.NOTIFICATION_EVENT = exports.SOCKET_NOTIFICATION_EVENT = exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
 var ERROR_MESSAGE;
 (function (ERROR_MESSAGE) {
     ERROR_MESSAGE["ERROR_ACCESS_DIR"] = "ERROR ACCESS DIR";
@@ -113,4 +113,9 @@ var METHOD_FORGET_PASSWORD;
     METHOD_FORGET_PASSWORD["PHONE"] = "phone";
     METHOD_FORGET_PASSWORD["EMAIL"] = "email";
 })(METHOD_FORGET_PASSWORD = exports.METHOD_FORGET_PASSWORD || (exports.METHOD_FORGET_PASSWORD = {}));
+var ONLINEOFFLINE;
+(function (ONLINEOFFLINE) {
+    ONLINEOFFLINE["ONLINE"] = "online";
+    ONLINEOFFLINE["OFFLINE"] = "offline";
+})(ONLINEOFFLINE = exports.ONLINEOFFLINE || (exports.ONLINEOFFLINE = {}));
 //# sourceMappingURL=enum.js.map

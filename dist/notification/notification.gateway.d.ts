@@ -1,13 +1,14 @@
 import { NotificationService } from './notification.service';
 import { Server, Socket } from 'socket.io';
 import { NOTIFICATION_EVENT } from 'src/enum/enum';
-import { ChatIDDto } from 'src/messenger/messenger.dto';
+import { UserIdentityService } from 'src/user-identity/user-identity.service';
 export declare class NotificationGateway {
     private readonly notificationService;
+    private readonly userIdentityService;
     server: Server;
-    constructor(notificationService: NotificationService);
+    constructor(notificationService: NotificationService, userIdentityService: UserIdentityService);
     joinNotificationRoom(socket: Socket, userId: string): Promise<void>;
-    leaveNotificationRoom(socket: Socket, chatIDDto: ChatIDDto): Promise<void>;
+    leaveNotificationRoom(socket: Socket, userId: string): Promise<void>;
     sendNotificationToRooms(props: {
         rooms: string[];
         ownerId: string;

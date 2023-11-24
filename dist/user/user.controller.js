@@ -36,6 +36,18 @@ let UserController = class UserController {
     async getClosestUserByRole(body) {
         return await this.userService.getClosestUserByRole(body);
     }
+    async getMyFriends(body) {
+        return await this.userService.getMyFriends(body);
+    }
+    async checkToMyFriend(body) {
+        return await this.userService.checkToMyFriend(body);
+    }
+    async addToMyFriend(body) {
+        return await this.userService.addToMyFriend(body);
+    }
+    async deleteMyFriend(body) {
+        return await this.userService.deleteMyFriend(body);
+    }
 };
 __decorate([
     (0, common_1.Post)('get-users'),
@@ -72,6 +84,34 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.ClosestUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getClosestUserByRole", null);
+__decorate([
+    (0, common_1.Post)('get-friends'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.IDUserDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getMyFriends", null);
+__decorate([
+    (0, common_1.Post)('check-my-friend'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.AddFriendDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "checkToMyFriend", null);
+__decorate([
+    (0, common_1.Post)('add-my-friend'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.AddFriendDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "addToMyFriend", null);
+__decorate([
+    (0, common_1.Post)('delete-to-friend'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.AddFriendDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deleteMyFriend", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService])

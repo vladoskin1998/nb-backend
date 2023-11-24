@@ -1,7 +1,8 @@
 import { Type } from "class-transformer";
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Validate, ValidateNested } from "class-validator";
-import { EDUCATION, FAMILYSTATUS, ORIENTATION, PRIVACY, QUALITYENUM, ROLES, SEX } from "src/enum/enum";
+import { IsArray, IsBoolean, IsEnum, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Validate, ValidateNested } from "class-validator";
+import { EDUCATION, FAMILYSTATUS, ONLINEOFFLINE, ORIENTATION, PRIVACY, QUALITYENUM, ROLES, SEX } from "src/enum/enum";
 import { IDUserDto } from "src/user/user.dto";
+import { USERIDENTITYFILTER } from "src/utils/constants";
 import { isDateOrString, isValidNationality } from "src/utils/utils";
 
 export class ProfessionDto {
@@ -9,14 +10,20 @@ export class ProfessionDto {
     _id: string;
 
     @IsString()
-    title: string;   
+    title: string;
 }
 
-export class ProfileSelectDTO extends IDUserDto{
+export class GetUserIdentityDto extends IDUserDto {
+    @IsOptional()
+    @IsIn(USERIDENTITYFILTER, { each: true })
+    options?: typeof USERIDENTITYFILTER
+}
+
+export class ProfileSelectDTO extends IDUserDto {
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => ProfessionDto)
-    readonly value:  ProfessionDto[];
+    readonly value: ProfessionDto[];
 
     @IsEnum(QUALITYENUM)
     readonly quality: QUALITYENUM;
@@ -37,7 +44,7 @@ class Coordinars {
 export class LocationDto {
     @IsNotEmpty()
     @IsString()
-     _id: string;
+    _id: string;
 
     @IsNotEmpty()
     @IsString()
@@ -98,7 +105,7 @@ export class ProfileTextInfoDTO {
     @IsOptional()
     @IsEnum(EDUCATION)
     readonly education?: EDUCATION | null;
-    
+
     @IsOptional()
     @IsString()
     readonly studySchool?: string;
@@ -127,13 +134,29 @@ export class ProfileTextInfoDTO {
     @ValidateNested({ each: true })
     readonly skills?: string[] | null;
 
-    
     @IsOptional()
     @IsArray()
     readonly certificatesFileName?: string[] | null;
 
     @IsOptional()
+    @IsBoolean()
+    readonly isAddedServices?: boolean;
+
+    @IsOptional()
+    @IsBoolean()
+    readonly isAddedPost?: boolean;
+
+    @IsOptional()
+    @IsBoolean()
+    readonly isExploreDone?: boolean;
+
+    @IsOptional()
     @IsString()
     readonly lastStepChangeProfile?: string;
+
+
+    @IsOptional()
+    @IsEnum(ONLINEOFFLINE)
+    readonly online?: ONLINEOFFLINE;
 }
 

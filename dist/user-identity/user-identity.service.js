@@ -31,10 +31,15 @@ let UserIdentityService = class UserIdentityService {
         this.userSkills = userSkills;
         this.filesService = filesService;
     }
-    async getIdentityInforamation(_id) {
+    async getIdentityInforamation(_id, options) {
         try {
             console.log("getIdentityInforamation--->", _id);
             const userId = new mongoose_1.Types.ObjectId(_id);
+            if (options && (options === null || options === void 0 ? void 0 : options.length)) {
+                const selectOptions = options.reduce((p, s) => `${p} ${s}`, '').trim();
+                console.log('selectoption', selectOptions);
+                return await this.userIdentity.findOne({ user: userId }).select(selectOptions);
+            }
             let userIdentity = await this.userIdentity.findOne({ user: userId });
             const userIdentityId = userIdentity === null || userIdentity === void 0 ? void 0 : userIdentity._id;
             if (!userIdentity) {

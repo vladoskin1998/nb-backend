@@ -18,14 +18,13 @@ const user_identity_service_1 = require("./user-identity.service");
 const enum_1 = require("../enum/enum");
 const platform_express_1 = require("@nestjs/platform-express");
 const user_identity_dto_1 = require("./user-identity.dto");
-const user_dto_1 = require("../user/user.dto");
 let UserIdentityController = class UserIdentityController {
     constructor(userIdentityService) {
         this.userIdentityService = userIdentityService;
     }
     async getIdentityInforamation(body) {
         console.log("---->", body);
-        return await this.userIdentityService.getIdentityInforamation(body === null || body === void 0 ? void 0 : body._id);
+        return await this.userIdentityService.getIdentityInforamation(body === null || body === void 0 ? void 0 : body._id, body.options);
     }
     async profileUploadAvatar(body, file) {
         var _a;
@@ -77,7 +76,7 @@ __decorate([
     (0, common_1.Post)('get-user-identity'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_dto_1.IDUserDto]),
+    __metadata("design:paramtypes", [user_identity_dto_1.GetUserIdentityDto]),
     __metadata("design:returntype", Promise)
 ], UserIdentityController.prototype, "getIdentityInforamation", null);
 __decorate([

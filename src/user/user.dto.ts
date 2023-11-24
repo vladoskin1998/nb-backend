@@ -4,13 +4,16 @@ import { Types } from 'mongoose';
 import { EDUCATION, FAMILYSTATUS, ORIENTATION, PRIVACY, QUALITYENUM, ROLES, SEX } from 'src/enum/enum';
 import { isDateOrString, isValidNationality } from 'src/utils/utils';
 
-
-
-
 export class IDUserDto {
     @IsNotEmpty()
     @IsString()
     readonly _id: string;
+}
+
+export class AddFriendDto extends IDUserDto{
+    @IsNotEmpty()
+    @IsString()
+    readonly friendId: string;
 }
 
 export class GetUsers extends IDUserDto{

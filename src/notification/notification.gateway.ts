@@ -1,9 +1,9 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { NotificationService } from './notification.service';
 import { Server, Socket } from 'socket.io'
-import { NOTIFICATION_EVENT, SOCKET_NOTIFICATION_EVENT } from 'src/enum/enum';
-import { ChatIDDto } from 'src/messenger/messenger.dto';
+import { NOTIFICATION_EVENT, ONLINEOFFLINE, SOCKET_NOTIFICATION_EVENT } from 'src/enum/enum';
 import { Inject, forwardRef } from '@nestjs/common';
+import { UserIdentityService } from 'src/user-identity/user-identity.service';
 
 @WebSocketGateway(5001,
     {
@@ -25,6 +25,8 @@ export class NotificationGateway {
     constructor(
         @Inject(forwardRef(() => NotificationService))
         private readonly notificationService: NotificationService,
+
+        private readonly userIdentityService: UserIdentityService,
     ){}
 
     @SubscribeMessage(SOCKET_NOTIFICATION_EVENT.JOIN_ROOM_NOTIFICATION)
@@ -32,26 +34,27 @@ export class NotificationGateway {
         @ConnectedSocket() socket: Socket,
         @MessageBody() userId: string
     ) {
-        console.log("userID--------------->", String(userId));
-
         const room = String(userId);
+
+        await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.ONLINE})
+    
         if (room) {
             socket.join(room);
         }
-
-
-        console.log("notification room----->", this.server.sockets.adapter.rooms);
-
+       // console.log("notification room----->", this.server.sockets.adapter.rooms);
     }
 
     @SubscribeMessage(SOCKET_NOTIFICATION_EVENT.LEAVE_ROOM_NOTIFICATION)
     async leaveNotificationRoom(
         @ConnectedSocket() socket: Socket,
-        @MessageBody() chatIDDto: ChatIDDto
+        @MessageBody() userId: string
     ) {
-        const { chatId } = chatIDDto;
+        const room = String(userId);
+
+        await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.OFFLINE})
+
         // console.log("lave roome", this.server.sockets.adapter.rooms);
-        socket.leave(String(chatId))
+        socket.leave(String(room))
     }
 
     async sendNotificationToRooms(
