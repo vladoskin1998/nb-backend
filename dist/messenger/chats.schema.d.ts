@@ -26,9 +26,7 @@ import { HydratedDocument, Types } from "mongoose";
 export type ChatsDocument = HydratedDocument<Chats>;
 export declare class Chats {
     participants: {
-        userId: string;
-        avatarFileName: string;
-        fullName: string;
+        userId: Types.ObjectId;
     }[];
     isSupport: boolean;
 }

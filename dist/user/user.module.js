@@ -16,6 +16,7 @@ const auth_module_1 = require("../auth/auth.module");
 const platform_express_1 = require("@nestjs/platform-express");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const friends_schema_1 = require("./friends.schema");
+const files_module_1 = require("../files/files.module");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
@@ -28,6 +29,7 @@ UserModule = __decorate([
             ]),
             platform_express_1.MulterModule.register({}),
             auth_module_1.AuthModule,
+            files_module_1.FilesModule,
         ],
         controllers: [user_controller_1.UserController],
         providers: [user_service_1.UserService],

@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -25,9 +26,13 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { UserService } from './user.service';
 import { AddFriendDto, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { UserIdDTO } from 'src/notification/notification.dto';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
+    getUserById(body: UserIdDTO): Promise<import("mongoose").Document<unknown, {}, import("./user.schema").User> & import("./user.schema").User & {
+        _id: import("mongoose").Types.ObjectId;
+    }>;
     getUsersByRole(body: GetUsers): Promise<import("./user.schema").User[]>;
     deleteUser(body: IDUserDto): Promise<void>;
     blockUser(body: IDUserDto): Promise<void>;
@@ -37,16 +42,18 @@ export declare class UserController {
         email?: string;
         role?: import("../enum/enum").ROLES;
         phone?: string;
+        avatarFileName?: string;
     }>;
     getClosestUserByRole(body: ClosestUserDto): Promise<any>;
-    getMyFriends(body: IDUserDto): Promise<Omit<import("mongoose").Document<unknown, {}, import("./friends.schema").Friends> & import("./friends.schema").Friends & {
-        _id: import("mongoose").Types.ObjectId;
-    }, never>[]>;
+    getMyFriends(body: IDUserDto): Promise<any>;
     checkToMyFriend(body: AddFriendDto): Promise<boolean>;
     addToMyFriend(body: AddFriendDto): Promise<Omit<import("mongoose").Document<unknown, {}, import("./friends.schema").Friends> & import("./friends.schema").Friends & {
         _id: import("mongoose").Types.ObjectId;
     }, never>>;
     deleteMyFriend(body: AddFriendDto): Promise<import("mongoose").Document<unknown, {}, import("./friends.schema").Friends> & import("./friends.schema").Friends & {
         _id: import("mongoose").Types.ObjectId;
+    }>;
+    profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{
+        avatarFileName: string;
     }>;
 }

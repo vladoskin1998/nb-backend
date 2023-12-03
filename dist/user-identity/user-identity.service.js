@@ -33,11 +33,9 @@ let UserIdentityService = class UserIdentityService {
     }
     async getIdentityInforamation(_id, options) {
         try {
-            console.log("getIdentityInforamation--->", _id);
             const userId = new mongoose_1.Types.ObjectId(_id);
             if (options && (options === null || options === void 0 ? void 0 : options.length)) {
                 const selectOptions = options.reduce((p, s) => `${p} ${s}`, '').trim();
-                console.log('selectoption', selectOptions);
                 return await this.userIdentity.findOne({ user: userId }).select(selectOptions);
             }
             let userIdentity = await this.userIdentity.findOne({ user: userId });
@@ -71,21 +69,6 @@ let UserIdentityService = class UserIdentityService {
             delete body._id;
             const identity = await this.userIdentity.findOneAndUpdate({ user: userId }, Object.assign(Object.assign({}, body), { isLocationVerify: true }));
             return { isLocationVerify: true };
-        }
-        catch (error) {
-            throw error;
-        }
-    }
-    async profileUploadAvatar(file, _id) {
-        const userId = new mongoose_1.Types.ObjectId(_id);
-        try {
-            let user = await this.userIdentity.findOne({ user: userId });
-            if (user.avatarFileName) {
-                await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar');
-            }
-            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar', false);
-            await user.updateOne({ avatarFileName });
-            return { avatarFileName };
         }
         catch (error) {
             throw error;

@@ -12,7 +12,7 @@ export class ScheduledTasksService {
 
     @Cron('0 0 * * *')
     async scheduleStatistics() {
-        console.log("scheduleStatistics");
+        
 
         await this.statisticsService.saveStatistic()
     }

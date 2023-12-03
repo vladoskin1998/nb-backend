@@ -16,9 +16,14 @@ exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
 const user_dto_1 = require("./user.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const notification_dto_1 = require("../notification/notification.dto");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
+    }
+    async getUserById(body) {
+        return await this.userService.getOneUserById(body);
     }
     async getUsersByRole(body) {
         return await this.userService.getUsers(body);
@@ -27,7 +32,6 @@ let UserController = class UserController {
         return await this.userService.deleteUser(body._id);
     }
     async blockUser(body) {
-        console.log(body);
         return await this.userService.blockUser(body._id);
     }
     async userTextInfo(body) {
@@ -48,7 +52,19 @@ let UserController = class UserController {
     async deleteMyFriend(body) {
         return await this.userService.deleteMyFriend(body);
     }
+    async profileUploadAvatar(body, file) {
+        var _a;
+        const userId = (_a = JSON.parse(body.payload)) === null || _a === void 0 ? void 0 : _a._id;
+        return await this.userService.profileUploadAvatar(file, userId);
+    }
 };
+__decorate([
+    (0, common_1.Post)('get-user'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [notification_dto_1.UserIdDTO]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUserById", null);
 __decorate([
     (0, common_1.Post)('get-users'),
     __param(0, (0, common_1.Body)()),
@@ -112,6 +128,15 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.AddFriendDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteMyFriend", null);
+__decorate([
+    (0, common_1.Post)('upload-avatar'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "profileUploadAvatar", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService])

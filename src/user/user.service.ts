@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { getDistance } from 'src/utils/utils';
 import { Friends } from './friends.schema';
+import { FilesService } from 'src/files/files.service';
+import { UserIdDTO } from 'src/notification/notification.dto';
 
 @Injectable()
 export class UserService {
@@ -23,9 +25,21 @@ export class UserService {
         @InjectModel(Friends.name)
         private friendsModel: Model<Friends>,
 
+        private readonly filesService: FilesService,
+
         private readonly jwtTokenService: JwtTokenService,
 
     ) { }
+
+    async getOneUserById(dto: UserIdDTO) {
+        try {
+            const _id = new Types.ObjectId(dto.userId)
+            return await this.userModel.findOne({_id}).select('fullName avatarFileName email');
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
     async getUsers({ _id, role, searchName }: { _id: string; role: ROLES; searchName: string }): Promise<User[]> {
         try {
@@ -105,16 +119,15 @@ export class UserService {
     async getClosestUserByRole(body: ClosestUserDto) {
         const { role, myLat, myLng } = body;
 
-        const usersByRole = await this.userModel.find({ role }).select('_id fullName')
+        const usersByRole = await this.userModel.find({ role }).select('_id fullName avatarFileName')
 
-        console.log(usersByRole);
 
         const userWithCoord = await Promise.all(
             usersByRole.map(
                 async (item) => {
                     const userId = new Types.ObjectId(item._id)
-                    const { coordinates, avatarFileName } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates')
-                    return { ...item.toObject(), avatarFileName, coordinates }
+                    const { coordinates } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates')
+                    return { ...item.toObject(), coordinates }
                 }
             )
         )
@@ -152,12 +165,28 @@ export class UserService {
     ) {
         try {
             const userId = new Types.ObjectId(body._id)
-            const friends = await this.friendsModel.find({ userId }).populate({
+            const friends: any = await this.friendsModel.find({ userId }).populate({
                 path: 'friendId',
-                select: 'fullName email phone role',
-                options: { sort: { fullName: 1 } }
+                select: 'fullName email phone role avatarFileName',
             })
-            return friends
+
+
+            friends.sort((a, b) => {
+                const nameA = a.friendId?.fullName.toUpperCase();
+                const nameB = b.friendId?.fullName.toUpperCase();
+              
+                if (nameA < nameB) {
+                  return -1;
+                }
+                if (nameA > nameB) {
+                  return 1;
+                }
+              
+                return 0;
+              });
+              
+              return friends;
+            
         } catch (error) {
 
         }
@@ -173,7 +202,7 @@ export class UserService {
                     { friendId },
                 ],
             })
-            console.log( isAlredyExistFriend);
+
             
             return Boolean(isAlredyExistFriend)
         } catch (error) {
@@ -202,7 +231,7 @@ export class UserService {
 
             return await friend.populate({
                 path: 'friendId',
-                select: 'fullName email phone role'
+                select: 'fullName email phone role avatarFileName'
             })
 
         } catch (error) {
@@ -227,6 +256,25 @@ export class UserService {
             return friend
         } catch (error) {
             throw new error
+        }
+    }
+
+    async profileUploadAvatar(file: Express.Multer.File, _id: string) {
+     
+        
+        
+        try {
+            const userId = new Types.ObjectId(_id)
+            let user = await this.userModel.findOne({ _id: userId })
+       
+            if (user?.avatarFileName) {
+                await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar')
+            }
+            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar', false)
+            await user.updateOne({ avatarFileName })
+            return { avatarFileName }
+        } catch (error) {
+            throw error
         }
     }
 

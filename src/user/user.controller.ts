@@ -1,10 +1,18 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AddFriendDto, ClosestUserDto, GetUsers, IDUserDto, UserTextInfoDTO } from './user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UserIdDTO } from 'src/notification/notification.dto';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) { }
+
+    @Post('get-user')
+    async getUserById(@Body() body: UserIdDTO) {
+        return await this.userService.getOneUserById(body)
+    }
+
 
     @Post('get-users')
     async getUsersByRole(@Body() body: GetUsers) {
@@ -19,7 +27,7 @@ export class UserController {
 
     @Post('block-user')
     async blockUser(@Body() body: IDUserDto) {
-        console.log(body);
+     
 
         return await this.userService.blockUser(body._id)
     }
@@ -67,4 +75,19 @@ export class UserController {
     ) {
         return await this.userService.deleteMyFriend(body)
     }
+
+    @Post('upload-avatar')
+    @UseInterceptors(FileInterceptor('file'))
+    async profileUploadAvatar(
+        @Body() body,
+        @UploadedFile() file: Express.Multer.File,
+    ) {
+
+        
+        
+        const userId = JSON.parse(body.payload)?._id
+        return await this.userService.profileUploadAvatar(file, userId)
+
+    }
+
 }

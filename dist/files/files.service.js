@@ -63,7 +63,6 @@ let FilesService = class FilesService {
         return nameFiles;
     }
     accessDir(dirPath) {
-        console.log("accessDir--->", dirPath);
         try {
             const uploadsDir = path.join(__dirname, '../../', 'uploads');
             if ((0, fs_1.existsSync)(uploadsDir)) {

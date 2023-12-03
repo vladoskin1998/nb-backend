@@ -60,10 +60,6 @@ __decorate([
     __metadata("design:type", Date)
 ], UserIdentity.prototype, "blockedUserDate", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ default: null }),
-    __metadata("design:type", String)
-], UserIdentity.prototype, "avatarFileName", void 0);
-__decorate([
     (0, mongoose_1.Prop)({ default: 5 }),
     __metadata("design:type", Number)
 ], UserIdentity.prototype, "step", void 0);

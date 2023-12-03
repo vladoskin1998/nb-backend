@@ -55,7 +55,7 @@ export declare class NotificationService {
         name: string;
         event: NOTIFICATION_EVENT;
     }): Promise<void>;
-    getUserNotification(body: UserIdDTO): Promise<Omit<Omit<import("mongoose").Document<unknown, {}, Notification> & Notification & {
+    getUserNotification(body: UserIdDTO): Promise<Omit<import("mongoose").Document<unknown, {}, Notification> & Notification & {
         _id: import("mongoose").Types.ObjectId;
-    }, never>, never>[]>;
+    }, never>[]>;
 }

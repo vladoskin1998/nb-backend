@@ -22,7 +22,7 @@ export class FilesService {
             }
 
             const fileName = `${name}.${mimoType}`;
-                // console.log('fileName name file----------->', `${dirPath}/${fileName}`);
+  
             await writeFile(path.join(dirPath, fileName), file.buffer);
             return fileName;
         } catch (error) {
@@ -71,7 +71,7 @@ export class FilesService {
     }
 
     accessDir(dirPath: string): void {
-        console.log("accessDir--->",dirPath);
+
         
         try {
             const uploadsDir = path.join(__dirname, '../../', 'uploads');

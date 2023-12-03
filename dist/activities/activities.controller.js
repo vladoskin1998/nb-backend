@@ -40,7 +40,6 @@ let ActivitiesController = class ActivitiesController {
         return await this.activitiesService.addPublishActivities({ files, payload });
     }
     async getPublishActivities(body) {
-        console.log('get-publish-activities');
         return await this.activitiesService.getPublishActivities(body);
     }
 };

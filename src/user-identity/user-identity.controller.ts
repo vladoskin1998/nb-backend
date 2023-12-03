@@ -11,22 +11,11 @@ export class UserIdentityController {
     
     @Post('get-user-identity')
     async getIdentityInforamation(@Body() body: GetUserIdentityDto){
-        console.log("---->",body);
+        
         
         return await this.userIdentityService.getIdentityInforamation(body?._id, body.options)
     }
     
-    @Post('upload-avatar')
-    
-    @UseInterceptors(FileInterceptor('file'))
-    async profileUploadAvatar(
-        @Body() body,
-        @UploadedFile() file: Express.Multer.File,
-    ) {
-        const userId = JSON.parse(body.payload)?._id
-        return await this.userIdentityService.profileUploadAvatar(file, userId)
-
-    }
 
     @Post('upload-certificates')
     @UseInterceptors(FilesInterceptor('files'))
@@ -84,7 +73,7 @@ export class UserIdentityController {
 
     @Get('profession-popular')
     async getPopularProfessionList() {
-        console.log();
+     
         
         return this.userIdentityService.getPopularSkillProfInterest(QUALITYENUM.PROFESSION)
     }

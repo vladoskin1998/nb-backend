@@ -29,13 +29,13 @@ export class UserIdentityService {
 
     async getIdentityInforamation(_id: string, options?: typeof USERIDENTITYFILTER) {
         try {
-            console.log("getIdentityInforamation--->",_id);
+   
             
             const userId = new Types.ObjectId(_id)
 
             if(options && options?.length){
                 const selectOptions = options.reduce((p,s) => `${p} ${s}`,'').trim()
-                console.log('selectoption', selectOptions);
+        
                 
                 return await this.userIdentity.findOne({ user: userId }).select(selectOptions)
             }
@@ -84,20 +84,6 @@ export class UserIdentityService {
     }
 
 
-    async profileUploadAvatar(file: Express.Multer.File, _id: string) {
-        const userId = new Types.ObjectId(_id)
-        try {
-            let user = await this.userIdentity.findOne({ user: userId })
-            if (user.avatarFileName) {
-                await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar')
-            }
-            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar', false)
-            await user.updateOne({ avatarFileName })
-            return { avatarFileName }
-        } catch (error) {
-            throw error
-        }
-    }
 
     async profileUploadCertificates(files: Array<Express.Multer.File>, _id: string, uploadedCertificates: string[]) {
         const userId = new Types.ObjectId(_id)
@@ -121,6 +107,8 @@ export class UserIdentityService {
     }
 
     async profileTextInfo(body: ProfileTextInfoDTO) {
+
+        
         const userId = new Types.ObjectId(body._id)
         let sanitizedBody = { ...body };
         delete sanitizedBody._id

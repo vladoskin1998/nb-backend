@@ -13,6 +13,9 @@ export class PublishPosts {
     @Prop({ type: Types.ObjectId, ref: User.name }) 
     userId: Types.ObjectId;
 
+    @Prop({ type: Types.ObjectId, ref: User.name, required: false }) 
+    repostUserId: Types.ObjectId;
+
     @Prop({ type: Types.ObjectId, ref: UserIdentity.name }) 
     userIdentityId: Types.ObjectId;
 

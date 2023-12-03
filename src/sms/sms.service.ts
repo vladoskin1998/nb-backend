@@ -23,7 +23,7 @@ export class SmsService {
         if(!/^\+[1-9]\d{1,14}$/.test(phone)){
             to = `+1${phone.replace(/\D/g, '')}`;
         }
-        console.log(phone);
+   
         await this.twilioClient.messages
         .create({
             body,

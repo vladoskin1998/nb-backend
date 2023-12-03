@@ -36,7 +36,11 @@ export class NotificationGateway {
     ) {
         const room = String(userId);
 
-        await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.ONLINE})
+        if(userId){
+            await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.ONLINE})
+        }
+        
+      
     
         if (room) {
             socket.join(room);
@@ -51,7 +55,10 @@ export class NotificationGateway {
     ) {
         const room = String(userId);
 
-        await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.OFFLINE})
+        if(userId){
+            await this.userIdentityService.profileTextInfo({_id:userId, online: ONLINEOFFLINE.OFFLINE})
+        }
+        
 
         // console.log("lave roome", this.server.sockets.adapter.rooms);
         socket.leave(String(room))
@@ -75,6 +82,9 @@ export class NotificationGateway {
         }
 
         const offlineUserRooms = rooms.filter(room => !this.server.sockets.adapter.rooms.has(room)  )
+        
+
+       
         
         await this.notificationService.addRoomsNotification({
             offlineUserRooms,

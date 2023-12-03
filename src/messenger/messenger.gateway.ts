@@ -76,16 +76,17 @@ export class MessengerGateway {
             file
         } = payload
 
-        await this.messengerService.addMessage({
+  
+        
+        const {messageId} = await this.messengerService.addMessage({
             chatId,
             senderId,
             content,
             timestamp,
-            isRead,
+            isRead:false,
             file
         })
 
-        console.log("sendmessage", chatId);
         console.log("sendmessage room", this.server.sockets.adapter.rooms);
 
         // socket.to(destinationEmail).emit(SOCKET_MESSENDER_EVENT.NOTIFICATION, currentChatId, sourceEmail)
@@ -98,7 +99,8 @@ export class MessengerGateway {
                 content,
                 timestamp,
                 isRead,
-                file
+                file,
+                messageId
             )
     }
 

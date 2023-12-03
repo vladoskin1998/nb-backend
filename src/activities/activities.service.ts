@@ -28,7 +28,7 @@ export class ActivitiesService {
         files: Array<Express.Multer.File>;
     }): Promise<ActivitiesDto> {
         try {
-            console.log(files);
+     
             
             await this.filesService.uploadFiles(files, 'uploads/activities');
             const newCategory = new this.activitiesModel({
@@ -94,7 +94,7 @@ export class ActivitiesService {
         }, files: Array<Express.Multer.File> }
     ) {
         try {
-            console.log(payload);
+
             
             const userId = new Types.ObjectId(payload.userId)
             const activitiesId = new Types.ObjectId(payload.activitiesId)

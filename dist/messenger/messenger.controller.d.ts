@@ -25,24 +25,20 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { MessengerService } from './messenger.service';
-import { ChatIDDto, ListChatDto, NewChatDto } from './messenger.dto';
+import { ChatIDDto, ListChatDto, NewChatDto, ReadMessageIDDto } from './messenger.dto';
 export declare class MessengerController {
     private readonly messengerService;
     constructor(messengerService: MessengerService);
     openChat(dto: NewChatDto): Promise<{
         participants: {
-            userId: string;
-            avatarFileName: string;
-            fullName: string;
+            userId: import("mongoose").Types.ObjectId;
         }[];
-        chatId: string | import("mongoose").Types.ObjectId;
+        chatId: import("mongoose").Types.ObjectId;
         isSupport: boolean;
     }>;
     listChat(dto: ListChatDto): Promise<{
         participants: {
-            userId: string;
-            avatarFileName: string;
-            fullName: string;
+            userId: import("mongoose").Types.ObjectId;
         }[];
         chatId: import("mongoose").Types.ObjectId;
         lastMessage: import("./message.schema").Message & {
@@ -51,9 +47,11 @@ export declare class MessengerController {
             _id: import("mongoose").Types.ObjectId;
         }>;
         isSupport: boolean;
+        notReadingMessage: (import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
+            _id: import("mongoose").Types.ObjectId;
+        })[];
     }[]>;
-    getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
-        _id: import("mongoose").Types.ObjectId;
-    })[]>;
+    getChatHistory(dto: ChatIDDto): Promise<any[]>;
     messageFile(file: Express.Multer.File): Promise<string>;
+    readMessages(dto: ReadMessageIDDto): Promise<void>;
 }

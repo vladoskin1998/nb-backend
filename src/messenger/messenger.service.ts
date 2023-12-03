@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto, ReadMessageIDDto } from './messenger.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
@@ -24,23 +24,16 @@ export class MessengerService {
         private notificationService: NotificationService
     ) { }
 
-    async openChat(dto: NewChatDto)
-        : Promise<{
-            participants: {
-                userId: string,
-                avatarFileName: string,
-                fullName: string,
-            }[],
-            chatId: string | Types.ObjectId,
-            isSupport: boolean
-        }> {
+    async openChat(dto: NewChatDto) {
         try {
 
-            const userIds = dto.participants.map(item => item.userId)
+            console.log(dto);
+
+            const userIds = dto.participants.map(item => new Types.ObjectId(item.userId))
 
             const existingChat = await this.chatsModel.findOne({
                 'participants.userId': { $all: userIds },
-            });
+            })
 
             if (existingChat) {
                 return {
@@ -51,16 +44,17 @@ export class MessengerService {
             }
 
             const newChat = await this.chatsModel.create({ participants: dto.participants, isSupport: dto.isSupport });
-
             return {
-                participants: newChat.participants,
+                participants: newChat?.participants,
                 chatId: newChat._id,
                 isSupport: newChat.isSupport
             };
         } catch (error) {
+            console.error('Error in openChat:', error);
             throw new Error('SERVER ERROR openChat')
         }
     }
+
     async listChat(dto: ListChatDto) {
         try {
             const userId = dto._id;
@@ -68,16 +62,26 @@ export class MessengerService {
             const chats = await this.chatsModel.find({
                 participants: { $elemMatch: { userId: userId } },
                 isSupport: dto.isSupport
-            });
+            }).populate({ path: 'participants.userId', model: 'User' })
 
             const chatsWithLastMessage = await Promise.all(
                 chats.map(async (item) => {
                     const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
+                    const notReadingMessage = await this.messageModel.find({
+                        $and: [
+                            { $nor: [{ senderId: new Types.ObjectId(userId)  }] },
+                            { isRead: false },
+                        ],
+                    }
+                    ).select( 'isRead' )
+                    
                     return {
                         participants: item.toObject().participants,
                         chatId: item._id,
                         lastMessage: message ? message.toObject() : null,
-                        isSupport: item.isSupport
+                        isSupport: item.isSupport,
+                        notReadingMessage,
+                        
                     };
                 })
             );
@@ -93,36 +97,50 @@ export class MessengerService {
         try {
 
             const chatId = new Types.ObjectId(dto.chatId)
-            const history = await this.messageModel.find({ chatId })
+            const history = await this.messageModel.aggregate([
+                { $match: { chatId } },
+                { $addFields: { messageId: '$_id' } },
+            ]);
             return history || []
         } catch (error) {
             throw new Error('SERVER ERROR')
         }
     }
 
-    async addMessage(payload: AddNewMessageDto): Promise<void> {
+    async addMessage(payload: AddNewMessageDto): Promise<{ messageId: string }> {
         try {
             const chatId = new Types.ObjectId(payload.chatId)
             const senderId = new Types.ObjectId(payload.senderId)
-            await this.messageModel.create({ ...payload, chatId, senderId })
+            // await this.messageModel.create({ ...payload, chatId, senderId })
 
             const { participants } = (await this.chatsModel.findOne({ _id: chatId }))
-            const rooms = participants.map(item => item.userId)
+            const rooms = participants.map(item => item.userId.toString())
 
-            const { avatarFileName, fullName } = participants.find(item => item.userId === payload.senderId)
+            const user = await this.userModel.findOne({ _id: senderId })
+
 
             await this.notificationService.sendNotification({
                 ownerId: payload.senderId,
                 rooms,
-                fileName: avatarFileName,
+                fileName: user.avatarFileName,
                 title: payload.content,
-                name: fullName,
+                name: user.fullName,
                 event: NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
             })
 
-            await this.messageModel.create({ ...payload, chatId, senderId, timestamp: new Date() })
+            const message = await this.messageModel.create({ ...payload, chatId, senderId, timestamp: new Date() })
+            return { messageId: message._id.toString() }
         } catch (error) {
             throw new Error('SERVER ERROR')
+        }
+    }
+
+
+    async readMessage({ messageId }: ReadMessageIDDto) {
+        try {
+            await this.messageModel.findOneAndUpdate({ _id: new Types.ObjectId(messageId)}, { isRead: true })
+        } catch (error) {
+
         }
     }
 

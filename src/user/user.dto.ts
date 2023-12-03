@@ -44,6 +44,10 @@ export class UserTextInfoDTO {
     @IsOptional()
     @IsString()
     phone?: string
+
+    @IsOptional()
+    @IsString()
+    avatarFileName?: string
 }
 
 export class ClosestUserDto{

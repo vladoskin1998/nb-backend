@@ -90,13 +90,9 @@ export class NotificationService {
             })
             .populate({
                 path: 'ownerId',
-                select: 'fullName'
+                select: 'fullName avatarFileName'
             })
-            .populate({
-                path: 'ownerIdentityId',
-                select: 'avatarFileName'
-            })
-
+         
             await this.notificationModel.deleteMany({userId: body.userId})
 
             return notification.reverse()

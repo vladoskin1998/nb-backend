@@ -35,7 +35,8 @@ export class User {
     @Prop({ default: METHOD_REGISTRATION.JWT })
     methodRegistration: METHOD_REGISTRATION.JWT | METHOD_REGISTRATION.FACEBOOK | METHOD_REGISTRATION.GOOGLE;
 
-
+    @Prop({ default: null})
+    avatarFileName: string | null;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -28,7 +28,7 @@ export class LikesService {
                 } else {
                     likeDocument.usersId.splice(index, 1);
                 }
-                console.log(likeDocument);
+             ;
                 await this.likesModel.updateOne({ _id: likeDocument._id }, { usersId: likeDocument.usersId });
                 return
             }

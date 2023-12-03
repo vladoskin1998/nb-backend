@@ -26,14 +26,18 @@ let NotificationGateway = class NotificationGateway {
     }
     async joinNotificationRoom(socket, userId) {
         const room = String(userId);
-        await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.ONLINE });
+        if (userId) {
+            await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.ONLINE });
+        }
         if (room) {
             socket.join(room);
         }
     }
     async leaveNotificationRoom(socket, userId) {
         const room = String(userId);
-        await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.OFFLINE });
+        if (userId) {
+            await this.userIdentityService.profileTextInfo({ _id: userId, online: enum_1.ONLINEOFFLINE.OFFLINE });
+        }
         socket.leave(String(room));
     }
     async sendNotificationToRooms(props) {

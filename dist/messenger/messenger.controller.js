@@ -36,6 +36,9 @@ let MessengerController = class MessengerController {
     async messageFile(file) {
         return await this.messengerService.fileMessage(file);
     }
+    async readMessages(dto) {
+        await this.messengerService.readMessage(dto);
+    }
 };
 __decorate([
     (0, common_1.Post)('open-chat'),
@@ -66,6 +69,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], MessengerController.prototype, "messageFile", null);
+__decorate([
+    (0, common_1.Post)('read-message'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [messenger_dto_1.ReadMessageIDDto]),
+    __metadata("design:returntype", Promise)
+], MessengerController.prototype, "readMessages", null);
 MessengerController = __decorate([
     (0, common_1.Controller)('messenger'),
     __metadata("design:paramtypes", [messenger_service_1.MessengerService])

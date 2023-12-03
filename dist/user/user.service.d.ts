@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 /// <reference types="mongoose/types/aggregate" />
 /// <reference types="mongoose/types/callback" />
 /// <reference types="mongoose/types/collection" />
@@ -29,12 +30,18 @@ import { ROLES } from 'src/enum/enum';
 import { JwtTokenService } from 'src/auth/jwt-auth.service';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { Friends } from './friends.schema';
+import { FilesService } from 'src/files/files.service';
+import { UserIdDTO } from 'src/notification/notification.dto';
 export declare class UserService {
     private readonly userModel;
     private userIdentityModel;
     private friendsModel;
+    private readonly filesService;
     private readonly jwtTokenService;
-    constructor(userModel: Model<User>, userIdentityModel: Model<UserIdentity>, friendsModel: Model<Friends>, jwtTokenService: JwtTokenService);
+    constructor(userModel: Model<User>, userIdentityModel: Model<UserIdentity>, friendsModel: Model<Friends>, filesService: FilesService, jwtTokenService: JwtTokenService);
+    getOneUserById(dto: UserIdDTO): Promise<import("mongoose").Document<unknown, {}, User> & User & {
+        _id: Types.ObjectId;
+    }>;
     getUsers({ _id, role, searchName }: {
         _id: string;
         role: ROLES;
@@ -48,19 +55,21 @@ export declare class UserService {
         email?: string;
         role?: ROLES;
         phone?: string;
+        avatarFileName?: string;
     }>;
     checkUsersExist(userIds: string[]): Promise<{
         _id: Types.ObjectId;
     }[]>;
     getClosestUserByRole(body: ClosestUserDto): Promise<any>;
-    getMyFriends(body: IDUserDto): Promise<Omit<import("mongoose").Document<unknown, {}, Friends> & Friends & {
-        _id: Types.ObjectId;
-    }, never>[]>;
+    getMyFriends(body: IDUserDto): Promise<any>;
     checkToMyFriend(body: AddFriendDto): Promise<boolean>;
     addToMyFriend(body: AddFriendDto): Promise<Omit<import("mongoose").Document<unknown, {}, Friends> & Friends & {
         _id: Types.ObjectId;
     }, never>>;
     deleteMyFriend(body: AddFriendDto): Promise<import("mongoose").Document<unknown, {}, Friends> & Friends & {
         _id: Types.ObjectId;
+    }>;
+    profileUploadAvatar(file: Express.Multer.File, _id: string): Promise<{
+        avatarFileName: string;
     }>;
 }

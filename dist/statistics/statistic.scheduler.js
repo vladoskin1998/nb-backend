@@ -18,7 +18,6 @@ let ScheduledTasksService = class ScheduledTasksService {
         this.statisticsService = statisticsService;
     }
     async scheduleStatistics() {
-        console.log("scheduleStatistics");
         await this.statisticsService.saveStatistic();
     }
 };

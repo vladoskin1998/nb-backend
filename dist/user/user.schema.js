@@ -46,6 +46,10 @@ __decorate([
     (0, mongoose_1.Prop)({ default: enum_1.METHOD_REGISTRATION.JWT }),
     __metadata("design:type", String)
 ], User.prototype, "methodRegistration", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ default: null }),
+    __metadata("design:type", String)
+], User.prototype, "avatarFileName", void 0);
 User = __decorate([
     (0, mongoose_1.Schema)()
 ], User);

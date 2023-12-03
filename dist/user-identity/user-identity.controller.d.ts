@@ -55,7 +55,6 @@ export declare class UserIdentityController {
         houseNumber: string;
         createdUserDate: Date;
         blockedUserDate: Date;
-        avatarFileName: string;
         step: number;
         privacy: import("src/enum/enum").PRIVACY;
         aboutMe: string;
@@ -67,19 +66,16 @@ export declare class UserIdentityController {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: {
+        nationality: [] | {
             _id: string | number;
             title: string;
-        }[] | [];
+        }[];
         isAddedServices: boolean;
         isAddedPost: boolean;
         isExploreDone: boolean;
         lastStepChangeProfile: string;
         online: import("src/enum/enum").ONLINEOFFLINE;
         _id: import("mongoose").Types.ObjectId;
-    }>;
-    profileUploadAvatar(body: any, file: Express.Multer.File): Promise<{
-        avatarFileName: string;
     }>;
     profileUploadCertificates(body: any, files: Array<Express.Multer.File>): Promise<{
         certificatesFileName: string[];

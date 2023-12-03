@@ -23,13 +23,7 @@ let UserIdentityController = class UserIdentityController {
         this.userIdentityService = userIdentityService;
     }
     async getIdentityInforamation(body) {
-        console.log("---->", body);
         return await this.userIdentityService.getIdentityInforamation(body === null || body === void 0 ? void 0 : body._id, body.options);
-    }
-    async profileUploadAvatar(body, file) {
-        var _a;
-        const userId = (_a = JSON.parse(body.payload)) === null || _a === void 0 ? void 0 : _a._id;
-        return await this.userIdentityService.profileUploadAvatar(file, userId);
     }
     async profileUploadCertificates(body, files) {
         var _a, _b;
@@ -56,7 +50,6 @@ let UserIdentityController = class UserIdentityController {
         return await this.userIdentityService.getSkillProfInterest(body.searchValue, enum_1.QUALITYENUM.PROFESSION);
     }
     async getPopularProfessionList() {
-        console.log();
         return this.userIdentityService.getPopularSkillProfInterest(enum_1.QUALITYENUM.PROFESSION);
     }
     async getInterestsList(body) {
@@ -79,15 +72,6 @@ __decorate([
     __metadata("design:paramtypes", [user_identity_dto_1.GetUserIdentityDto]),
     __metadata("design:returntype", Promise)
 ], UserIdentityController.prototype, "getIdentityInforamation", null);
-__decorate([
-    (0, common_1.Post)('upload-avatar'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.UploadedFile)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], UserIdentityController.prototype, "profileUploadAvatar", null);
 __decorate([
     (0, common_1.Post)('upload-certificates'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),

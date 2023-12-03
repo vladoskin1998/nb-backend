@@ -1,7 +1,8 @@
 import { Body, Controller, Post, UploadedFiles, UseInterceptors, } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { AddCommentDto, AddMarkPostDto, AddRepostDto, GetMarkPostDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { IDUserDto } from 'src/user/user.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -14,13 +15,24 @@ export class PostsController {
 
     @Post('get-post')
     async getPost(@Body() body: GetPostDto) {
-        return await this.postsService.getPost(body)
+        return await this.postsService.getOnePost(body)
+    }
+
+    @Post('get-post')
+    async getPostByMark(@Body() body: GetMarkPostDto){
+        return await this.postsService.getPostByMark(body)
     }
     
     @Post('get-comments')
     async getComments(@Body() body: GetPostDto) {
         return await this.postsService.getComments(body)
     }
+
+    @Post('get-my-comments')
+    async getMyComments(@Body() body: IDUserDto) {
+        return await this.postsService.getMyComments(body)
+    }
+
 
     @Post('add-post')
     @UseInterceptors(FilesInterceptor('files'))
@@ -37,4 +49,23 @@ export class PostsController {
         return await this.postsService.addComment(body)
     }
 
+    @Post('add-repost')
+    async addRepost(@Body() body: AddRepostDto) {
+        return await this.postsService.addRepost(body)
+    }
+
+    @Post('delete-repost')
+    async deleteRepost(@Body() body: AddRepostDto) {
+        return await this.postsService.deleteRepost(body)
+    }
+
+    @Post('add-mark')
+    async addMark(@Body() body: AddMarkPostDto) {
+        return await this.postsService.addMark(body)
+    }
+
+    @Post('delete-mark')
+    async deleteMark(@Body() body: AddMarkPostDto) {
+        return await this.postsService.deleteMark(body)
+    }
 }

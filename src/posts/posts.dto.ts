@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 
 export class GetPostsDto{
@@ -8,6 +8,10 @@ export class GetPostsDto{
 
     @IsString()
     userId: string
+
+    @IsOptional()
+    @IsBoolean()
+    isMarkedOption: boolean
 
 }
 
@@ -21,10 +25,32 @@ export class GetPostDto{
 
 }
 
+
+
 export class AddCommentDto extends GetPostDto{
     @IsString()
     userIdentityId: string
 
     @IsString()
     text: string;
+}
+
+export class AddRepostDto {
+    @IsString()
+    repostedUserId: string
+
+    @IsString()
+    postId: string;
+}
+
+export class GetMarkPostDto {
+
+    @IsString()
+    marckedUserId: string;
+}
+
+export class AddMarkPostDto  extends GetMarkPostDto{
+    
+    @IsString()
+    postId: string;
 }

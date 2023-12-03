@@ -22,12 +22,23 @@ const jwt_auth_service_1 = require("../auth/jwt-auth.service");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const utils_1 = require("../utils/utils");
 const friends_schema_1 = require("./friends.schema");
+const files_service_1 = require("../files/files.service");
 let UserService = class UserService {
-    constructor(userModel, userIdentityModel, friendsModel, jwtTokenService) {
+    constructor(userModel, userIdentityModel, friendsModel, filesService, jwtTokenService) {
         this.userModel = userModel;
         this.userIdentityModel = userIdentityModel;
         this.friendsModel = friendsModel;
+        this.filesService = filesService;
         this.jwtTokenService = jwtTokenService;
+    }
+    async getOneUserById(dto) {
+        try {
+            const _id = new mongoose_2.Types.ObjectId(dto.userId);
+            return await this.userModel.findOne({ _id }).select('fullName avatarFileName email');
+        }
+        catch (error) {
+            throw error;
+        }
     }
     async getUsers({ _id, role, searchName }) {
         try {
@@ -92,12 +103,11 @@ let UserService = class UserService {
     }
     async getClosestUserByRole(body) {
         const { role, myLat, myLng } = body;
-        const usersByRole = await this.userModel.find({ role }).select('_id fullName');
-        console.log(usersByRole);
+        const usersByRole = await this.userModel.find({ role }).select('_id fullName avatarFileName');
         const userWithCoord = await Promise.all(usersByRole.map(async (item) => {
             const userId = new mongoose_2.Types.ObjectId(item._id);
-            const { coordinates, avatarFileName } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates');
-            return Object.assign(Object.assign({}, item.toObject()), { avatarFileName, coordinates });
+            const { coordinates } = await this.userIdentityModel.findOne({ user: userId }).select('avatarFileName coordinates');
+            return Object.assign(Object.assign({}, item.toObject()), { coordinates });
         }));
         let closestUser = null;
         let minDistance = Infinity;
@@ -120,8 +130,19 @@ let UserService = class UserService {
             const userId = new mongoose_2.Types.ObjectId(body._id);
             const friends = await this.friendsModel.find({ userId }).populate({
                 path: 'friendId',
-                select: 'fullName email phone role',
-                options: { sort: { fullName: 1 } }
+                select: 'fullName email phone role avatarFileName',
+            });
+            friends.sort((a, b) => {
+                var _a, _b;
+                const nameA = (_a = a.friendId) === null || _a === void 0 ? void 0 : _a.fullName.toUpperCase();
+                const nameB = (_b = b.friendId) === null || _b === void 0 ? void 0 : _b.fullName.toUpperCase();
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
             });
             return friends;
         }
@@ -138,7 +159,6 @@ let UserService = class UserService {
                     { friendId },
                 ],
             });
-            console.log(isAlredyExistFriend);
             return Boolean(isAlredyExistFriend);
         }
         catch (error) {
@@ -156,7 +176,7 @@ let UserService = class UserService {
             const friend = await this.friendsModel.create({ userId, friendId });
             return await friend.populate({
                 path: 'friendId',
-                select: 'fullName email phone role'
+                select: 'fullName email phone role avatarFileName'
             });
         }
         catch (error) {
@@ -179,6 +199,21 @@ let UserService = class UserService {
             throw new error;
         }
     }
+    async profileUploadAvatar(file, _id) {
+        try {
+            const userId = new mongoose_2.Types.ObjectId(_id);
+            let user = await this.userModel.findOne({ _id: userId });
+            if (user === null || user === void 0 ? void 0 : user.avatarFileName) {
+                await this.filesService.deleteFile(user.avatarFileName, 'uploads/avatar');
+            }
+            const avatarFileName = await this.filesService.uploadSingleFile(file, 'uploads/avatar', false);
+            await user.updateOne({ avatarFileName });
+            return { avatarFileName };
+        }
+        catch (error) {
+            throw error;
+        }
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),
@@ -188,6 +223,7 @@ UserService = __decorate([
     __metadata("design:paramtypes", [mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
+        files_service_1.FilesService,
         jwt_auth_service_1.JwtTokenService])
 ], UserService);
 exports.UserService = UserService;

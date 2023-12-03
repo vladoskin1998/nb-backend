@@ -1,8 +1,6 @@
 import { IDUserDto } from 'src/user/user.dto';
 export declare class ParticipantDto {
     userId: string;
-    avatarFileName: string | null;
-    fullName: string;
 }
 export declare class NewChatDto {
     participants: ParticipantDto[];
@@ -10,6 +8,9 @@ export declare class NewChatDto {
 }
 export declare class ChatIDDto {
     chatId: string;
+}
+export declare class ReadMessageIDDto {
+    messageId: string;
 }
 export declare class AddNewMessageDto extends ChatIDDto {
     senderId: string;

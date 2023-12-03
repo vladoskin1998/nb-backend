@@ -39,7 +39,6 @@ export declare class UserIdentity {
     houseNumber: string | null;
     createdUserDate: Date;
     blockedUserDate: Date;
-    avatarFileName: string | null;
     step: number;
     privacy: PRIVACY;
     aboutMe: string;

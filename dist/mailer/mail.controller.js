@@ -17,7 +17,6 @@ let MailController = class MailController {
         this.mailService = mailService;
     }
     async send() {
-        console.log('mailing/send');
     }
 };
 __decorate([

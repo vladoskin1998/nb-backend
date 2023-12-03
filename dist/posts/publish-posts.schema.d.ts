@@ -27,6 +27,7 @@ import { PRIVACY } from 'src/enum/enum';
 export type PublishPostsDocument = HydratedDocument<PublishPosts>;
 export declare class PublishPosts {
     userId: Types.ObjectId;
+    repostUserId: Types.ObjectId;
     userIdentityId: Types.ObjectId;
     likes: Types.ObjectId;
     title: string;

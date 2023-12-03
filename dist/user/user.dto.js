@@ -70,6 +70,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserTextInfoDTO.prototype, "phone", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UserTextInfoDTO.prototype, "avatarFileName", void 0);
 exports.UserTextInfoDTO = UserTextInfoDTO;
 class ClosestUserDto {
 }

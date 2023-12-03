@@ -42,9 +42,6 @@ export class UserIdentity {
     @Prop({ default: null  })
     blockedUserDate: Date;
 
-    @Prop({ default: null})
-    avatarFileName: string | null;
-
     @Prop({ default: 5})
     step: number;
 

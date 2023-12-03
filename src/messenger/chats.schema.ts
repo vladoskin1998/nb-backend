@@ -1,22 +1,23 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Types } from "mongoose";
+import { UserIdentity } from "src/user-identity/user-identity.schema";
 import { User } from "src/user/user.schema";
 
 export type ChatsDocument = HydratedDocument<Chats>;
 
 @Schema()
 export class Chats {
-
-    @Prop({ type: Array })
+    @Prop({ type: [
+        {
+            userId: { type: Types.ObjectId, ref: User.name },
+        }
+    ] })
     participants: {
-        userId: string,
-        avatarFileName: string,
-        fullName: string,
+        userId: Types.ObjectId;
     }[];
 
-    @Prop({default: false})
-    isSupport: boolean
-
+    @Prop({ default: false })
+    isSupport: boolean;
 }
 
 export const ChatsSchema = SchemaFactory.createForClass(Chats);

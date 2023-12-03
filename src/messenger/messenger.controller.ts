@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { MessengerService } from './messenger.service';
-import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ParticipantDto, ReadMessageIDDto } from './messenger.dto';
 import { IDUserDto } from 'src/user/user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -36,5 +36,10 @@ export class MessengerController {
         @UploadedFile() file: Express.Multer.File,
     ) {
         return await this.messengerService.fileMessage(file)
+    }
+
+    @Post('read-message')
+    async readMessages(  @Body() dto: ReadMessageIDDto){
+        await this.messengerService.readMessage(dto)
     }
 }

@@ -65,7 +65,6 @@ export declare class UserIdentityService {
         houseNumber: string;
         createdUserDate: Date;
         blockedUserDate: Date;
-        avatarFileName: string;
         step: number;
         privacy: import("src/enum/enum").PRIVACY;
         aboutMe: string;
@@ -77,10 +76,10 @@ export declare class UserIdentityService {
         education: import("src/enum/enum").EDUCATION;
         studySchool: string;
         familyStatus: import("src/enum/enum").FAMILYSTATUS;
-        nationality: {
+        nationality: [] | {
             _id: string | number;
             title: string;
-        }[] | [];
+        }[];
         isAddedServices: boolean;
         isAddedPost: boolean;
         isExploreDone: boolean;
@@ -90,9 +89,6 @@ export declare class UserIdentityService {
     }>;
     changeLocation(body: LocationDto): Promise<{
         isLocationVerify: boolean;
-    }>;
-    profileUploadAvatar(file: Express.Multer.File, _id: string): Promise<{
-        avatarFileName: string;
     }>;
     profileUploadCertificates(files: Array<Express.Multer.File>, _id: string, uploadedCertificates: string[]): Promise<{
         certificatesFileName: string[];

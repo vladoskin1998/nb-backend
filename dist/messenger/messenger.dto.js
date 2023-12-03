@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListChatDto = exports.AddNewMessageDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
+exports.ListChatDto = exports.AddNewMessageDto = exports.ReadMessageIDDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const user_dto_1 = require("../user/user.dto");
@@ -20,14 +20,6 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], ParticipantDto.prototype, "userId", void 0);
-__decorate([
-    (0, class_validator_1.Validate)(utils_1.isNullOrString),
-    __metadata("design:type", String)
-], ParticipantDto.prototype, "avatarFileName", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], ParticipantDto.prototype, "fullName", void 0);
 exports.ParticipantDto = ParticipantDto;
 class NewChatDto {
 }
@@ -51,6 +43,13 @@ __decorate([
     __metadata("design:type", String)
 ], ChatIDDto.prototype, "chatId", void 0);
 exports.ChatIDDto = ChatIDDto;
+class ReadMessageIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ReadMessageIDDto.prototype, "messageId", void 0);
+exports.ReadMessageIDDto = ReadMessageIDDto;
 class AddNewMessageDto extends ChatIDDto {
 }
 __decorate([

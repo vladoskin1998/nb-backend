@@ -23,6 +23,10 @@ __decorate([
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], PublishPosts.prototype, "userId", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name, required: false }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], PublishPosts.prototype, "repostUserId", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_identity_schema_1.UserIdentity.name }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
 ], PublishPosts.prototype, "userIdentityId", void 0);

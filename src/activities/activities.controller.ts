@@ -57,7 +57,7 @@ export class ActivitiesController {
 
     @Post('get-publish-activities')
     async getPublishActivities(@Body() body: GetPublishActivitiesDto) {
-        console.log('get-publish-activities');
+
         
         return await this.activitiesService.getPublishActivities(body)
     }

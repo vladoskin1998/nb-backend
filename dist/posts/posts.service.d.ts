@@ -27,26 +27,33 @@ import { PublishPosts } from './publish-posts.schema';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
-import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { AddCommentDto, AddMarkPostDto, AddRepostDto, GetMarkPostDto, GetPostDto, GetPostsDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
 import { PublishComments } from './publish-comments.schema';
 import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { NotificationService } from 'src/notification/notification.service';
+import { Repost } from './repost.schema';
+import { MarkPost } from './posts-mark.schema';
+import { IDUserDto } from 'src/user/user.dto';
 export declare class PostsService {
     private readonly publishPostsModel;
     private readonly likesModel;
     private readonly publishCommentsModel;
+    private readonly repostModel;
+    private readonly markPostModel;
     private readonly userIdentity;
     private filesService;
     private notificationService;
-    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, userIdentity: Model<UserIdentity>, filesService: FilesService, notificationService: NotificationService);
+    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, repostModel: Model<Repost>, markPostModel: Model<MarkPost>, userIdentity: Model<UserIdentity>, filesService: FilesService, notificationService: NotificationService);
     getPosts(body: GetPostsDto): Promise<{
         posts: any[];
         allPageNumber: number;
     }>;
-    getPost(body: GetPostDto): Promise<{
+    getOnePost(body: GetPostDto): Promise<{
         post: any;
     }>;
+    getPostByMark(body: GetMarkPostDto): Promise<string[]>;
+    getMyComments(body: IDUserDto): Promise<any[]>;
     getComments(body: GetPostDto): Promise<{
         comments: any;
         countComments: number;
@@ -58,6 +65,7 @@ export declare class PostsService {
             title: string;
             text: string;
             userId: string;
+            repostedUserId: string | null;
             coordinates: {
                 lat: number;
                 lng: number;
@@ -70,4 +78,8 @@ export declare class PostsService {
     addComment(body: AddCommentDto): Promise<import("mongoose").Document<unknown, {}, PublishComments> & PublishComments & {
         _id: Types.ObjectId;
     }>;
+    addRepost(body: AddRepostDto): Promise<void>;
+    deleteRepost(body: AddRepostDto): Promise<void>;
+    addMark(body: AddMarkPostDto): Promise<void>;
+    deleteMark(body: AddMarkPostDto): Promise<void>;
 }

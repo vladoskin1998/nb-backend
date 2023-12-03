@@ -30,7 +30,6 @@ let ActivitiesService = class ActivitiesService {
     }
     async createActivitie({ activitie, files, }) {
         try {
-            console.log(files);
             await this.filesService.uploadFiles(files, 'uploads/activities');
             const newCategory = new this.activitiesModel({
                 name: activitie.name,
@@ -71,7 +70,6 @@ let ActivitiesService = class ActivitiesService {
     }
     async addPublishActivities({ payload, files }) {
         try {
-            console.log(payload);
             const userId = new mongoose_2.Types.ObjectId(payload.userId);
             const activitiesId = new mongoose_2.Types.ObjectId(payload.activitiesId);
             const filesName = await this.filesService.uploadFiles(files, 'uploads/publish_activities', false);

@@ -7,12 +7,6 @@ import { isNullOrString } from 'src/utils/utils';
 export class ParticipantDto {
     @IsString()
     userId: string
-
-    @Validate(isNullOrString)
-    avatarFileName: string | null
-
-    @IsString()
-    fullName: string
 }
 
 export class NewChatDto {
@@ -21,7 +15,6 @@ export class NewChatDto {
     @ValidateNested({ each: true })
     @Type(() => ParticipantDto)
     participants: ParticipantDto[];
-
 
     @IsOptional()
     @IsBoolean()
@@ -34,6 +27,12 @@ export class ChatIDDto {
     chatId: string;
 }
 
+export class ReadMessageIDDto {
+    @IsString()
+    messageId: string;
+
+    
+}
 
 export class AddNewMessageDto extends ChatIDDto {
 

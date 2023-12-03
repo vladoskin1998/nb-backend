@@ -7,6 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UserIdentity, UserIdentitySchema } from 'src/user-identity/user-identity.schema';
 import { Friends, FriendsSchema } from './friends.schema';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { Friends, FriendsSchema } from './friends.schema';
         ]),
         MulterModule.register({}),
         AuthModule,
+        FilesModule,
     ],
     controllers: [UserController],
     providers: [UserService],

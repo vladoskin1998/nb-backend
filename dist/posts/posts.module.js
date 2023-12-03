@@ -18,6 +18,8 @@ const likes_schema_1 = require("../likes/likes.schema");
 const publish_comments_schema_1 = require("./publish-comments.schema");
 const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const notification_module_1 = require("../notification/notification.module");
+const repost_schema_1 = require("./repost.schema");
+const posts_mark_schema_1 = require("./posts-mark.schema");
 let PostsModule = class PostsModule {
 };
 PostsModule = __decorate([
@@ -27,6 +29,8 @@ PostsModule = __decorate([
                 { name: publish_posts_schema_1.PublishPosts.name, schema: publish_posts_schema_1.PublishPostsSchema },
                 { name: publish_comments_schema_1.PublishComments.name, schema: publish_comments_schema_1.PublishCommentsSchema },
                 { name: likes_schema_1.Likes.name, schema: likes_schema_1.LikesSchema },
+                { name: repost_schema_1.Repost.name, schema: repost_schema_1.RepostSchema },
+                { name: posts_mark_schema_1.MarkPost.name, schema: posts_mark_schema_1.MarkPostSchema },
                 { name: user_identity_schema_1.UserIdentity.name, schema: user_identity_schema_1.UserIdentitySchema },
             ]),
             platform_express_1.MulterModule.register({}),

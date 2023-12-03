@@ -23,7 +23,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto } from './messenger.dto';
+import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ReadMessageIDDto } from './messenger.dto';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
 import { Message } from './message.schema';
@@ -41,18 +41,14 @@ export declare class MessengerService {
     constructor(userIdentityModel: Model<UserIdentity>, userModel: Model<User>, chatsModel: Model<Chats>, messageModel: Model<Message>, filesService: FilesService, notificationService: NotificationService);
     openChat(dto: NewChatDto): Promise<{
         participants: {
-            userId: string;
-            avatarFileName: string;
-            fullName: string;
+            userId: Types.ObjectId;
         }[];
-        chatId: string | Types.ObjectId;
+        chatId: Types.ObjectId;
         isSupport: boolean;
     }>;
     listChat(dto: ListChatDto): Promise<{
         participants: {
-            userId: string;
-            avatarFileName: string;
-            fullName: string;
+            userId: Types.ObjectId;
         }[];
         chatId: Types.ObjectId;
         lastMessage: Message & {
@@ -61,10 +57,14 @@ export declare class MessengerService {
             _id: Types.ObjectId;
         }>;
         isSupport: boolean;
+        notReadingMessage: (import("mongoose").Document<unknown, {}, Message> & Message & {
+            _id: Types.ObjectId;
+        })[];
     }[]>;
-    getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, Message> & Message & {
-        _id: Types.ObjectId;
-    })[]>;
-    addMessage(payload: AddNewMessageDto): Promise<void>;
+    getChatHistory(dto: ChatIDDto): Promise<any[]>;
+    addMessage(payload: AddNewMessageDto): Promise<{
+        messageId: string;
+    }>;
+    readMessage({ messageId }: ReadMessageIDDto): Promise<void>;
     fileMessage(file: Express.Multer.File): Promise<string>;
 }

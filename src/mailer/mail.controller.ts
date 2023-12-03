@@ -7,7 +7,7 @@ export class MailController {
 
     @Get('send')
     async send(){
-        console.log('mailing/send');
+
         
         // await this.mailService.sendMail()
     } 

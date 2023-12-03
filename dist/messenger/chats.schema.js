@@ -11,10 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatsSchema = exports.Chats = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const user_schema_1 = require("../user/user.schema");
 let Chats = class Chats {
 };
 __decorate([
-    (0, mongoose_1.Prop)({ type: Array }),
+    (0, mongoose_1.Prop)({ type: [
+            {
+                userId: { type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name },
+            }
+        ] }),
     __metadata("design:type", Array)
 ], Chats.prototype, "participants", void 0);
 __decorate([

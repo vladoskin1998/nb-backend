@@ -25,7 +25,8 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { PostsService } from './posts.service';
-import { AddCommentDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { AddCommentDto, AddMarkPostDto, AddRepostDto, GetMarkPostDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { IDUserDto } from 'src/user/user.dto';
 export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
@@ -36,14 +37,20 @@ export declare class PostsController {
     getPost(body: GetPostDto): Promise<{
         post: any;
     }>;
+    getPostByMark(body: GetMarkPostDto): Promise<string[]>;
     getComments(body: GetPostDto): Promise<{
         comments: any;
         countComments: number;
     }>;
+    getMyComments(body: IDUserDto): Promise<any[]>;
     addPost(body: any, files: Array<Express.Multer.File> | null): Promise<import("mongoose").Document<unknown, {}, import("./publish-posts.schema").PublishPosts> & import("./publish-posts.schema").PublishPosts & {
         _id: import("mongoose").Types.ObjectId;
     }>;
     addComment(body: AddCommentDto): Promise<import("mongoose").Document<unknown, {}, import("./publish-comments.schema").PublishComments> & import("./publish-comments.schema").PublishComments & {
         _id: import("mongoose").Types.ObjectId;
     }>;
+    addRepost(body: AddRepostDto): Promise<void>;
+    deleteRepost(body: AddRepostDto): Promise<void>;
+    addMark(body: AddMarkPostDto): Promise<void>;
+    deleteMark(body: AddMarkPostDto): Promise<void>;
 }

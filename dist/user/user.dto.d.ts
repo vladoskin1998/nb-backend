@@ -15,6 +15,7 @@ export declare class UserTextInfoDTO {
     email?: string;
     role?: ROLES;
     phone?: string;
+    avatarFileName?: string;
 }
 export declare class ClosestUserDto {
     role: ROLES;

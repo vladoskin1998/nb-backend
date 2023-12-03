@@ -34,7 +34,8 @@ let MessengerService = class MessengerService {
     }
     async openChat(dto) {
         try {
-            const userIds = dto.participants.map(item => item.userId);
+            console.log(dto);
+            const userIds = dto.participants.map(item => new mongoose_2.Types.ObjectId(item.userId));
             const existingChat = await this.chatsModel.findOne({
                 'participants.userId': { $all: userIds },
             });
@@ -47,12 +48,13 @@ let MessengerService = class MessengerService {
             }
             const newChat = await this.chatsModel.create({ participants: dto.participants, isSupport: dto.isSupport });
             return {
-                participants: newChat.participants,
+                participants: newChat === null || newChat === void 0 ? void 0 : newChat.participants,
                 chatId: newChat._id,
                 isSupport: newChat.isSupport
             };
         }
         catch (error) {
+            console.error('Error in openChat:', error);
             throw new Error('SERVER ERROR openChat');
         }
     }
@@ -62,14 +64,21 @@ let MessengerService = class MessengerService {
             const chats = await this.chatsModel.find({
                 participants: { $elemMatch: { userId: userId } },
                 isSupport: dto.isSupport
-            });
+            }).populate({ path: 'participants.userId', model: 'User' });
             const chatsWithLastMessage = await Promise.all(chats.map(async (item) => {
                 const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
+                const notReadingMessage = await this.messageModel.find({
+                    $and: [
+                        { $nor: [{ senderId: new mongoose_2.Types.ObjectId(userId) }] },
+                        { isRead: false },
+                    ],
+                }).select('isRead');
                 return {
                     participants: item.toObject().participants,
                     chatId: item._id,
                     lastMessage: message ? message.toObject() : null,
-                    isSupport: item.isSupport
+                    isSupport: item.isSupport,
+                    notReadingMessage,
                 };
             }));
             return chatsWithLastMessage.reverse();
@@ -81,7 +90,10 @@ let MessengerService = class MessengerService {
     async getChatHistory(dto) {
         try {
             const chatId = new mongoose_2.Types.ObjectId(dto.chatId);
-            const history = await this.messageModel.find({ chatId });
+            const history = await this.messageModel.aggregate([
+                { $match: { chatId } },
+                { $addFields: { messageId: '$_id' } },
+            ]);
             return history || [];
         }
         catch (error) {
@@ -92,22 +104,29 @@ let MessengerService = class MessengerService {
         try {
             const chatId = new mongoose_2.Types.ObjectId(payload.chatId);
             const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
-            await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId }));
             const { participants } = (await this.chatsModel.findOne({ _id: chatId }));
-            const rooms = participants.map(item => item.userId);
-            const { avatarFileName, fullName } = participants.find(item => item.userId === payload.senderId);
+            const rooms = participants.map(item => item.userId.toString());
+            const user = await this.userModel.findOne({ _id: senderId });
             await this.notificationService.sendNotification({
                 ownerId: payload.senderId,
                 rooms,
-                fileName: avatarFileName,
+                fileName: user.avatarFileName,
                 title: payload.content,
-                name: fullName,
+                name: user.fullName,
                 event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
             });
-            await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date() }));
+            const message = await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date() }));
+            return { messageId: message._id.toString() };
         }
         catch (error) {
             throw new Error('SERVER ERROR');
+        }
+    }
+    async readMessage({ messageId }) {
+        try {
+            await this.messageModel.findOneAndUpdate({ _id: new mongoose_2.Types.ObjectId(messageId) }, { isRead: true });
+        }
+        catch (error) {
         }
     }
     async fileMessage(file) {

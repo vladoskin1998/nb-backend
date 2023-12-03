@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddCommentDto = exports.GetPostDto = exports.GetPostsDto = void 0;
+exports.AddMarkPostDto = exports.GetMarkPostDto = exports.AddRepostDto = exports.AddCommentDto = exports.GetPostDto = exports.GetPostsDto = void 0;
 const class_validator_1 = require("class-validator");
 class GetPostsDto {
 }
@@ -21,6 +21,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], GetPostsDto.prototype, "userId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], GetPostsDto.prototype, "isMarkedOption", void 0);
 exports.GetPostsDto = GetPostsDto;
 class GetPostDto {
 }
@@ -44,4 +49,29 @@ __decorate([
     __metadata("design:type", String)
 ], AddCommentDto.prototype, "text", void 0);
 exports.AddCommentDto = AddCommentDto;
+class AddRepostDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddRepostDto.prototype, "repostedUserId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddRepostDto.prototype, "postId", void 0);
+exports.AddRepostDto = AddRepostDto;
+class GetMarkPostDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetMarkPostDto.prototype, "marckedUserId", void 0);
+exports.GetMarkPostDto = GetMarkPostDto;
+class AddMarkPostDto extends GetMarkPostDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddMarkPostDto.prototype, "postId", void 0);
+exports.AddMarkPostDto = AddMarkPostDto;
 //# sourceMappingURL=posts.dto.js.map
