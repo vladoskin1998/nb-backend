@@ -73,21 +73,25 @@ export class MessengerGateway {
             content,
             timestamp,
             isRead,
-            file
+            file,
+            like,
+            audio
         } = payload
 
-  
-        
-        const {messageId} = await this.messengerService.addMessage({
+        await this.messengerService.addMessage({
             chatId,
             senderId,
             content,
             timestamp,
-            isRead:false,
-            file
+            isRead,
+            file,
+            like,
+            audio
         })
 
-        console.log("sendmessage room", this.server.sockets.adapter.rooms);
+        console.log('123');
+        // console.log("sendmessage", chatId);
+        // console.log("sendmessage room", this.server.sockets.adapter.rooms);
 
         // socket.to(destinationEmail).emit(SOCKET_MESSENDER_EVENT.NOTIFICATION, currentChatId, sourceEmail)
 
@@ -99,11 +103,178 @@ export class MessengerGateway {
                 content,
                 timestamp,
                 isRead,
+                file
+            )
+    }
+    
+    @SubscribeMessage(SOCKET_MESSENDER_EVENT.SEND_PRIVATE_VOICE_MESSAGE)
+    async handleVoiceMessage(
+        @MessageBody() payload: MessageType,
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const {
+            chatId,
+            senderId,
+            timestamp,
+            isRead,
+            file,
+            audio,
+            like,
+        } = payload
+
+        await this.messengerService.addVoiceMessage({
+            chatId,
+            senderId,
+            timestamp,
+            isRead,
+            file,
+            audio,
+            like,
+        })
+
+        socket
+            .to(String(chatId))
+            .emit(SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE,
+                chatId,
+                senderId,
+                timestamp,
+                isRead,
                 file,
-                messageId
+                audio
             )
     }
 
+    @SubscribeMessage(SOCKET_MESSENDER_EVENT.DELETE_PRIVATE_MESSAGE)
+    async findMessage(
+        @MessageBody() payload: MessageType,
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const {
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            isRead,
+            file,
+            like,
+            audio,
+        } = payload
+
+        await this.messengerService.deleteMessage({
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            isRead,
+            file,
+            like,
+            audio,
+        })
+        socket
+            .to(String(chatId))
+            .emit(SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE,
+                chatId,
+                senderId,
+                content,
+                timestamp,
+                isRead,
+                file
+            )
+    }
+
+    @SubscribeMessage(SOCKET_MESSENDER_EVENT.DELETE_PRIVATE_MESSAGE_LIKE)
+    async findLikedMessage(
+        @MessageBody() payload: MessageType,
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const {
+            chatId,
+            senderId,
+            timestamp,
+            like
+        } = payload
+
+        await this.messengerService.deleteLikedMessage({
+            chatId,
+            senderId,
+            timestamp,
+            like
+        })
+        socket
+            .to(String(chatId))
+            .emit(SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE,
+                chatId,
+                senderId,
+                timestamp,
+                like
+            )
+    }
+    
+    @SubscribeMessage(SOCKET_MESSENDER_EVENT.SEND_PRIVATE_MESSAGE_LIKE)
+    async createLikedMessage(
+        @MessageBody() payload: MessageType,
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const {
+            chatId,
+            senderId,
+            timestamp,
+            like
+        } = payload
+
+        await this.messengerService.createLikedMessage({
+            chatId,
+            senderId,
+            timestamp,
+            like
+        })
+        socket
+            .to(String(chatId))
+            .emit(SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE,
+                chatId,
+                senderId,
+                timestamp,
+                like
+            )
+    }
+
+    @SubscribeMessage(SOCKET_MESSENDER_EVENT.FORWARD_PRIVATE_MESSAGE)
+    async findToMessage(
+        @MessageBody() payload: MessageType,
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const {
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            senderIdold,
+            file,
+            audio,
+            like
+        } = payload
+
+        await this.messengerService.forwardMessage({
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            senderIdold,
+            file,
+            audio,
+            like
+        })
+        socket
+            .to(String(chatId))
+            .emit(SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE,
+                chatId,
+                senderId,
+                content,
+                timestamp,
+                senderIdold,
+                audio
+            )
+    }
     // @SubscribeMessage(SOCKET_MESSENDER_EVENT.NEW_CREATE_CHAT)
     // async updateChatList(
     //     @MessageBody() destinationEmail: string,

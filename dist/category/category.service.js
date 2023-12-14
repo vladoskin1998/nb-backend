@@ -193,7 +193,7 @@ let CategoryService = class CategoryService {
         }
     }
     async getPublishServices(body) {
-        const pageSize = 20;
+        const pageSize = 100;
         const allPageNumber = Math.ceil((await this.publishServiceModel.countDocuments()) / pageSize);
         const subServicesId = new mongoose_1.Types.ObjectId(body.subServicesId);
         const skip = (body.pageNumber - 1) * pageSize;
@@ -204,14 +204,79 @@ let CategoryService = class CategoryService {
             .sort({ createdPublishServiceDate: -1 })
             .populate({
             path: 'userId',
-            select: 'fullName',
+            select: 'fullName avatarFileName',
         })
             .populate({
             path: 'userIdentityId',
-            select: 'avatarFileName',
+        })
+            .populate({
+            path: 'servicesId',
+            select: 'name',
+        })
+            .populate({
+            path: 'subServicesId',
+            select: 'name',
         })
             .exec();
         return { publishServices, allPageNumber };
+    }
+    async getTenPublishServices() {
+        try {
+            const publishServices = await this.publishServiceModel
+                .find()
+                .sort({ createdPublishServiceDate: -1 })
+                .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+                .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession dateBirth',
+                },
+            })
+                .populate({
+                path: 'servicesId',
+                select: 'name',
+            })
+                .populate({
+                path: 'subServicesId',
+                select: 'name',
+            });
+            return publishServices;
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    async getOnePublishService(body) {
+        try {
+            const publishId = new mongoose_1.Types.ObjectId(body.publishServiceId);
+            const publishServices = await this.publishServiceModel
+                .findOne({ _id: publishId })
+                .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+                .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession',
+                },
+            })
+                .populate({
+                path: 'servicesId',
+                select: 'name fileName',
+            })
+                .populate({
+                path: 'subServicesId',
+                select: 'name',
+            });
+            return publishServices;
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
 };
 CategoryService = __decorate([

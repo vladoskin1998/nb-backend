@@ -25,7 +25,7 @@
 /// <reference types="mongoose/types/inferschematype" />
 import { Model, Types } from 'mongoose';
 import { Category, SubCategory } from './category.schema';
-import { GetPublishServiceDto, MoveSubCategoryIDDto, VisiableDto } from './category.dto';
+import { GetOnePublishDto, GetPublishServiceDto, MoveSubCategoryIDDto, VisiableDto } from './category.dto';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishService } from './publish-service.schema';
@@ -98,9 +98,15 @@ export declare class CategoryService {
         _id: Types.ObjectId;
     }>;
     getPublishServices(body: GetPublishServiceDto): Promise<{
-        publishServices: Omit<Omit<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
+        publishServices: Omit<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
             _id: Types.ObjectId;
-        }, never>, never>[];
+        }, never>, never>, never>, never>[];
         allPageNumber: number;
+    }>;
+    getTenPublishServices(): Promise<Omit<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
+        _id: Types.ObjectId;
+    }, never>, never>, never>, never>[]>;
+    getOnePublishService(body: GetOnePublishDto): Promise<import("mongoose").Document<unknown, {}, PublishService> & PublishService & {
+        _id: Types.ObjectId;
     }>;
 }

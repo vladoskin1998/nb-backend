@@ -36,6 +36,7 @@ export declare class MessengerController {
         chatId: import("mongoose").Types.ObjectId;
         isSupport: boolean;
     }>;
+    newChat(dto: NewChatDto): Promise<void>;
     listChat(dto: ListChatDto): Promise<{
         participants: {
             userId: import("mongoose").Types.ObjectId;
@@ -47,11 +48,11 @@ export declare class MessengerController {
             _id: import("mongoose").Types.ObjectId;
         }>;
         isSupport: boolean;
-        notReadingMessage: (import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
-            _id: import("mongoose").Types.ObjectId;
-        })[];
+        groupName: string;
     }[]>;
-    getChatHistory(dto: ChatIDDto): Promise<any[]>;
+    getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, import("./message.schema").Message> & import("./message.schema").Message & {
+        _id: import("mongoose").Types.ObjectId;
+    })[]>;
     messageFile(file: Express.Multer.File): Promise<string>;
     readMessages(dto: ReadMessageIDDto): Promise<void>;
 }

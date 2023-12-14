@@ -25,6 +25,7 @@
 import { HydratedDocument, Types } from 'mongoose';
 export type RepostDocument = HydratedDocument<Repost>;
 export declare class Repost {
+    ownerId: Types.ObjectId | null;
     repostedUserId: Types.ObjectId | null;
     postId: Types.ObjectId;
     createdRepostDate: Date;

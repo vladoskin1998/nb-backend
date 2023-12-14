@@ -3,8 +3,8 @@ import { FilesService } from '../files/files.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
-import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
-import { VisiableDto } from 'src/category/category.dto';
+import { ActivitiesDto, GetOnePublishActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
+import { GetOnePublishDto, VisiableDto } from 'src/category/category.dto';
 import { NOTIFICATION_EVENT, PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
 import { NotificationService } from 'src/notification/notification.service';
@@ -118,7 +118,7 @@ export class ActivitiesService {
     }
 
     async getPublishActivities(body: GetPublishActivitiesDto) {
-        const pageSize = 20
+        const pageSize = 100
         const allPageNumber = Math.ceil((await this.publishActivitiesModel.countDocuments()) / pageSize)
         const activitiesId = new Types.ObjectId(body.activitiesId)
 
@@ -131,14 +131,74 @@ export class ActivitiesService {
             .sort({ createEventDate: -1 })
             .populate({
                 path: 'userId',
-                select: 'fullName',
+                select: 'fullName avatarFileName',
             })
             .populate({
                 path: 'userIdentityId',
-                select: 'avatarFileName',
+                select: '',
+            })
+            .populate({
+                path: 'activitiesId',
+                select: 'name',
             })
             .exec();
 
         return { publishActivities, allPageNumber };
+    }
+
+
+    async getTenPublishActivities(){
+        try {
+            const publishServices = await this.publishActivitiesModel
+            .find()
+            .sort({ createdPublishServiceDate: -1 })
+            .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+            .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession dateBirth',
+                },
+            })
+            .populate({
+                path: 'activitiesId',
+                select: 'name',
+            })
+
+            return publishServices
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+
+    
+    async getOnePublishActivities(body: GetOnePublishActivitiesDto){
+        try {
+            const publishId = new Types.ObjectId(body.publishActivitiesId)
+
+            const publishActivities = await this.publishActivitiesModel
+            .findOne({_id:publishId})
+            .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+            .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession',
+                },
+            })
+            .populate({
+                path: 'activitiesId',
+                select: 'name fileName',
+            })
+
+            return publishActivities
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 }

@@ -18,6 +18,7 @@ const posts_service_1 = require("./posts.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const posts_dto_1 = require("./posts.dto");
 const user_dto_1 = require("../user/user.dto");
+const notification_dto_1 = require("../notification/notification.dto");
 let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
@@ -37,24 +38,39 @@ let PostsController = class PostsController {
     async getMyComments(body) {
         return await this.postsService.getMyComments(body);
     }
+    async getPostPin(body) {
+        return await this.postsService.getPostPin(body);
+    }
     async addPost(body, files) {
         const payload = JSON.parse(body.payload);
         return await this.postsService.addPost({ files, payload });
     }
+    async changePostPrivacy(body) {
+        return await this.postsService.changePostPrivacy(body);
+    }
+    async updatePostPin(body) {
+        return await this.postsService.updatePostPin(body);
+    }
     async addComment(body) {
         return await this.postsService.addComment(body);
     }
-    async addRepost(body) {
-        return await this.postsService.addRepost(body);
+    async updateNotification(body) {
+        return await this.postsService.updateNotification(body);
     }
-    async deleteRepost(body) {
-        return await this.postsService.deleteRepost(body);
+    async updateRepost(body) {
+        return await this.postsService.updateRepost(body);
     }
     async addMark(body) {
         return await this.postsService.addMark(body);
     }
     async deleteMark(body) {
         return await this.postsService.deleteMark(body);
+    }
+    async hidePost(body) {
+        return await this.postsService.hidePost(body);
+    }
+    async deletePost(body) {
+        return await this.postsService.deletePost(body);
     }
 };
 __decorate([
@@ -93,6 +109,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "getMyComments", null);
 __decorate([
+    (0, common_1.Post)('get-post-pin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [notification_dto_1.UserIdDTO]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "getPostPin", null);
+__decorate([
     (0, common_1.Post)('add-post'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FilesInterceptor)('files')),
     __param(0, (0, common_1.Body)()),
@@ -102,6 +125,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "addPost", null);
 __decorate([
+    (0, common_1.Post)('change-post-privacy'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.ChangePostPrivacyDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "changePostPrivacy", null);
+__decorate([
+    (0, common_1.Post)('update-post-pin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.UpdatePinPostDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "updatePostPin", null);
+__decorate([
     (0, common_1.Post)('add-comment'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -109,19 +146,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "addComment", null);
 __decorate([
-    (0, common_1.Post)('add-repost'),
+    (0, common_1.Post)('update-notification'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [posts_dto_1.AddRepostDto]),
+    __metadata("design:paramtypes", [posts_dto_1.NotificationPostDto]),
     __metadata("design:returntype", Promise)
-], PostsController.prototype, "addRepost", null);
+], PostsController.prototype, "updateNotification", null);
 __decorate([
-    (0, common_1.Post)('delete-repost'),
+    (0, common_1.Post)('update-repost'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [posts_dto_1.AddRepostDto]),
     __metadata("design:returntype", Promise)
-], PostsController.prototype, "deleteRepost", null);
+], PostsController.prototype, "updateRepost", null);
 __decorate([
     (0, common_1.Post)('add-mark'),
     __param(0, (0, common_1.Body)()),
@@ -136,6 +173,20 @@ __decorate([
     __metadata("design:paramtypes", [posts_dto_1.AddMarkPostDto]),
     __metadata("design:returntype", Promise)
 ], PostsController.prototype, "deleteMark", null);
+__decorate([
+    (0, common_1.Post)('hide-post'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.PostHideDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "hidePost", null);
+__decorate([
+    (0, common_1.Post)('delete-post'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.DeletePostDto]),
+    __metadata("design:returntype", Promise)
+], PostsController.prototype, "deletePost", null);
 PostsController = __decorate([
     (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [posts_service_1.PostsService])

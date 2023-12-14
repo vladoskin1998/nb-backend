@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ListChatDto = exports.AddNewMessageDto = exports.ReadMessageIDDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
+exports.ListChatDto = exports.createMessageLikedDto = exports.deleteLikedMessageDto = exports.forwardMessageDto = exports.deleteMessageDto = exports.AddNewVoiceMessageDto = exports.AddNewMessageDto = exports.ReadMessageIDDto = exports.ChatIDDto = exports.NewChatDto = exports.ParticipantDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 const user_dto_1 = require("../user/user.dto");
@@ -30,6 +30,11 @@ __decorate([
     (0, class_transformer_1.Type)(() => ParticipantDto),
     __metadata("design:type", Array)
 ], NewChatDto.prototype, "participants", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], NewChatDto.prototype, "groupName", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsBoolean)(),
@@ -72,10 +77,106 @@ __decorate([
 ], AddNewMessageDto.prototype, "isRead", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], AddNewMessageDto.prototype, "audio", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.Validate)(utils_1.isNullOrString),
     __metadata("design:type", String)
 ], AddNewMessageDto.prototype, "file", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddNewMessageDto.prototype, "like", void 0);
 exports.AddNewMessageDto = AddNewMessageDto;
+class AddNewVoiceMessageDto extends ChatIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddNewVoiceMessageDto.prototype, "senderId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], AddNewVoiceMessageDto.prototype, "timestamp", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], AddNewVoiceMessageDto.prototype, "isRead", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Validate)(utils_1.isNullOrString),
+    __metadata("design:type", String)
+], AddNewVoiceMessageDto.prototype, "file", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AddNewVoiceMessageDto.prototype, "like", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], AddNewVoiceMessageDto.prototype, "audio", void 0);
+exports.AddNewVoiceMessageDto = AddNewVoiceMessageDto;
+class deleteMessageDto extends AddNewMessageDto {
+}
+exports.deleteMessageDto = deleteMessageDto;
+class forwardMessageDto extends ChatIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], forwardMessageDto.prototype, "senderId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], forwardMessageDto.prototype, "senderIdold", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], forwardMessageDto.prototype, "content", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], forwardMessageDto.prototype, "timestamp", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.Validate)(utils_1.isNullOrString),
+    __metadata("design:type", String)
+], forwardMessageDto.prototype, "file", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], forwardMessageDto.prototype, "like", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Boolean)
+], forwardMessageDto.prototype, "audio", void 0);
+exports.forwardMessageDto = forwardMessageDto;
+class deleteLikedMessageDto extends ChatIDDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], deleteLikedMessageDto.prototype, "senderId", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], deleteLikedMessageDto.prototype, "like", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDate)(),
+    __metadata("design:type", Date)
+], deleteLikedMessageDto.prototype, "timestamp", void 0);
+exports.deleteLikedMessageDto = deleteLikedMessageDto;
+class createMessageLikedDto extends deleteLikedMessageDto {
+}
+exports.createMessageLikedDto = createMessageLikedDto;
 class ListChatDto extends user_dto_1.IDUserDto {
 }
 __decorate([

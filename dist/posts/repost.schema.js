@@ -19,6 +19,10 @@ let Repost = class Repost {
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name }),
     __metadata("design:type", mongoose_2.Types.ObjectId)
+], Repost.prototype, "ownerId", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: user_schema_1.User.name }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
 ], Repost.prototype, "repostedUserId", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId, ref: publish_posts_schema_1.PublishPosts.name }),

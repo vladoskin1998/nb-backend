@@ -37,6 +37,9 @@ export class PublishPosts {
     @Prop({ default: PRIVACY.EVERYONE, enum:PRIVACY})
     privacyPost: PRIVACY;
 
+    @Prop({ default: PRIVACY.EVERYONE, enum:PRIVACY})
+    privacyComment: PRIVACY;
+
     @Prop({ default: new Date()  })
     createdPostDate: Date;
 

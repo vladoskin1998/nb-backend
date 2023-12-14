@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetPublishServiceDto = exports.SubCategoryListDto = exports.EditDto = exports.CategoryDto = exports.VisiableDto = exports.MoveSubCategoryIDDto = exports.PublishCategoryIDDto = exports.SubCategoryIDDto = exports.CategoryIDDto = exports.IDDto = void 0;
+exports.GetOnePublishDto = exports.GetPublishServiceDto = exports.SubCategoryListDto = exports.EditDto = exports.CategoryDto = exports.VisiableDto = exports.MoveSubCategoryIDDto = exports.PublishCategoryIDDto = exports.SubCategoryIDDto = exports.CategoryIDDto = exports.IDDto = void 0;
 const class_validator_1 = require("class-validator");
 class IDDto {
 }
@@ -103,4 +103,12 @@ __decorate([
     __metadata("design:type", Number)
 ], GetPublishServiceDto.prototype, "subServicesId", void 0);
 exports.GetPublishServiceDto = GetPublishServiceDto;
+class GetOnePublishDto {
+}
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], GetOnePublishDto.prototype, "publishServiceId", void 0);
+exports.GetOnePublishDto = GetOnePublishDto;
 //# sourceMappingURL=category.dto.js.map

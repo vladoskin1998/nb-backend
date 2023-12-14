@@ -33,19 +33,92 @@ let MessengerGateway = class MessengerGateway {
         socket.leave(String(chatId));
     }
     async handleMessage(payload, socket) {
-        const { chatId, senderId, content, timestamp, isRead, file } = payload;
-        const { messageId } = await this.messengerService.addMessage({
+        const { chatId, senderId, content, timestamp, isRead, file, like, audio } = payload;
+        await this.messengerService.addMessage({
             chatId,
             senderId,
             content,
             timestamp,
-            isRead: false,
-            file
+            isRead,
+            file,
+            like,
+            audio
         });
-        console.log("sendmessage room", this.server.sockets.adapter.rooms);
+        console.log('123');
         socket
             .to(String(chatId))
-            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, isRead, file, messageId);
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, isRead, file);
+    }
+    async handleVoiceMessage(payload, socket) {
+        const { chatId, senderId, timestamp, isRead, file, audio, like, } = payload;
+        await this.messengerService.addVoiceMessage({
+            chatId,
+            senderId,
+            timestamp,
+            isRead,
+            file,
+            audio,
+            like,
+        });
+        socket
+            .to(String(chatId))
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, timestamp, isRead, file, audio);
+    }
+    async findMessage(payload, socket) {
+        const { chatId, senderId, content, timestamp, isRead, file, like, audio, } = payload;
+        await this.messengerService.deleteMessage({
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            isRead,
+            file,
+            like,
+            audio,
+        });
+        socket
+            .to(String(chatId))
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, isRead, file);
+    }
+    async findLikedMessage(payload, socket) {
+        const { chatId, senderId, timestamp, like } = payload;
+        await this.messengerService.deleteLikedMessage({
+            chatId,
+            senderId,
+            timestamp,
+            like
+        });
+        socket
+            .to(String(chatId))
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, timestamp, like);
+    }
+    async createLikedMessage(payload, socket) {
+        const { chatId, senderId, timestamp, like } = payload;
+        await this.messengerService.createLikedMessage({
+            chatId,
+            senderId,
+            timestamp,
+            like
+        });
+        socket
+            .to(String(chatId))
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, timestamp, like);
+    }
+    async findToMessage(payload, socket) {
+        const { chatId, senderId, content, timestamp, senderIdold, file, audio, like } = payload;
+        await this.messengerService.forwardMessage({
+            chatId,
+            senderId,
+            content,
+            timestamp,
+            senderIdold,
+            file,
+            audio,
+            like
+        });
+        socket
+            .to(String(chatId))
+            .emit(enum_1.SOCKET_MESSENDER_EVENT.GET_PRIVATE_MESSAGE, chatId, senderId, content, timestamp, senderIdold, audio);
     }
 };
 __decorate([
@@ -77,6 +150,46 @@ __decorate([
     __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
     __metadata("design:returntype", Promise)
 ], MessengerGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(enum_1.SOCKET_MESSENDER_EVENT.SEND_PRIVATE_VOICE_MESSAGE),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], MessengerGateway.prototype, "handleVoiceMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(enum_1.SOCKET_MESSENDER_EVENT.DELETE_PRIVATE_MESSAGE),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], MessengerGateway.prototype, "findMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(enum_1.SOCKET_MESSENDER_EVENT.DELETE_PRIVATE_MESSAGE_LIKE),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], MessengerGateway.prototype, "findLikedMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(enum_1.SOCKET_MESSENDER_EVENT.SEND_PRIVATE_MESSAGE_LIKE),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], MessengerGateway.prototype, "createLikedMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)(enum_1.SOCKET_MESSENDER_EVENT.FORWARD_PRIVATE_MESSAGE),
+    __param(0, (0, websockets_1.MessageBody)()),
+    __param(1, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
+    __metadata("design:returntype", Promise)
+], MessengerGateway.prototype, "findToMessage", null);
 MessengerGateway = __decorate([
     (0, websockets_1.WebSocketGateway)(5001, {
         cors: {

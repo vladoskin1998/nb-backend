@@ -29,6 +29,10 @@ __decorate([
     __metadata("design:type", String)
 ], Message.prototype, "content", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: String }),
+    __metadata("design:type", String)
+], Message.prototype, "like", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: Date, default: new Date(), required: false }),
     __metadata("design:type", Date)
 ], Message.prototype, "timestamp", void 0);
@@ -40,6 +44,18 @@ __decorate([
     (0, mongoose_1.Prop)({ type: String, default: null }),
     __metadata("design:type", String)
 ], Message.prototype, "file", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
+    __metadata("design:type", Boolean)
+], Message.prototype, "audio", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: mongoose_2.Types.ObjectId }),
+    __metadata("design:type", mongoose_2.Types.ObjectId)
+], Message.prototype, "senderIdold", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
+    __metadata("design:type", Boolean)
+], Message.prototype, "forward", void 0);
 Message = __decorate([
     (0, mongoose_1.Schema)()
 ], Message);

@@ -31,3 +31,6 @@ export declare class GetPublishServiceDto {
     pageNumber: number;
     subServicesId: number;
 }
+export declare class GetOnePublishDto {
+    readonly publishServiceId: string;
+}

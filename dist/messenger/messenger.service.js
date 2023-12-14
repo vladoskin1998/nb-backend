@@ -58,27 +58,40 @@ let MessengerService = class MessengerService {
             throw new Error('SERVER ERROR openChat');
         }
     }
+    async newChat(dto) {
+        try {
+            const userIds = dto.participants.map(item => item.userId);
+            const groupName = dto.groupName;
+            const existingChat = await this.chatsModel.findOne({
+                'participants.userId': { $all: userIds },
+            });
+            if (existingChat) {
+                await this.chatsModel.updateOne({ participants: dto.participants, isSupport: dto.isSupport, groupName: dto.groupName });
+            }
+            else {
+                await this.chatsModel.create({ participants: dto.participants, isSupport: dto.isSupport, groupName: dto.groupName });
+            }
+            console.log(groupName);
+        }
+        catch (error) {
+            throw new Error('SERVER ERROR openChat');
+        }
+    }
     async listChat(dto) {
         try {
             const userId = dto._id;
             const chats = await this.chatsModel.find({
                 participants: { $elemMatch: { userId: userId } },
                 isSupport: dto.isSupport
-            }).populate({ path: 'participants.userId', model: 'User' });
+            });
             const chatsWithLastMessage = await Promise.all(chats.map(async (item) => {
                 const message = await this.messageModel.findOne({ chatId: item._id }).sort({ timestamp: -1 });
-                const notReadingMessage = await this.messageModel.find({
-                    $and: [
-                        { $nor: [{ senderId: new mongoose_2.Types.ObjectId(userId) }] },
-                        { isRead: false },
-                    ],
-                }).select('isRead');
                 return {
                     participants: item.toObject().participants,
                     chatId: item._id,
                     lastMessage: message ? message.toObject() : null,
                     isSupport: item.isSupport,
-                    notReadingMessage,
+                    groupName: item.groupName,
                 };
             }));
             return chatsWithLastMessage.reverse();
@@ -90,10 +103,7 @@ let MessengerService = class MessengerService {
     async getChatHistory(dto) {
         try {
             const chatId = new mongoose_2.Types.ObjectId(dto.chatId);
-            const history = await this.messageModel.aggregate([
-                { $match: { chatId } },
-                { $addFields: { messageId: '$_id' } },
-            ]);
+            const history = await this.messageModel.find({ chatId });
             return history || [];
         }
         catch (error) {
@@ -115,11 +125,89 @@ let MessengerService = class MessengerService {
                 name: user.fullName,
                 event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
             });
-            const message = await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date() }));
+            const message = await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date(), audio: false, forward: false }));
             return { messageId: message._id.toString() };
         }
         catch (error) {
             throw new Error('SERVER ERROR');
+        }
+    }
+    async deleteLikedMessage(payload) {
+        try {
+            const likeSenderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const messages = await this.messageModel.findOne({
+                senderId: likeSenderId,
+                timestamp: payload.timestamp
+            });
+            await this.messageModel.updateOne({ _id: new mongoose_2.Types.ObjectId(messages._id) }, { like: "" });
+        }
+        catch (e) {
+            throw new Error(e);
+        }
+    }
+    async createLikedMessage(payload) {
+        try {
+            const likeSenderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const messages = await this.messageModel.findOne({
+                senderId: senderId,
+                timestamp: payload.timestamp
+            });
+            await this.messageModel.updateOne({ _id: new mongoose_2.Types.ObjectId(messages._id) }, { like: payload.like });
+        }
+        catch (e) {
+            throw new Error(e);
+        }
+    }
+    async addVoiceMessage(payload) {
+        try {
+            const chatId = new mongoose_2.Types.ObjectId(payload.chatId);
+            const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const { participants } = (await this.chatsModel.findOne({ _id: chatId }));
+            const rooms = participants.map(item => item.userId.toString());
+            const user = await this.userModel.findOne({ _id: senderId });
+            await this.notificationService.sendNotification({
+                ownerId: payload.senderId,
+                rooms,
+                fileName: user.avatarFileName,
+                title: "Voice Message",
+                name: user.fullName,
+                event: enum_1.NOTIFICATION_EVENT.NOTIFICATION_MESSAGE
+            });
+            console.log(senderId);
+            const message = await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderId, timestamp: new Date(), forward: false, audio: true, content: "Voice Message" }));
+            return { messageId: message._id.toString() };
+        }
+        catch (error) {
+            throw new Error('SERVER ERROR');
+        }
+    }
+    async deleteMessage(payload) {
+        try {
+            const chatId = new mongoose_2.Types.ObjectId(payload.chatId);
+            const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const messages = await this.messageModel.findOne({
+                senderId: senderId,
+                timestamp: payload.timestamp
+            });
+            await this.messageModel.deleteOne({ _id: new mongoose_2.Types.ObjectId(messages._id) });
+            console.log(messages, payload.timestamp, senderId);
+        }
+        catch (e) {
+            throw new Error(e);
+        }
+    }
+    async forwardMessage(payload) {
+        try {
+            const chatId = new mongoose_2.Types.ObjectId(payload.chatId);
+            const senderIdold = new mongoose_2.Types.ObjectId(payload.senderIdold);
+            const senderId = new mongoose_2.Types.ObjectId(payload.senderId);
+            const senderName = (await this.userModel.findOne(senderIdold)).fullName;
+            console.log(payload.file);
+            await this.messageModel.create(Object.assign(Object.assign({}, payload), { chatId, senderIdold: senderName, timestamp: new Date(), forward: true, senderId: senderId, file: payload.file }));
+        }
+        catch (e) {
+            throw new Error(e);
         }
     }
     async readMessage({ messageId }) {

@@ -21,3 +21,10 @@ export class GetPublishActivitiesDto {
     @IsString()    
     readonly activitiesId : string
 }
+
+
+export class GetOnePublishActivitiesDto {
+    @IsNotEmpty()
+    @IsString()
+    readonly publishActivitiesId: string;
+}

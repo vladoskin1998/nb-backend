@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ONLINEOFFLINE = exports.METHOD_FORGET_PASSWORD = exports.NOTIFICATION_MAILING = exports.NOTIFICATION_EVENT = exports.SOCKET_NOTIFICATION_EVENT = exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
+exports.NOTIFICATION_POST = exports.ONLINEOFFLINE = exports.METHOD_FORGET_PASSWORD = exports.NOTIFICATION_MAILING = exports.NOTIFICATION_EVENT = exports.SOCKET_NOTIFICATION_EVENT = exports.SOCKET_MESSENDER_EVENT = exports.QUALITYENUM = exports.FAMILYSTATUS = exports.EDUCATION = exports.SEX = exports.ORIENTATION = exports.PRIVACY = exports.METHOD_REGISTRATION = exports.ROLES = exports.HTTP_MESSAGE = exports.ERROR_MESSAGE = void 0;
 var ERROR_MESSAGE;
 (function (ERROR_MESSAGE) {
     ERROR_MESSAGE["ERROR_ACCESS_DIR"] = "ERROR ACCESS DIR";
@@ -86,6 +86,11 @@ var SOCKET_MESSENDER_EVENT;
     SOCKET_MESSENDER_EVENT["LEAVE_ROOM"] = "leave_room";
     SOCKET_MESSENDER_EVENT["SEND_PRIVATE_MESSAGE"] = "send_private_message";
     SOCKET_MESSENDER_EVENT["GET_PRIVATE_MESSAGE"] = "get_private_message";
+    SOCKET_MESSENDER_EVENT["DELETE_PRIVATE_MESSAGE"] = "delete_private_message";
+    SOCKET_MESSENDER_EVENT["FORWARD_PRIVATE_MESSAGE"] = "forward_private_message";
+    SOCKET_MESSENDER_EVENT["SEND_PRIVATE_VOICE_MESSAGE"] = "send_private_voice_message";
+    SOCKET_MESSENDER_EVENT["SEND_PRIVATE_MESSAGE_LIKE"] = "send_private_message_like";
+    SOCKET_MESSENDER_EVENT["DELETE_PRIVATE_MESSAGE_LIKE"] = "delete_private_message_like";
     SOCKET_MESSENDER_EVENT["NEW_CREATE_CHAT"] = "new_create_chat";
     SOCKET_MESSENDER_EVENT["UPDATE_LIST_CHAT"] = "update_list_chat";
     SOCKET_MESSENDER_EVENT["AUTH_SOCKET"] = "auth_socket";
@@ -118,4 +123,9 @@ var ONLINEOFFLINE;
     ONLINEOFFLINE["ONLINE"] = "online";
     ONLINEOFFLINE["OFFLINE"] = "offline";
 })(ONLINEOFFLINE = exports.ONLINEOFFLINE || (exports.ONLINEOFFLINE = {}));
+var NOTIFICATION_POST;
+(function (NOTIFICATION_POST) {
+    NOTIFICATION_POST["POST"] = "post";
+    NOTIFICATION_POST["COMMENT"] = "comment";
+})(NOTIFICATION_POST = exports.NOTIFICATION_POST || (exports.NOTIFICATION_POST = {}));
 //# sourceMappingURL=enum.js.map

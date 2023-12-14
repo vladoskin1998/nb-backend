@@ -55,6 +55,10 @@ __decorate([
     __metadata("design:type", String)
 ], PublishPosts.prototype, "privacyPost", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ default: enum_1.PRIVACY.EVERYONE, enum: enum_1.PRIVACY }),
+    __metadata("design:type", String)
+], PublishPosts.prototype, "privacyComment", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ default: new Date() }),
     __metadata("design:type", Date)
 ], PublishPosts.prototype, "createdPostDate", void 0);

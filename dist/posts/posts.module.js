@@ -16,10 +16,13 @@ const platform_express_1 = require("@nestjs/platform-express");
 const publish_posts_schema_1 = require("./publish-posts.schema");
 const likes_schema_1 = require("../likes/likes.schema");
 const publish_comments_schema_1 = require("./publish-comments.schema");
-const user_identity_schema_1 = require("../user-identity/user-identity.schema");
 const notification_module_1 = require("../notification/notification.module");
 const repost_schema_1 = require("./repost.schema");
 const posts_mark_schema_1 = require("./posts-mark.schema");
+const post_notification_schema_1 = require("./post-notification.schema");
+const user_schema_1 = require("../user/user.schema");
+const post_pin_schema_1 = require("./post-pin.schema");
+const post_hide_schema_1 = require("./post-hide.schema");
 let PostsModule = class PostsModule {
 };
 PostsModule = __decorate([
@@ -31,7 +34,10 @@ PostsModule = __decorate([
                 { name: likes_schema_1.Likes.name, schema: likes_schema_1.LikesSchema },
                 { name: repost_schema_1.Repost.name, schema: repost_schema_1.RepostSchema },
                 { name: posts_mark_schema_1.MarkPost.name, schema: posts_mark_schema_1.MarkPostSchema },
-                { name: user_identity_schema_1.UserIdentity.name, schema: user_identity_schema_1.UserIdentitySchema },
+                { name: user_schema_1.User.name, schema: user_schema_1.UserSchema }, ,
+                { name: post_notification_schema_1.PostNotification.name, schema: post_notification_schema_1.PostNotificationSchema },
+                { name: post_pin_schema_1.PostPin.name, schema: post_pin_schema_1.PostPinSchema },
+                { name: post_hide_schema_1.PostHide.name, schema: post_hide_schema_1.PostHideSchema },
             ]),
             platform_express_1.MulterModule.register({}),
             files_module_1.FilesModule,

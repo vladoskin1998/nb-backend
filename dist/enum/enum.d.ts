@@ -72,6 +72,11 @@ export declare enum SOCKET_MESSENDER_EVENT {
     LEAVE_ROOM = "leave_room",
     SEND_PRIVATE_MESSAGE = "send_private_message",
     GET_PRIVATE_MESSAGE = "get_private_message",
+    DELETE_PRIVATE_MESSAGE = "delete_private_message",
+    FORWARD_PRIVATE_MESSAGE = "forward_private_message",
+    SEND_PRIVATE_VOICE_MESSAGE = "send_private_voice_message",
+    SEND_PRIVATE_MESSAGE_LIKE = "send_private_message_like",
+    DELETE_PRIVATE_MESSAGE_LIKE = "delete_private_message_like",
     NEW_CREATE_CHAT = "new_create_chat",
     UPDATE_LIST_CHAT = "update_list_chat",
     AUTH_SOCKET = "auth_socket"
@@ -98,4 +103,8 @@ export declare enum METHOD_FORGET_PASSWORD {
 export declare enum ONLINEOFFLINE {
     ONLINE = "online",
     OFFLINE = "offline"
+}
+export declare enum NOTIFICATION_POST {
+    POST = "post",
+    COMMENT = "comment"
 }

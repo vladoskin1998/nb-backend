@@ -26,7 +26,7 @@
 import { FilesService } from '../files/files.service';
 import { Model, Types } from 'mongoose';
 import { Activities } from './activities.schema';
-import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
+import { ActivitiesDto, GetOnePublishActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { VisiableDto } from 'src/category/category.dto';
 import { PRIVACY } from 'src/enum/enum';
 import { PublishActivities } from './publish-activities.schema';
@@ -65,9 +65,15 @@ export declare class ActivitiesService {
         _id: Types.ObjectId;
     }>;
     getPublishActivities(body: GetPublishActivitiesDto): Promise<{
-        publishActivities: Omit<Omit<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+        publishActivities: Omit<Omit<Omit<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
             _id: Types.ObjectId;
-        }, never>, never>[];
+        }, never>, never>, never>[];
         allPageNumber: number;
+    }>;
+    getTenPublishActivities(): Promise<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+        _id: Types.ObjectId;
+    }, never>, never>, never>[]>;
+    getOnePublishActivities(body: GetOnePublishActivitiesDto): Promise<import("mongoose").Document<unknown, {}, PublishActivities> & PublishActivities & {
+        _id: Types.ObjectId;
     }>;
 }

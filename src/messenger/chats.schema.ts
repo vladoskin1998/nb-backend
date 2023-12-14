@@ -18,6 +18,9 @@ export class Chats {
 
     @Prop({ default: false })
     isSupport: boolean;
+
+    @Prop({type: String, default:""})
+    groupName: string
 }
 
 export const ChatsSchema = SchemaFactory.createForClass(Chats);

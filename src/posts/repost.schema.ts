@@ -8,6 +8,8 @@ export type RepostDocument = HydratedDocument<Repost>;
 @Schema({ versionKey: false })
 export class Repost {
 
+    @Prop({ type: Types.ObjectId, ref: User.name }) 
+    ownerId: Types.ObjectId | null;
 
     @Prop({ type: Types.ObjectId, ref: User.name }) 
     repostedUserId: Types.ObjectId | null;

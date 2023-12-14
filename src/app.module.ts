@@ -18,6 +18,7 @@ import { MailModule } from './mailer/mail.module';
 import { LikesModule } from './likes/likes.module';
 import { SmsModule } from './sms/sms.module';
 import { NotificationModule } from './notification/notification.module';
+// import { MapModule } from 'map/map.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { NotificationModule } from './notification/notification.module';
     LikesModule,
     SmsModule,
     NotificationModule,
+    // MapModule,
   ],
 })
 export class AppModule {}

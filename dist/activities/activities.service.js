@@ -87,7 +87,7 @@ let ActivitiesService = class ActivitiesService {
         }
     }
     async getPublishActivities(body) {
-        const pageSize = 20;
+        const pageSize = 100;
         const allPageNumber = Math.ceil((await this.publishActivitiesModel.countDocuments()) / pageSize);
         const activitiesId = new mongoose_2.Types.ObjectId(body.activitiesId);
         const skip = (body.pageNumber - 1) * pageSize;
@@ -98,14 +98,68 @@ let ActivitiesService = class ActivitiesService {
             .sort({ createEventDate: -1 })
             .populate({
             path: 'userId',
-            select: 'fullName',
+            select: 'fullName avatarFileName',
         })
             .populate({
             path: 'userIdentityId',
-            select: 'avatarFileName',
+            select: '',
+        })
+            .populate({
+            path: 'activitiesId',
+            select: 'name',
         })
             .exec();
         return { publishActivities, allPageNumber };
+    }
+    async getTenPublishActivities() {
+        try {
+            const publishServices = await this.publishActivitiesModel
+                .find()
+                .sort({ createdPublishServiceDate: -1 })
+                .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+                .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession dateBirth',
+                },
+            })
+                .populate({
+                path: 'activitiesId',
+                select: 'name',
+            });
+            return publishServices;
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+    async getOnePublishActivities(body) {
+        try {
+            const publishId = new mongoose_2.Types.ObjectId(body.publishActivitiesId);
+            const publishActivities = await this.publishActivitiesModel
+                .findOne({ _id: publishId })
+                .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+                .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession',
+                },
+            })
+                .populate({
+                path: 'activitiesId',
+                select: 'name fileName',
+            });
+            return publishActivities;
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
 };
 ActivitiesService = __decorate([

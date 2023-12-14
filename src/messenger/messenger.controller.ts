@@ -14,6 +14,13 @@ export class MessengerController {
         return targetChat
     }
 
+    @Post('new-chat')
+    async newChat(@Body() dto: NewChatDto) {
+        const targetChat = await this.messengerService.newChat(dto)
+        console.log(dto.groupName)
+        return targetChat
+    }
+
     @Post('list-chat')
     async listChat(
         @Body() dto: ListChatDto

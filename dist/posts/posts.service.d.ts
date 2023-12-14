@@ -27,24 +27,31 @@ import { PublishPosts } from './publish-posts.schema';
 import { Model, Types } from 'mongoose';
 import { FilesService } from 'src/files/files.service';
 import { PRIVACY } from 'src/enum/enum';
-import { AddCommentDto, AddMarkPostDto, AddRepostDto, GetMarkPostDto, GetPostDto, GetPostsDto } from './posts.dto';
+import { AddCommentDto, AddMarkPostDto, AddRepostDto, ChangePostPrivacyDto, DeletePostDto, GetMarkPostDto, GetPostDto, GetPostsDto, NotificationPostDto, PostHideDto, UpdatePinPostDto } from './posts.dto';
 import { Likes } from 'src/likes/likes.schema';
 import { PublishComments } from './publish-comments.schema';
-import { UserIdentity } from 'src/user-identity/user-identity.schema';
 import { NotificationService } from 'src/notification/notification.service';
 import { Repost } from './repost.schema';
 import { MarkPost } from './posts-mark.schema';
 import { IDUserDto } from 'src/user/user.dto';
+import { PostNotification } from './post-notification.schema';
+import { User } from 'src/user/user.schema';
+import { PostPin } from './post-pin.schema';
+import { UserIdDTO } from 'src/notification/notification.dto';
+import { PostHide } from './post-hide.schema';
 export declare class PostsService {
     private readonly publishPostsModel;
     private readonly likesModel;
     private readonly publishCommentsModel;
     private readonly repostModel;
     private readonly markPostModel;
-    private readonly userIdentity;
+    private readonly postNotificationModel;
+    private readonly userModel;
+    private readonly postPinModel;
+    private readonly postHideModel;
     private filesService;
     private notificationService;
-    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, repostModel: Model<Repost>, markPostModel: Model<MarkPost>, userIdentity: Model<UserIdentity>, filesService: FilesService, notificationService: NotificationService);
+    constructor(publishPostsModel: Model<PublishPosts>, likesModel: Model<Likes>, publishCommentsModel: Model<PublishComments>, repostModel: Model<Repost>, markPostModel: Model<MarkPost>, postNotificationModel: Model<PostNotification>, userModel: Model<User>, postPinModel: Model<PostPin>, postHideModel: Model<PostHide>, filesService: FilesService, notificationService: NotificationService);
     getPosts(body: GetPostsDto): Promise<{
         posts: any[];
         allPageNumber: number;
@@ -58,6 +65,9 @@ export declare class PostsService {
         comments: any;
         countComments: number;
     }>;
+    getPostPin(body: UserIdDTO): Promise<(import("mongoose").Document<unknown, {}, PostPin> & PostPin & {
+        _id: Types.ObjectId;
+    })[]>;
     addPost({ payload, files }: {
         payload: {
             userIdentityId: string;
@@ -70,16 +80,22 @@ export declare class PostsService {
                 lat: number;
                 lng: number;
             };
+            deletedFiles?: string[];
+            postId?: string;
         };
         files: Array<Express.Multer.File>;
     }): Promise<import("mongoose").Document<unknown, {}, PublishPosts> & PublishPosts & {
         _id: Types.ObjectId;
     }>;
+    changePostPrivacy(body: ChangePostPrivacyDto): Promise<void>;
+    updatePostPin(body: UpdatePinPostDto): Promise<void>;
     addComment(body: AddCommentDto): Promise<import("mongoose").Document<unknown, {}, PublishComments> & PublishComments & {
         _id: Types.ObjectId;
     }>;
-    addRepost(body: AddRepostDto): Promise<void>;
-    deleteRepost(body: AddRepostDto): Promise<void>;
+    updateNotification(body: NotificationPostDto): Promise<void>;
+    updateRepost(body: AddRepostDto): Promise<void>;
     addMark(body: AddMarkPostDto): Promise<void>;
     deleteMark(body: AddMarkPostDto): Promise<void>;
+    hidePost(body: PostHideDto): Promise<void>;
+    deletePost(body: DeletePostDto): Promise<void>;
 }

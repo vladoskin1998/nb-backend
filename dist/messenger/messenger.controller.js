@@ -25,6 +25,11 @@ let MessengerController = class MessengerController {
         const targetChat = await this.messengerService.openChat(dto);
         return targetChat;
     }
+    async newChat(dto) {
+        const targetChat = await this.messengerService.newChat(dto);
+        console.log(dto.groupName);
+        return targetChat;
+    }
     async listChat(dto) {
         const userChatList = await this.messengerService.listChat(dto);
         return userChatList;
@@ -47,6 +52,13 @@ __decorate([
     __metadata("design:paramtypes", [messenger_dto_1.NewChatDto]),
     __metadata("design:returntype", Promise)
 ], MessengerController.prototype, "openChat", null);
+__decorate([
+    (0, common_1.Post)('new-chat'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [messenger_dto_1.NewChatDto]),
+    __metadata("design:returntype", Promise)
+], MessengerController.prototype, "newChat", null);
 __decorate([
     (0, common_1.Post)('list-chat'),
     __param(0, (0, common_1.Body)()),

@@ -11,6 +11,7 @@ import {
 import { CategoryService } from './category.service';
 import {
     CategoryIDDto,
+    GetOnePublishDto,
     GetPublishServiceDto,
     IDDto,
     MoveSubCategoryIDDto,
@@ -100,5 +101,17 @@ export class CategoryController {
         return await this.categoryService.getPublishServices(body)
     }
 
+    @Post('get-ten-publish-service')
+    async getTenPosts() {
+        return await this.categoryService.getTenPublishServices()
+    }
+
+    
+    @Post('get-one-publish-service')
+    async getOnePublishService(@Body() body: GetOnePublishDto) {
+        return await this.categoryService.getOnePublishService(body)
+    }
+
+    
 }
 

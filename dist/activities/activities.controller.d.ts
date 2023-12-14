@@ -25,7 +25,7 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { ActivitiesService } from './activities.service';
-import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
+import { ActivitiesDto, GetOnePublishActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
 import { IDDto, VisiableDto } from 'src/category/category.dto';
 export declare class ActivitiesController {
     private readonly activitiesService;
@@ -40,9 +40,15 @@ export declare class ActivitiesController {
         _id: import("mongoose").Types.ObjectId;
     }>;
     getPublishActivities(body: GetPublishActivitiesDto): Promise<{
-        publishActivities: Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-activities.schema").PublishActivities> & import("./publish-activities.schema").PublishActivities & {
+        publishActivities: Omit<Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-activities.schema").PublishActivities> & import("./publish-activities.schema").PublishActivities & {
             _id: import("mongoose").Types.ObjectId;
-        }, never>, never>[];
+        }, never>, never>, never>[];
         allPageNumber: number;
+    }>;
+    getTenPosts(): Promise<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-activities.schema").PublishActivities> & import("./publish-activities.schema").PublishActivities & {
+        _id: import("mongoose").Types.ObjectId;
+    }, never>, never>, never>[]>;
+    getOnePublishService(body: GetOnePublishActivitiesDto): Promise<import("mongoose").Document<unknown, {}, import("./publish-activities.schema").PublishActivities> & import("./publish-activities.schema").PublishActivities & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
 }

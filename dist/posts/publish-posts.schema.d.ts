@@ -38,6 +38,7 @@ export declare class PublishPosts {
         lng: number | null;
     };
     privacyPost: PRIVACY;
+    privacyComment: PRIVACY;
     createdPostDate: Date;
     addressLocation: string;
     viewPost: number;

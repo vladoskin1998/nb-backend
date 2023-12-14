@@ -27,6 +27,10 @@ __decorate([
     (0, mongoose_1.Prop)({ default: false }),
     __metadata("design:type", Boolean)
 ], Chats.prototype, "isSupport", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, default: "" }),
+    __metadata("design:type", String)
+], Chats.prototype, "groupName", void 0);
 Chats = __decorate([
     (0, mongoose_1.Schema)()
 ], Chats);

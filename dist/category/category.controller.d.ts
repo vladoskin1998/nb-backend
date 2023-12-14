@@ -25,7 +25,7 @@
 /// <reference types="mongoose" />
 /// <reference types="mongoose/types/inferschematype" />
 import { CategoryService } from './category.service';
-import { CategoryIDDto, GetPublishServiceDto, IDDto, MoveSubCategoryIDDto, PublishCategoryIDDto, SubCategoryIDDto, VisiableDto } from './category.dto';
+import { CategoryIDDto, GetOnePublishDto, GetPublishServiceDto, IDDto, MoveSubCategoryIDDto, PublishCategoryIDDto, SubCategoryIDDto, VisiableDto } from './category.dto';
 export declare class CategoryController {
     private readonly categoryService;
     constructor(categoryService: CategoryService);
@@ -62,9 +62,15 @@ export declare class CategoryController {
         _id: import("mongoose").Types.ObjectId;
     }>;
     getPosts(body: GetPublishServiceDto): Promise<{
-        publishServices: Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-service.schema").PublishService> & import("./publish-service.schema").PublishService & {
+        publishServices: Omit<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-service.schema").PublishService> & import("./publish-service.schema").PublishService & {
             _id: import("mongoose").Types.ObjectId;
-        }, never>, never>[];
+        }, never>, never>, never>, never>[];
         allPageNumber: number;
+    }>;
+    getTenPosts(): Promise<Omit<Omit<Omit<Omit<import("mongoose").Document<unknown, {}, import("./publish-service.schema").PublishService> & import("./publish-service.schema").PublishService & {
+        _id: import("mongoose").Types.ObjectId;
+    }, never>, never>, never>, never>[]>;
+    getOnePublishService(body: GetOnePublishDto): Promise<import("mongoose").Document<unknown, {}, import("./publish-service.schema").PublishService> & import("./publish-service.schema").PublishService & {
+        _id: import("mongoose").Types.ObjectId;
     }>;
 }

@@ -77,3 +77,13 @@ export class GetPublishServiceDto{
     subServicesId: number
 
 }
+
+
+export class GetOnePublishDto {
+    @IsNotEmpty()
+    @IsString()
+    readonly publishServiceId: string;
+}
+
+
+

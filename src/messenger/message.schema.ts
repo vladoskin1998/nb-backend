@@ -18,6 +18,9 @@ export class Message {
     @Prop({ type: String })
     content: string
 
+    @Prop({ type: String })
+    like:string
+
     @Prop({ type: Date, default: new Date(), required: false })
     timestamp: Date
 
@@ -26,6 +29,17 @@ export class Message {
 
     @Prop({ type: String, default: null })
     file: string
+
+    @Prop({type: Boolean, default:false})
+    audio: boolean
+
+    @Prop({ type: Types.ObjectId})
+    senderIdold: Types.ObjectId;
+
+    
+    @Prop({type: Boolean, default:false})
+    forward: boolean
+
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

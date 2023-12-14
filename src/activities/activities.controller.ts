@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
-import { IDDto, VisiableDto } from 'src/category/category.dto';
+import { ActivitiesDto, GetOnePublishActivitiesDto, GetPublishActivitiesDto } from './activities.dto';
+import { GetOnePublishDto, IDDto, VisiableDto } from 'src/category/category.dto';
 
 @Controller('activities')
 export class ActivitiesController {
@@ -58,8 +58,18 @@ export class ActivitiesController {
     @Post('get-publish-activities')
     async getPublishActivities(@Body() body: GetPublishActivitiesDto) {
 
-        
         return await this.activitiesService.getPublishActivities(body)
     }
+
+    @Post('get-ten-publish-activities')
+    async getTenPosts() {
+        return await this.activitiesService.getTenPublishActivities()
+    }
+
+    @Post('get-one-publish-activities')
+    async getOnePublishService(@Body() body: GetOnePublishActivitiesDto) {
+        return await this.activitiesService.getOnePublishActivities(body)
+    }
+
 
 }

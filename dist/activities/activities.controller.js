@@ -42,6 +42,12 @@ let ActivitiesController = class ActivitiesController {
     async getPublishActivities(body) {
         return await this.activitiesService.getPublishActivities(body);
     }
+    async getTenPosts() {
+        return await this.activitiesService.getTenPublishActivities();
+    }
+    async getOnePublishService(body) {
+        return await this.activitiesService.getOnePublishActivities(body);
+    }
 };
 __decorate([
     (0, common_1.Post)('add-activitie'),
@@ -88,6 +94,19 @@ __decorate([
     __metadata("design:paramtypes", [activities_dto_1.GetPublishActivitiesDto]),
     __metadata("design:returntype", Promise)
 ], ActivitiesController.prototype, "getPublishActivities", null);
+__decorate([
+    (0, common_1.Post)('get-ten-publish-activities'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getTenPosts", null);
+__decorate([
+    (0, common_1.Post)('get-one-publish-activities'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [activities_dto_1.GetOnePublishActivitiesDto]),
+    __metadata("design:returntype", Promise)
+], ActivitiesController.prototype, "getOnePublishService", null);
 ActivitiesController = __decorate([
     (0, common_1.Controller)('activities'),
     __metadata("design:paramtypes", [activities_service_1.ActivitiesService])

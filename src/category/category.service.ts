@@ -5,6 +5,7 @@ import { Category, SubCategory } from './category.schema'; // Импортиру
 import {
     CategoryDto,
     EditDto,
+    GetOnePublishDto,
     GetPublishServiceDto,
     MoveSubCategoryIDDto,
     SubCategoryListDto,
@@ -282,7 +283,7 @@ export class CategoryService {
     }
 
     async getPublishServices(body: GetPublishServiceDto) {
-        const pageSize = 20
+        const pageSize = 100
         const allPageNumber = Math.ceil((await this.publishServiceModel.countDocuments()) / pageSize)
         const subServicesId = new Types.ObjectId(body.subServicesId)
 
@@ -295,15 +296,83 @@ export class CategoryService {
             .sort({ createdPublishServiceDate: -1 })
             .populate({
                 path: 'userId',
-                select: 'fullName',
+                select: 'fullName avatarFileName',
             })
             .populate({
                 path: 'userIdentityId',
-                select: 'avatarFileName',
+            })   
+            .populate({
+                path: 'servicesId',
+                select: 'name',
+            })
+            .populate({
+                path: 'subServicesId',
+                select: 'name',
             })
             .exec();
 
         return { publishServices, allPageNumber };
+    }
+
+    async getTenPublishServices(){
+        try {
+            const publishServices = await this.publishServiceModel
+            .find()
+            .sort({ createdPublishServiceDate: -1 })
+            .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+            .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession dateBirth',
+                },
+            })
+            .populate({
+                path: 'servicesId',
+                select: 'name',
+            })
+            .populate({
+                path: 'subServicesId',
+                select: 'name',
+            })
+
+            return publishServices
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    async getOnePublishService(body: GetOnePublishDto){
+        try {
+            const publishId = new Types.ObjectId(body.publishServiceId)
+
+            const publishServices = await this.publishServiceModel
+            .findOne({_id:publishId})
+            .populate({
+                path: 'userId',
+                select: 'fullName avatarFileName email role',
+            })
+            .populate({
+                path: 'userIdentityId',
+                populate: {
+                    path: 'profession',
+                },
+            })
+            .populate({
+                path: 'servicesId',
+                select: 'name fileName',
+            })
+            .populate({
+                path: 'subServicesId',
+                select: 'name',
+            })
+
+            return publishServices
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
 }

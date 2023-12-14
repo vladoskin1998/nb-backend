@@ -23,7 +23,7 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { AddNewMessageDto, ChatIDDto, ListChatDto, NewChatDto, ReadMessageIDDto } from './messenger.dto';
+import { AddNewMessageDto, AddNewVoiceMessageDto, ChatIDDto, ListChatDto, NewChatDto, ReadMessageIDDto, createMessageLikedDto, deleteLikedMessageDto, deleteMessageDto, forwardMessageDto } from './messenger.dto';
 import { Chats } from './chats.schema';
 import { Model, Types } from 'mongoose';
 import { Message } from './message.schema';
@@ -46,6 +46,7 @@ export declare class MessengerService {
         chatId: Types.ObjectId;
         isSupport: boolean;
     }>;
+    newChat(dto: NewChatDto): Promise<void>;
     listChat(dto: ListChatDto): Promise<{
         participants: {
             userId: Types.ObjectId;
@@ -57,14 +58,21 @@ export declare class MessengerService {
             _id: Types.ObjectId;
         }>;
         isSupport: boolean;
-        notReadingMessage: (import("mongoose").Document<unknown, {}, Message> & Message & {
-            _id: Types.ObjectId;
-        })[];
+        groupName: string;
     }[]>;
-    getChatHistory(dto: ChatIDDto): Promise<any[]>;
+    getChatHistory(dto: ChatIDDto): Promise<(import("mongoose").Document<unknown, {}, Message> & Message & {
+        _id: Types.ObjectId;
+    })[]>;
     addMessage(payload: AddNewMessageDto): Promise<{
         messageId: string;
     }>;
+    deleteLikedMessage(payload: deleteLikedMessageDto): Promise<void>;
+    createLikedMessage(payload: createMessageLikedDto): Promise<void>;
+    addVoiceMessage(payload: AddNewVoiceMessageDto): Promise<{
+        messageId: string;
+    }>;
+    deleteMessage(payload: deleteMessageDto): Promise<void>;
+    forwardMessage(payload: forwardMessageDto): Promise<void>;
     readMessage({ messageId }: ReadMessageIDDto): Promise<void>;
     fileMessage(file: Express.Multer.File): Promise<string>;
 }

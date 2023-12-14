@@ -60,6 +60,12 @@ let CategoryController = class CategoryController {
     async getPosts(body) {
         return await this.categoryService.getPublishServices(body);
     }
+    async getTenPosts() {
+        return await this.categoryService.getTenPublishServices();
+    }
+    async getOnePublishService(body) {
+        return await this.categoryService.getOnePublishService(body);
+    }
 };
 __decorate([
     (0, common_1.Post)('add-categorie'),
@@ -150,6 +156,19 @@ __decorate([
     __metadata("design:paramtypes", [category_dto_1.GetPublishServiceDto]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "getPosts", null);
+__decorate([
+    (0, common_1.Post)('get-ten-publish-service'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "getTenPosts", null);
+__decorate([
+    (0, common_1.Post)('get-one-publish-service'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [category_dto_1.GetOnePublishDto]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "getOnePublishService", null);
 CategoryController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
